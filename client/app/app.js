@@ -2,7 +2,6 @@
 
 angular.module('armUptimeApp', [
   'ngCookies',
-  'ngResource',
   'ngSanitize',
   'ui.router',
   'ui.bootstrap'
