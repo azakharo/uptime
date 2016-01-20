@@ -16,11 +16,35 @@ module.exports = function (grunt) {
     ngtemplates: 'grunt-angular-templates',
     cdnify: 'grunt-google-cdn',
     protractor: 'grunt-protractor-runner',
-    buildcontrol: 'grunt-build-control'
+    buildcontrol: 'grunt-build-control',
+    replace: 'grunt-text-replace'
   });
 
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
+
+
+  // Base URL replacements
+  var baseUrl = '/dashboard/';
+  var replApp = {
+    from: 'app/',
+    to: baseUrl + 'app/'
+  };
+  var replBowerComp = {
+    from: 'bower_components/',
+    to: baseUrl + 'bower_components/'
+  };
+
+  var replBowerCompAbs = {
+    from: '/bower_components/',
+    to: 'bower_components/'
+  };
+
+  var replUrlUiGrid = {
+    from: 'url(ui-grid.',
+    to: 'url(/bower_components/angular-ui-grid/ui-grid.'
+  };
+
 
   // Define the configuration for all the tasks
   grunt.initConfig({
@@ -603,6 +627,34 @@ module.exports = function (grunt) {
         }
       }
     },
+
+    replace: {
+      is_debug: {
+        src: ['.tmp/concat/app/app.js'], // source files array (supports minimatch)
+        dest: '.tmp/concat/app/app.js',  // destination directory or file
+        replacements: [{
+          from: 'var isRestDebug = true;', // string replacement
+          to: 'var isRestDebug = false;'
+        }]
+      },
+      baseUrl: {
+        src: [
+          'dist/public/index.html',
+          'dist/public/app/*.js',
+          'dist/public/app/*.css'
+        ],
+        overwrite: true,
+        replacements: [replApp, replBowerCompAbs, replBowerComp]
+      },
+      urlUiGrid: {
+        src: [
+          'dist/public/app/*.css'
+        ],
+        overwrite: true,
+        replacements: [replUrlUiGrid]
+      }
+    }
+
   });
 
   // Used for delaying livereload until after server has restarted
@@ -710,13 +762,16 @@ module.exports = function (grunt) {
     'autoprefixer',
     'ngtemplates',
     'concat',
+    'replace:is_debug',
     'ngAnnotate',
     'copy:dist',
     'cdnify',
     'cssmin',
     'uglify',
     'rev',
-    'usemin'
+    'usemin',
+    'replace:urlUiGrid',
+    'replace:baseUrl'
   ]);
 
   grunt.registerTask('default', [
