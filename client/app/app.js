@@ -5,7 +5,8 @@ angular.module('armUptimeApp', [
   'ngSanitize',
   'ui.router',
   'ui.bootstrap',
-  'restService'
+  'restService',
+  'authService'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
     $urlRouterProvider
