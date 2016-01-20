@@ -1,11 +1,20 @@
 'use strict';
 
 angular.module('armUptimeApp')
-  .controller('MainCtrl', function ($scope, $http) {
-    $scope.awesomeThings = [];
+  .controller('MainCtrl', function ($scope, $log) {
+    //$scope.Auth = Auth;
 
-    $http.get('/api/things').success(function(awesomeThings) {
-      $scope.awesomeThings = awesomeThings;
-    });
+    $scope.onSettingsBtnClick = function() {
+      log("settings clicked");
+    };
+
+    $scope.onLogOutBtnClick = function() {
+      //$state.go('login');
+      //Auth.logout();
+    };
+
+    function log(msg) {
+      $log.debug(msg);
+    }
 
   });

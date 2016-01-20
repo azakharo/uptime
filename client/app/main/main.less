@@ -1,34 +1,57 @@
-.thing-form {
-  margin: 20px 0;
+#main-page {
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  background: lightgoldenrodyellow;
 }
 
-#banner {
-    border-bottom: none;
-    margin-top: -20px;
+//**********************
+// header
+
+#header {
+  flex: 0 1 auto;
+  width: 100%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  background: #000000;
+  color: #ffffff;
+
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: space-between;
 }
 
-#banner h1 {
-    font-size: 60px;
-    line-height: 1;
-    letter-spacing: -1px;
+#header-text {
+  flex: 1;
+  font-size: x-large;
+  padding-left: 5px;
 }
 
-.hero-unit {
-    position: relative;
-    padding: 30px 15px;
-    color: #F5F5F5;
-    text-align: center;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-    background: #4393B9;
+#header-right-part {
+  flex: none;
+  padding-left: 10px;
+  padding-right: 20px;
 }
 
-.footer {
-    text-align: center;
-    padding: 30px 0;
-    margin-top: 70px;
-    border-top: 1px solid #E5E5E5;
+#user-section {
+  display: inline-block;
 }
 
-.navbar-text {
-    margin-left: 15px;
+// header
+//**********************
+
+#content {
+  flex: 1;
+  background: gold;
+}
+
+#footer  {
+  flex: 0 0 auto;
+  width: 100%;
 }
