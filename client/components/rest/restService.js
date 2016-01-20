@@ -4,7 +4,7 @@ var mod = angular.module('restService', []);
 
 mod.service(
   "myRest",
-  function ($http, $q, $log, $rootScope, $interval, alertService) {
+  function ($http, $q, $log, $rootScope) {
 
     var baseURL = '/api/cp/v1/';
     var turnoverBaseURL = '/api/pt/v1/';
@@ -1140,11 +1140,14 @@ mod.service(
 
       if (response.status == 502 || response.status == 503 || response.status == 0) {
         $rootScope.isRestUnavailable = true;
-        alertService.add("danger", format('Адрес {} недоступен', $rootScope.urlCausedError));
+        //alertService.add("danger", format('Адрес {} недоступен', $rootScope.urlCausedError));
+        log(format('Адрес {} недоступен', $rootScope.urlCausedError));
       }
       else if (response.status == 500) {
         $rootScope.isRestError = true;
-        alertService.add("danger", format('При обращении по адресу {} произошла ошибка',
+        //alertService.add("danger", format('При обращении по адресу {} произошла ошибка',
+        //  $rootScope.urlCausedError));
+        log(format('При обращении по адресу {} произошла ошибка',
           $rootScope.urlCausedError));
       }
       else {
