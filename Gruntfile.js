@@ -439,9 +439,9 @@ module.exports = function (grunt) {
       dist: [
         'babel',
         'jade',
-        'less',
-        'imagemin',
-        'svgmin'
+        'less'
+        //'imagemin',
+        //'svgmin'
       ]
     },
 
