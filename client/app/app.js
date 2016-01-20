@@ -4,7 +4,8 @@ angular.module('armUptimeApp', [
   'ngCookies',
   'ngSanitize',
   'ui.router',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'restService'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
     $urlRouterProvider
