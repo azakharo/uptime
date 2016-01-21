@@ -10,7 +10,17 @@
           i.fa.fa-sign-out
   #content
     #left-part.p1
-      p left part
+      #time-period-selector
+        #stat-switch.Grid.Grid--center
+          .Grid-cell.text-large Выбор периода наблюдения:
+          .Grid-cell
+            .btn-group
+              label.btn.btn-primary(ng-model="timePeriod", uib-btn-radio="'day'") Сутки
+              label.btn.btn-primary(ng-model="timePeriod", uib-btn-radio="'week'") Неделя
+              label.btn.btn-primary(ng-model="timePeriod", uib-btn-radio="'month'") Месяц
+      pre {{ timePeriod }}
+      #transport-list
+        p transp list
     #right-part.p1
       p right part
   footer#footer.text-center Copyright &copy; 2015 &mdash;&nbsp;
