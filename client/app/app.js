@@ -6,6 +6,7 @@ angular.module('armUptimeApp', [
   'ui.router',
   'ui.bootstrap',
   'restService',
+  'TransportStatus',
   'authService'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {

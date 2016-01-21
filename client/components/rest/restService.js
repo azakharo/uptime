@@ -2029,66 +2029,6 @@ mod.service(
       return deferred.promise;
     }
 
-    function getTransportStatus(dtStart, dtEnd) {
-      return [
-        {
-          type: 'trolleybus',
-          name: '1022',
-          status: 'OK',
-          events: [
-            {
-              timestamp: moment(),
-              status: 'Partial'
-            }
-          ],
-          validators: [
-            {
-              name: 'v1',
-              status: 'OK',
-              events: [
-                {
-                  timestamp: moment(),
-                  status: 'FAIL'
-                }
-              ]
-            },
-            {
-              name: 'v2',
-              status: 'OK',
-              events: []
-            },
-            {
-              name: 'v3',
-              status: 'OK',
-              events: []
-            }
-          ],
-          pps: [
-            {
-              name: 'pp1',
-              status: 'OK',
-              events: []
-            },
-            {
-              name: 'pp2',
-              status: 'OK',
-              events: []
-            },
-            {
-              name: 'pp3',
-              status: 'OK',
-              events: []
-            }
-          ],
-          uhf: {
-            status: 'OK',
-            events: []
-          }
-        }
-      ];
-    }
-
-
     // Return public API
     return ({
       getAccounts:      getAccounts,
