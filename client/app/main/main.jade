@@ -1,12 +1,12 @@
 #main-page.w100.vh100
   #header
     #header-text Uptime Monitor
-    #header-right-part.text-right
+    #header-right-part.text-right.plr1
       #user-section(ng-show="Auth.getCurrentUser() !== undefined")
-        span(style="margin-right: 10px") Оператор: {{ Auth.getCurrentUser() }}
-        button.btn.btn-default.user-section-btn(ng-click="onSettingsBtnClick()", disabled="disabled", style="margin-right: 5px")
+        span.mr2 Оператор: {{ Auth.getCurrentUser() }}
+        button.btn.btn-default.user-section-btn.mr1(ng-click="onSettingsBtnClick()", disabled="disabled")
           i.fa.fa-cog
-        button.btn.btn-default.user-section-btn(ng-click="onLogOutBtnClick()", style="margin-right: 15px")
+        button.btn.btn-default.user-section-btn(ng-click="onLogOutBtnClick()")
           i.fa.fa-sign-out
   #content
     #left-part.p1
