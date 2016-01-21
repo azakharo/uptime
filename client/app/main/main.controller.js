@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('armUptimeApp')
-  .controller('MainCtrl', function ($scope, $log, $state, Auth) {
+  .controller('MainCtrl', function ($scope, $log, $state, Auth, transpStatus) {
     $scope.Auth = Auth;
     $scope.timePeriod = 'day';
 
@@ -13,6 +13,13 @@ angular.module('armUptimeApp')
       $state.go('login');
       Auth.logout();
     };
+
+    $scope.busInfos = [];
+    transpStatus.getTransportStatus(moment(), moment()).then(
+      function (data) {
+        $scope.busInfos = data;
+      }
+    );
 
     function log(msg) {
       $log.debug(msg);

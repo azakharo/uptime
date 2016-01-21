@@ -18,10 +18,11 @@
               label.btn.btn-primary(ng-model="timePeriod", uib-btn-radio="'day'") Сутки
               label.btn.btn-primary(ng-model="timePeriod", uib-btn-radio="'week'") Неделя
               label.btn.btn-primary(ng-model="timePeriod", uib-btn-radio="'month'") Месяц
-      #transport-list-title.pt1
+      #transport-list-title.pt2.pb1
         .fs-medium Список транспортных средств с оборудованием:
       #transport-list
-        p transp list
+        uib-accordion
+          uib-accordion-group(heading="{{bus.name}}", ng-repeat="bus in busInfos") {{bus.status}}
     #right-part.p1
       p right part
   footer#footer.text-center Copyright &copy; 2015 &mdash;&nbsp;
