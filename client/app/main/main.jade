@@ -12,12 +12,14 @@
     #left-part.p1
       #time-period-selector
         .Grid.Grid--center
-          .Grid-cell--autoSize.text-large Выбор периода наблюдения:
+          .Grid-cell--autoSize.fs-medium Выбор периода наблюдения:
           .Grid-cell.text-left.pl1
             .btn-group
               label.btn.btn-primary(ng-model="timePeriod", uib-btn-radio="'day'") Сутки
               label.btn.btn-primary(ng-model="timePeriod", uib-btn-radio="'week'") Неделя
               label.btn.btn-primary(ng-model="timePeriod", uib-btn-radio="'month'") Месяц
+      #transport-list-title.pt1
+        .fs-medium Список транспортных средств с оборудованием:
       #transport-list
         p transp list
     #right-part.p1
