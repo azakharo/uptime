@@ -18,8 +18,7 @@
               label.btn.btn-primary(ng-model="timePeriod", uib-btn-radio="'day'") Сутки
               label.btn.btn-primary(ng-model="timePeriod", uib-btn-radio="'week'") Неделя
               label.btn.btn-primary(ng-model="timePeriod", uib-btn-radio="'month'") Месяц
-      #transport-list-title.pt2.pb1
-        .fs-medium Список транспортных средств с оборудованием:
+      #transport-list-title.pt2.pb1.fs-medium Список транспортных средств с оборудованием:
       #transport-list.overflow-auto
         uib-accordion
           // ACCORDION ITEM
@@ -34,26 +33,26 @@
                       img(ng-switch-when="trolleybus", src='assets/images/trolleybus.png', alt="Троллейбус")
                       img(ng-switch-when="bus",        src='assets/images/bus.png',        alt="Автобус")
                     .Grid-cell.text-right.pr1
-                      span {{bus.name}}
+                      span.bold {{bus.name}}
                 .Grid-cell
                   .timeline
             // BODY
             // validators
             .sect-validators.mb1.bb1
               .Grid.Grid--center.pb1(ng-repeat="v in bus.validators")
-                .Grid-cell-fixed-1of8.text-right.pr1 {{v.name}}
+                .Grid-cell-fixed-1of8.text-right.pr1.bold {{v.name}}
                 .Grid-cell
                   .timeline
             // pps
             .sect-pps.mb1.bb1
               .Grid.Grid--center.pb1(ng-repeat="pp in bus.pps")
-                .Grid-cell-fixed-1of8.text-right.pr1 {{pp.name}}
+                .Grid-cell-fixed-1of8.text-right.pr1.bold {{pp.name}}
                 .Grid-cell
                   .timeline
             // uhf
             .sect-uhf.mb1
               .Grid.Grid--center
-                .Grid-cell-fixed-1of8.text-right.pr1 UHF
+                .Grid-cell-fixed-1of8.text-right.pr1.bold UHF
                 .Grid-cell
                   .timeline
     #right-part.p1
