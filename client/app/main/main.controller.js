@@ -20,7 +20,7 @@ angular.module('armUptimeApp')
       transpStatus.getTransportStatus(moment(), moment()).then(
         function (data) {
           $scope.busInfos = data;
-          log("transport status data were updated");
+          //log("transport status data were updated");
           $scope.selectedBus = null;
         }
       );
