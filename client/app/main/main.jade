@@ -22,10 +22,10 @@
       #transport-list.overflow-auto
         uib-accordion
           // ACCORDION ITEM
-          uib-accordion-group(heading="{{bus.name}}", ng-repeat="bus in busInfos")
+          uib-accordion-group(ng-repeat="bus in busInfos")
             // HEADER
             uib-accordion-heading
-              .Grid.Grid--center
+              .Grid.Grid--center(ng-click="onAccordionItemClicked(bus)")
                 .Grid-cell-fixed-1of8
                   .Grid.Grid--center
                     .Grid-cell.rounded(ng-switch="bus.type",

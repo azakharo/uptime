@@ -20,6 +20,8 @@ angular.module('armUptimeApp')
       transpStatus.getTransportStatus(moment(), moment()).then(
         function (data) {
           $scope.busInfos = data;
+          log("transport status data were updated");
+          $scope.selectedBus = null;
         }
       );
     }
@@ -27,6 +29,22 @@ angular.module('armUptimeApp')
     $scope.$watch('timePeriod', function (newVal, oldVal, scope) {
       updateTransportStatus();
     });
+
+    $scope.selectedBus = null;
+    $scope.onAccordionItemClicked = function (bus) {
+      if (!$scope.selectedBus) {
+        $scope.selectedBus = bus;
+      }
+      else {
+        if ($scope.selectedBus === bus) {
+          // unselect
+          //$scope.selectedBus = null;
+        }
+        else {
+          $scope.selectedBus = bus;
+        }
+      }
+    };
 
     function log(msg) {
       $log.debug(msg);
