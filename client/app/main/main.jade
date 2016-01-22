@@ -22,7 +22,37 @@
         .fs-medium Список транспортных средств с оборудованием:
       #transport-list
         uib-accordion
-          uib-accordion-group(heading="{{bus.name}}", ng-repeat="bus in busInfos") {{bus.status}}
+          // ACCORDION ITEM
+          uib-accordion-group(heading="{{bus.name}}", ng-repeat="bus in busInfos")
+            // HEADER
+            uib-accordion-heading
+              .Grid.Grid--center
+                .Grid-cell-1of8 {{bus.type}}
+                .Grid-cell-1of8.text-right.pr2 {{bus.name}}
+                .Grid-cell-3of4
+                  .timeline
+            // BODY
+            // validators
+            .sect-validators.mb1.bb1
+              .Grid.Grid--center.pb1(ng-repeat="v in bus.validators")
+                .Grid-cell-1of8
+                .Grid-cell-1of8.text-right.pr2 {{v.name}}
+                .Grid-cell-3of4
+                  .timeline
+            // pps
+            .sect-pps.mb1.bb1
+              .Grid.Grid--center.pb1(ng-repeat="pp in bus.pps")
+                .Grid-cell-1of8
+                .Grid-cell-1of8.text-right.pr2 {{pp.name}}
+                .Grid-cell-3of4
+                  .timeline
+            // uhf
+            .sect-uhf.mb1
+              .Grid.Grid--center
+                .Grid-cell-1of8
+                .Grid-cell-1of8.text-right.pr2 UHF
+                .Grid-cell-3of4
+                  .timeline
     #right-part.p1
       p right part
   footer#footer.text-center Copyright &copy; 2015 &mdash;&nbsp;
