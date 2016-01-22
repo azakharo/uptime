@@ -1,0 +1,3 @@
+Build:
+* copy images
+* disable: concat, minify, uglify.
