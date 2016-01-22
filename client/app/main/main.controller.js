@@ -15,11 +15,18 @@ angular.module('armUptimeApp')
     };
 
     $scope.busInfos = [];
-    transpStatus.getTransportStatus(moment(), moment()).then(
-      function (data) {
-        $scope.busInfos = data;
-      }
-    );
+
+    function updateTransportStatus() {
+      transpStatus.getTransportStatus(moment(), moment()).then(
+        function (data) {
+          $scope.busInfos = data;
+        }
+      );
+    }
+
+    $scope.$watch('timePeriod', function (newVal, oldVal, scope) {
+      updateTransportStatus();
+    });
 
     function log(msg) {
       $log.debug(msg);
