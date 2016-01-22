@@ -27,7 +27,11 @@
             // HEADER
             uib-accordion-heading
               .Grid.Grid--center
-                .Grid-cell-1of8 {{bus.type}}
+                .Grid-cell--autoSize
+                  div.rounded(ng-switch="bus.type",
+                  ng-style="bus.status === 'OK' && {'background-color': 'green'} || bus.status === 'FAIL' && {'background-color': 'red'}")
+                    img(ng-switch-when="trolleybus", src='assets/images/trolleybus.png', alt="Троллейбус")
+                    img(ng-switch-when="bus",        src='assets/images/bus.png',        alt="Автобус")
                 .Grid-cell-1of8.text-right.pr2 {{bus.name}}
                 .Grid-cell-3of4
                   .timeline

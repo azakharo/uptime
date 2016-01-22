@@ -65,7 +65,7 @@ mod.service(
           }
         },
         {
-          type: 'trolleybus',
+          type: 'bus',
           name: '1093',
           status: 'FAIL',
           events: [
