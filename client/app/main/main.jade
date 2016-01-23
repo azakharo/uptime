@@ -29,30 +29,33 @@
                 .Grid-cell-fixed-1of8
                   .Grid.Grid--center
                     .Grid-cell.rounded(ng-switch="bus.type",
-                    ng-class="{ 'bus-status-ok': bus.status === 'OK', 'bus-status-failed': bus.status === 'FAIL', 'bus-status-partial': bus.status === 'PARTIAL' }")
+                    ng-class="getStatusBgClass(bus.status)")
                       img(ng-switch-when="trolleybus", src='assets/images/trolleybus.png', alt="Троллейбус")
                       img(ng-switch-when="bus",        src='assets/images/bus.png',        alt="Автобус")
                     .Grid-cell.text-right.pr1
-                      span.bold {{bus.name}}
+                      span.bold(ng-class="getStatusFgClass(bus.status)") {{bus.name}}
                 .Grid-cell
                   .timeline
             // BODY
             // validators
             .sect-validators.mb1.bb1
               .Grid.Grid--center.pb1(ng-repeat="v in bus.validators")
-                .Grid-cell-fixed-1of8.text-right.pr1.bold {{v.name}}
+                .Grid-cell-fixed-1of8.text-right.pr1
+                  span.bold(ng-class="getStatusFgClass(v.status)") {{v.name}}
                 .Grid-cell
                   .timeline
             // pps
             .sect-pps.mb1.bb1
               .Grid.Grid--center.pb1(ng-repeat="pp in bus.pps")
-                .Grid-cell-fixed-1of8.text-right.pr1.bold {{pp.name}}
+                .Grid-cell-fixed-1of8.text-right.pr1
+                  span.bold(ng-class="getStatusFgClass(pp.status)") {{pp.name}}
                 .Grid-cell
                   .timeline
             // uhf
             .sect-uhf.mb1
               .Grid.Grid--center
-                .Grid-cell-fixed-1of8.text-right.pr1.bold UHF
+                .Grid-cell-fixed-1of8.text-right.pr1
+                  span.bold(ng-class="getStatusFgClass(bus.uhf.status)") UHF
                 .Grid-cell
                   .timeline
     #right-part.p1

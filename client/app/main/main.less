@@ -93,14 +93,44 @@
   background: red;
 }
 
-.bus-status-ok {
-  background: rgba(0, 255, 0, 0.5);
+/////////////////////////////////////////////////
+// Status colors
+
+@color-status-ok: rgba(0, 255, 0, 1.0);
+@color-status-failed: rgba(255, 0, 0, 1.0);
+@color-status-partial: rgba(255, 255, 0, 1.0);
+@color-status-unknown: rgba(0, 0, 0, 1);
+
+.status-ok-bg {
+  background: @color-status-ok;
 }
 
-.bus-status-failed {
-  background: rgba(255, 0, 0, 0.5);
+.status-failed-bg {
+  background: @color-status-failed;
 }
 
-.bus-status-partial {
-  background: rgba(255, 255, 0, 0.5);
+.status-partial-bg {
+  background: @color-status-partial;
 }
+
+.status-unknown-bg {
+  background: @color-status-unknown;
+}
+
+.status-ok-fg {
+  color: @color-status-ok;
+}
+
+.status-failed-fg {
+  color: @color-status-failed;
+}
+
+.status-partial-fg {
+  color: @color-status-partial;
+}
+
+.status-unknown-fg {
+  color: @color-status-unknown;
+}
+
+/////////////////////////////////////////////////

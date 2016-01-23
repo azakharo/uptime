@@ -46,6 +46,44 @@ angular.module('armUptimeApp')
       }
     };
 
+    $scope.getStatusBgClass = function (status) {
+      let class2ret = null;
+      switch (status) {
+        case 'OK':
+          class2ret = 'status-ok-bg';
+          break;
+        case 'FAIL':
+          class2ret = 'status-failed-bg';
+          break;
+        case 'PARTIAL':
+          class2ret = 'status-partial-bg';
+          break;
+        default:
+          class2ret = 'status-unknown-bg';
+          break;
+      }
+      return class2ret;
+    };
+
+    $scope.getStatusFgClass = function (status) {
+      let class2ret = null;
+      switch (status) {
+        case 'OK':
+          class2ret = 'status-ok-fg';
+          break;
+        case 'FAIL':
+          class2ret = 'status-failed-fg';
+          break;
+        case 'PARTIAL':
+          class2ret = 'status-partial-fg';
+          break;
+        default:
+          class2ret = 'status-unknown-fg';
+          break;
+      }
+      return class2ret;
+    };
+
     function log(msg) {
       $log.debug(msg);
     }
