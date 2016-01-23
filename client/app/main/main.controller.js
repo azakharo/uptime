@@ -84,6 +84,26 @@ angular.module('armUptimeApp')
       return class2ret;
     };
 
+    $scope.dtStart = moment().subtract(1, 'days');
+    $scope.dtEnd = moment();
+    $scope.timeIntervals = [
+      {
+        dtStart: $scope.dtStart.clone(),
+        dtEnd: $scope.dtStart.clone().add(8, 'hours'),
+        color: 'danger'
+      },
+      {
+        dtStart: $scope.dtStart.clone().add(8, 'hours'),
+        dtEnd: $scope.dtStart.clone().add(16, 'hours'),
+        color: 'warning'
+      },
+      {
+        dtStart: $scope.dtStart.clone().add(16, 'hours'),
+        dtEnd: $scope.dtEnd.clone(),
+        color: 'success'
+      }
+    ];
+
     function log(msg) {
       $log.debug(msg);
     }
