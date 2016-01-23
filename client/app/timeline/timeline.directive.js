@@ -8,7 +8,8 @@ angular.module('armUptimeApp')
       scope: {
         dtStart: '=',
         dtEnd: '=',
-        intervals: '='
+        intervals: '=',
+        height: '@'
       },
 
       controller: ['$scope', '$log', '$sce', function ($scope, $log) {
