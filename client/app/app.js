@@ -59,3 +59,5 @@ angular.module('armUptimeApp', [
   .run(function (myRest) {
     myRest.getApps();
   });
+
+moment.locale('ru');

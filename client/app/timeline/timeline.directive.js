@@ -33,7 +33,7 @@ angular.module('armUptimeApp')
           let duration = intervl.dtEnd.from(intervl.dtStart);
           return `<p>Начало: ${start}</p>
           <p>&nbsp;Конец: ${end}</p>
-          <p>Продолжительность: ${duration}</p>`;
+          <p>Завершилось ${duration}</p>`;
         };
       }]
 
