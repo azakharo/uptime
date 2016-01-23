@@ -30,10 +30,10 @@ angular.module('armUptimeApp')
           let timeFrmt = 'HH:mm:ss DD.MM.YYYY';
           let start = intervl.dtStart.format(timeFrmt);
           let end = intervl.dtEnd.format(timeFrmt);
-          let duration = intervl.dtEnd.from(intervl.dtStart);
+          let duration = intervl.dtEnd.from(intervl.dtStart, true);
           return `<p>Начало: ${start}</p>
           <p>&nbsp;Конец: ${end}</p>
-          <p>Завершилось ${duration}</p>`;
+          <p>Продолжительность: ${duration}</p>`;
         };
       }]
 
