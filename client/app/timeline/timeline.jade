@@ -1,4 +1,6 @@
 uib-progress(ng-style="{ height: height }")
   uib-bar(ng-repeat='intervl in timeIntervals track by $index', value='intervl.percent', type='{{intervl.color}}',
   uib-tooltip-html="getTooltipHtml(intervl)", tooltip-append-to-body="true", tooltip-placement="auto bottom")
-    span(ng-hide='intervl.percent < 5') {{intervl.percent | number:1}}%
+    .timeline-item-content.h100
+      .timeline-item-percent
+        span(ng-hide='intervl.percent < 5') {{intervl.percent | number:1}}%
