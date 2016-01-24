@@ -9,7 +9,8 @@ angular.module('armUptimeApp')
         dtStart: '=',
         dtEnd: '=',
         intervals: '=',
-        height: '@'
+        height: '@',
+        showPercents: '='
       },
 
       controller: ['$scope', '$log', '$sce', function ($scope, $log) {
@@ -36,6 +37,11 @@ angular.module('armUptimeApp')
           <p>&nbsp;Конец: ${end}</p>
           <p>Продолжительность: ${duration}</p>`;
         };
+
+        // Show percents param
+        if ($scope.showPercents === undefined) {
+          $scope.showPercents = true;
+        }
       }]
 
     }; // return
