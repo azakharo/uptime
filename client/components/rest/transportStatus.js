@@ -115,12 +115,41 @@ mod.service(
       return deferred.promise;
     }
 
+    function getEvents(selectedBus, dtStart, dtEnd) {
+      let deferred = $q.defer();
+
+      const buses = [
+        'Автобус 1',
+        'Автобус 2'
+      ];
+      const eventTypes = [
+        'validator_OK',
+        'validator_FAIL',
+        'pp_OK',
+        'pp_FAIL',
+        'uhf_OK',
+        'uhf_FAIL'
+      ];
+
+      let events = _.times(500, function (ind) {
+        let newEvent = {};
+        newEvent.timestamp = moment().subtract(10 * ind, 'minutes');
+        newEvent.bus = _.sample(buses);
+        newEvent.name = _.sample(eventTypes);
+        return newEvent;
+      });
+      deferred.resolve(events);
+
+      return deferred.promise;
+    }
+
     function log(msg) {
       $log.debug(msg);
     }
 
     return ({
-      getTransportStatus: getTransportStatus
+      getTransportStatus: getTransportStatus,
+      getEvents: getEvents
     });
 
   }

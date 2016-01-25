@@ -1,15 +1,15 @@
 'use strict';
 
 angular.module('armUptimeApp')
-  .controller('MainCtrl', function ($scope, $log, $state, Auth, transpStatus) {
+  .controller('MainCtrl', function ($scope, $log, $state, uiGridConstants, Auth, transpStatus) {
     $scope.Auth = Auth;
     $scope.timePeriod = 'day';
 
-    $scope.onSettingsBtnClick = function() {
+    $scope.onSettingsBtnClick = function () {
       log("settings clicked");
     };
 
-    $scope.onLogOutBtnClick = function() {
+    $scope.onLogOutBtnClick = function () {
       $state.go('login');
       Auth.logout();
     };
@@ -28,12 +28,14 @@ angular.module('armUptimeApp')
 
     $scope.$watch('timePeriod', function (newVal, oldVal, scope) {
       updateTransportStatus();
+      updateTransportEvents($scope.selectedBus);
     });
 
     $scope.selectedBus = null;
     $scope.onAccordionItemClicked = function (bus) {
       if (!$scope.selectedBus) {
         $scope.selectedBus = bus;
+        updateTransportEvents($scope.selectedBus);
       }
       else {
         if ($scope.selectedBus === bus) {
@@ -42,6 +44,7 @@ angular.module('armUptimeApp')
         }
         else {
           $scope.selectedBus = bus;
+          updateTransportEvents($scope.selectedBus);
         }
       }
     };
@@ -84,6 +87,7 @@ angular.module('armUptimeApp')
       return class2ret;
     };
 
+    // TODO rem dummy data
     $scope.dtStart = moment().subtract(1, 'days');
     $scope.dtEnd = moment();
     $scope.timeIntervals = [
@@ -104,8 +108,78 @@ angular.module('armUptimeApp')
       }
     ];
 
+    //-----------------------------------
+    // ui-grid setup
+
+    $scope.gridOptions = {};
+
+    $scope.gridOptions.columnDefs = [
+      {
+        displayName: 'Время',
+        field: 'timestamp.toDate()',
+        type: 'date',
+        cellFilter: 'date: "yyyy-MM.dd HH:mm:ss"'
+      },
+      {
+        displayName: 'Событие',
+        field: 'name',
+        cellFilter: 'transEventNameFilter'
+      },
+      {
+        displayName: 'Детали',
+        field: 'bus'
+      },
+      {
+        displayName: 'Продолжительность',
+        field: 'duration',
+        cellClass: "text-right",
+        headerCellClass: "text-right"
+      }
+    ];
+
+    $scope.gridOptions.enableHorizontalScrollbar = uiGridConstants.scrollbars.NEVER;
+    $scope.gridOptions.enableVerticalScrollbar = uiGridConstants.scrollbars.WHEN_NEEDED;
+    $scope.gridOptions.enableColumnMenus = false;
+
+    function updateTransportEvents() {
+      if (!$scope.selectedBus) {
+        return;
+      }
+      transpStatus.getEvents(moment(), moment()).then(
+        function (events) {
+          $scope.gridOptions.data = events;
+          log("transport events updated");
+        }
+      );
+    }
+
+    // ui-grid setup
+    //-----------------------------------
+
     function log(msg) {
       $log.debug(msg);
     }
 
+  })
+
+  .filter('transEventNameFilter', function () {
+    return function (eventType) {
+      switch (eventType) {
+        case 'validator_OK':
+          return "валидатор появился";
+        case 'validator_FAIL':
+          return "валидатор пропал";
+        case 'pp_OK':
+          return "датчик пассажиропотока появился";
+        case 'pp_FAIL':
+          return "датчик пассажиропотока пропал";
+        case 'uhf_OK':
+          return "UHF появился";
+        case 'uhf_FAIL':
+          return "UHF пропал";
+        default:
+          return "неизвестное";
+      }
+
+    };
   });
