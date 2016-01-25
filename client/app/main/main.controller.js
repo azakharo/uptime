@@ -140,6 +140,7 @@ angular.module('armUptimeApp')
     $scope.gridOptions.enableHorizontalScrollbar = uiGridConstants.scrollbars.NEVER;
     $scope.gridOptions.enableVerticalScrollbar = uiGridConstants.scrollbars.WHEN_NEEDED;
     $scope.gridOptions.enableColumnMenus = false;
+    $scope.gridOptions.paginationPageSizes = [50, 100, 200, 250, 500];
 
     function updateTransportEvents() {
       if (!$scope.selectedBus) {
