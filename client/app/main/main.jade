@@ -35,7 +35,7 @@
                     .Grid-cell.text-right.pr1
                       span.bold(ng-class="getStatusFgClass(bus.status)") {{bus.name}}
                 .Grid-cell
-                  .timeline
+                  timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals", height="50px")
             // BODY
             // validators
             .sect-validators.mb1.bb1
@@ -43,21 +43,21 @@
                 .Grid-cell-fixed-1of8.text-right.pr1
                   span.bold(ng-class="getStatusFgClass(v.status)") {{v.name}}
                 .Grid-cell
-                  .timeline
+                  timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals")
             // pps
             .sect-pps.mb1.bb1
               .Grid.Grid--center.pb1(ng-repeat="pp in bus.pps")
                 .Grid-cell-fixed-1of8.text-right.pr1
                   span.bold(ng-class="getStatusFgClass(pp.status)") {{pp.name}}
                 .Grid-cell
-                  .timeline
+                  timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals")
             // uhf
             .sect-uhf.mb1
               .Grid.Grid--center
                 .Grid-cell-fixed-1of8.text-right.pr1
                   span.bold(ng-class="getStatusFgClass(bus.uhf.status)") UHF
                 .Grid-cell
-                  .timeline
+                  timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals")
     #right-part.p1
       timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals", height="50px")
   footer#footer.text-center Copyright &copy; 2015 &mdash;&nbsp;
