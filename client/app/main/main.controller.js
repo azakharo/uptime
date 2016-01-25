@@ -22,7 +22,6 @@ angular.module('armUptimeApp')
         function (data) {
           $scope.busInfos = data;
           log("transport statuses updated");
-          $scope.selectedBus = null;
         }
       );
     }
