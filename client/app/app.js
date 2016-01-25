@@ -5,6 +5,8 @@ angular.module('armUptimeApp', [
   'ngSanitize',
   'ui.router',
   'ui.bootstrap',
+  'ui.grid',
+  'ui.grid.autoResize',
   'restService',
   'TransportStatus',
   'authService'
@@ -56,8 +58,14 @@ angular.module('armUptimeApp', [
     });
   })
 
-  .run(function (myRest) {
+  // Additional configuration
+  .run(function (i18nService, myRest) {
+    // Cause 401 if necessary
     myRest.getApps();
-  });
 
-moment.locale('ru');
+    // moment js
+    moment.locale('ru');
+
+    // ui-grid
+    i18nService.setCurrentLang('ru');
+  });
