@@ -17,10 +17,11 @@ angular.module('armUptimeApp')
     $scope.busInfos = [];
 
     function updateTransportStatus() {
-      transpStatus.getTransportStatus(moment(), moment()).then(
+      let {start, end} = timePeriod2moments($scope.timePeriod);
+      transpStatus.getTransportStatus(start, end).then(
         function (data) {
           $scope.busInfos = data;
-          //log("transport status data were updated");
+          log("transport statuses updated");
           $scope.selectedBus = null;
         }
       );
@@ -28,14 +29,14 @@ angular.module('armUptimeApp')
 
     $scope.$watch('timePeriod', function (newVal, oldVal, scope) {
       updateTransportStatus();
-      updateTransportEvents($scope.selectedBus);
+      updateTransportEvents();
     });
 
     $scope.selectedBus = null;
     $scope.onAccordionItemClicked = function (bus) {
       if (!$scope.selectedBus) {
         $scope.selectedBus = bus;
-        updateTransportEvents($scope.selectedBus);
+        updateTransportEvents();
       }
       else {
         if ($scope.selectedBus === bus) {
@@ -44,7 +45,7 @@ angular.module('armUptimeApp')
         }
         else {
           $scope.selectedBus = bus;
-          updateTransportEvents($scope.selectedBus);
+          updateTransportEvents();
         }
       }
     };
@@ -143,9 +144,11 @@ angular.module('armUptimeApp')
 
     function updateTransportEvents() {
       if (!$scope.selectedBus) {
+        $scope.gridOptions.data = [];
         return;
       }
-      transpStatus.getEvents(moment(), moment()).then(
+      let {start, end} = timePeriod2moments($scope.timePeriod);
+      transpStatus.getEvents($scope.selectedBus, start, end).then(
         function (events) {
           $scope.gridOptions.data = events;
           log("transport events updated");
@@ -155,6 +158,28 @@ angular.module('armUptimeApp')
 
     // ui-grid setup
     //-----------------------------------
+
+    function timePeriod2moments(timePeriod) {
+      let start = null;
+      let end = moment();
+      switch (timePeriod) {
+        case 'day':
+          start = moment().subtract(1, 'days');
+          break;
+        case 'week':
+          start = moment().subtract(7, 'days');
+          break;
+        case 'month':
+          start = moment().subtract(1, 'month');
+          break;
+        default:
+          throw `UNEXPECTED time period '${timePeriod}'`;
+      }
+      return {
+        start: start,
+        end: end
+      }
+    }
 
     function log(msg) {
       $log.debug(msg);
@@ -180,6 +205,5 @@ angular.module('armUptimeApp')
         default:
           return "неизвестное";
       }
-
     };
   });

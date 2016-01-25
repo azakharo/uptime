@@ -115,7 +115,7 @@ mod.service(
       return deferred.promise;
     }
 
-    function getEvents(selectedBus, dtStart, dtEnd) {
+    function getEvents(bus, dtStart, dtEnd) {
       let deferred = $q.defer();
 
       const buses = [
