@@ -59,7 +59,10 @@
                 .Grid-cell
                   timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals")
     #right-part.p1
-      .grid(ui-grid="gridOptions", ui-grid-auto-resize)
+      #bus-events-title.pb1.fs-large
+        span(ng-show="selectedBus") События для {{ selectedBus.name }}:
+        span(ng-show="!selectedBus") Выберите транспортное средство для просмотра событий.
+      #bus-events.grid(ui-grid="gridOptions", ui-grid-auto-resize)
   footer#footer.text-center Copyright &copy; 2015 &mdash;&nbsp;
     a(href="http://sarov-itc.ru/", target="_blank") ИТЦ Система-Саров
     span ,&nbsp;&nbsp;
