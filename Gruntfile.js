@@ -775,7 +775,7 @@ module.exports = function (grunt) {
     'replace:baseUrl'
   ]);
 
-  grunt.registerTask('debug-build', [
+  grunt.registerTask('build-debug', [
     'clean:dist',
     'injector:less',
     'concurrent:dist',
