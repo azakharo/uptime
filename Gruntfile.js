@@ -25,7 +25,7 @@ module.exports = function (grunt) {
 
 
   // Base URL replacements
-  var baseUrl = '/dashboard/';
+  var baseUrl = '/uptime/';
   var replApp = {
     from: 'app/',
     to: baseUrl + 'app/'
@@ -773,6 +773,26 @@ module.exports = function (grunt) {
     'usemin',
     'replace:urlUiGrid',
     'replace:baseUrl'
+  ]);
+
+  grunt.registerTask('debug-build', [
+    'clean:dist',
+    'injector:less',
+    'concurrent:dist',
+    'injector',
+    'wiredep',
+    'useminPrepare',
+    'autoprefixer',
+    'ngtemplates',
+    'concat',
+    'ngAnnotate',
+    'copy:dist',
+    'cdnify',
+    'cssmin',
+    'uglify',
+    'rev',
+    'usemin',
+    'replace:urlUiGrid'
   ]);
 
   grunt.registerTask('default', [
