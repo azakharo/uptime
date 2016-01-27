@@ -13,9 +13,15 @@ class Period {
 }
 
 class OnlinePeriod extends Period {
+  toString() {
+    return super.toString() + ' online';
+  }
 }
 
 class OfflinePeriod extends Period {
+  toString() {
+    return super.toString() + ' offline';
+  }
 }
 
 let onlinePointDistance = 5 * 60; // sec
@@ -28,30 +34,40 @@ function findPeriods (onlinePoints, maxPointDistance) {
   }
   let curPeriod = new OnlinePeriod(onlinePoints[0].timestamp, null);
   for (let i = 1; i < onlinePoints.length; i++) {
-    let nextPoint = onlinePoints[i];
+    let curPoint = onlinePoints[i];
     let prevPoint = onlinePoints[i - 1];
-
-    // if this is the last point then finish the cur per
-    if (i === onlinePoints.length - 1) {
-      curPeriod.end = nextPoint.timestamp;
-      periods.push(curPeriod);
-      continue;
-    }
 
     // if current period is offline, then finish it and start new online period, continue
     if (curPeriod instanceof OfflinePeriod) {
-      curPeriod.end = nextPoint.timestamp.clone().subtract(1, 'seconds');
+      curPeriod.end = curPoint.timestamp.clone().subtract(1, 'seconds');
       periods.push(curPeriod);
-      curPeriod = new OnlinePeriod(nextPoint.timestamp, null);
+      curPeriod = new OnlinePeriod(curPoint.timestamp, null);
       continue;
     }
 
-    // Find out whether the difference between curPer.start and nextPoint is longer than maxPointDistance
-    if (nextPoint.timestamp.diff(prevPoint.timestamp, 'seconds', true) > maxPointDistance) {
-      // if longer, then finish cur online per and start new offline per
-      curPeriod.end = nextPoint.timestamp.clone().add(5, 'minutes').subtract(1, 'seconds');
+    // Find out whether the difference between prevPoint and curPoint is longer than maxPointDistance
+    if (curPoint.timestamp.diff(prevPoint.timestamp, 'seconds', true) >= maxPointDistance) {
+      // if longer, then finish cur online per
+      curPeriod.end = prevPoint.timestamp.clone().add(maxPointDistance, 'seconds').subtract(1, 'seconds');
       periods.push(curPeriod);
-      curPeriod = new OfflinePeriod(nextPoint.timestamp.clone().add(5, 'minutes'), null);
+      // Add new offline per
+      curPeriod = new OfflinePeriod(
+        prevPoint.timestamp.clone().add(maxPointDistance, 'seconds'),
+        curPoint.timestamp.clone().subtract(1, 'seconds'));
+      periods.push(curPeriod);
+      if (i === onlinePoints.length - 1) {
+        // Start new online per
+        curPeriod = new OnlinePeriod(
+          curPoint.timestamp,
+          null);
+      }
+      continue;
+    }
+
+    // if this is the last point then finish the cur per
+    if (i === onlinePoints.length - 1) {
+      curPeriod.end = curPoint.timestamp;
+      periods.push(curPeriod);
     }
 
   }
@@ -87,10 +103,26 @@ function testAlwaysOnline() {
   let periods = findPeriods(points, testMaxPointDist);
   logPeriods(periods);
 }
+log('testAlwaysOnline');
 testAlwaysOnline();
 
 // 2. Almost always offline, 1 short online per in the middle
 // 3. Online, offline, online
+
+// 4. Very short time limit
+function testVeryShortTimeLimit() {
+  let points = [
+    new OnlinePoint(moment("2016-01-27 06:00:00", testTimePointFrmt)),
+    new OnlinePoint(moment("2016-01-27 06:03:00", testTimePointFrmt)),
+    new OnlinePoint(moment("2016-01-27 06:07:00", testTimePointFrmt)),
+    new OnlinePoint(moment("2016-01-27 06:10:00", testTimePointFrmt))
+  ];
+
+  let periods = findPeriods(points, 60);
+  logPeriods(periods);
+}
+log('testVeryShortTimeLimit');
+testVeryShortTimeLimit();
 
 // Tests
 ///////////////////////////////////////////////////////////////////////////////
