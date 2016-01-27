@@ -18,7 +18,10 @@ class OnlinePeriod extends Period {
 class OfflinePeriod extends Period {
 }
 
-function findPeriods (onlinePoints) {
+let onlinePointDistance = 5 * 60; // sec
+
+// maxPointDistance in sec
+function findPeriods (onlinePoints, maxPointDistance) {
   let periods = [];
   if (!onlinePoints || onlinePoints.length === 0 || onlinePoints.length === 1) {
     return periods;
@@ -43,8 +46,8 @@ function findPeriods (onlinePoints) {
       continue;
     }
 
-    // Find out whether the difference between curPer.start and nextPoint is longer than 5 min
-    if (nextPoint.timestamp.diff(prevPoint.timestamp, 'minutes', true) > 5) {
+    // Find out whether the difference between curPer.start and nextPoint is longer than maxPointDistance
+    if (nextPoint.timestamp.diff(prevPoint.timestamp, 'seconds', true) > maxPointDistance) {
       // if longer, then finish cur online per and start new offline per
       curPeriod.end = nextPoint.timestamp.clone().add(5, 'minutes').subtract(1, 'seconds');
       periods.push(curPeriod);
@@ -60,6 +63,7 @@ function findPeriods (onlinePoints) {
 // Tests
 
 const testTimePointFrmt = "YYYY-MM-DD HH:mm:ss";
+const testMaxPointDist = 5 * 60; // sec
 
 function log(msg) {
   console.log(msg);
@@ -80,7 +84,7 @@ function testAlwaysOnline() {
     new OnlinePoint(moment("2016-01-27 06:10:00", testTimePointFrmt))
   ];
 
-  let periods = findPeriods(points);
+  let periods = findPeriods(points, testMaxPointDist);
   logPeriods(periods);
 }
 testAlwaysOnline();

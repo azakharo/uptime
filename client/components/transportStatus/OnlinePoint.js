@@ -7,7 +7,3 @@ class OnlinePoint {
     return this.timestamp.format('YYYY-MM-DD HH:mm:ss');
   }
 }
-
-//module.exports = {
-//  OnlinePoint: OnlinePoint
-//};
