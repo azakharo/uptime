@@ -1,3 +1,5 @@
+"use strict";
+
 class Period {
   constructor(start, end) {
     this.start = start;

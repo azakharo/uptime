@@ -1,3 +1,5 @@
+"use strict";
+
 class OnlinePoint {
   constructor(t) {
     this.timestamp = t;
