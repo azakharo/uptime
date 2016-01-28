@@ -35,11 +35,7 @@ angular.module('armUptimeApp', [
       responseError: function(response) {
         if (response.status === 401 || response.status === 403) {
           $log.debug('intercepted ' + response.status);
-
-          // TODO Work-around the auth issue
-          //$location.path('/login');
-          $location.path('/');
-
+          $location.path('/login');
           $cookieStore.remove('token');
           $cookieStore.remove('username');
           return $q.reject(response);
