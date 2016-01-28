@@ -66,7 +66,6 @@ function findPeriods (start, end, onlinePoints, maxPointDistance) {
 
   for (let i = 1; i < onlinePoints.length; i++) {
     let curPoint = onlinePoints[i];
-    let isLastPoint = (i === onlinePoints.length - 1);
     let prevPoint = onlinePoints[i - 1];
 
     if (curPeriod instanceof OfflinePeriod) {
@@ -158,7 +157,12 @@ function testAlwaysOnline() {
     moment("2016-01-27 06:10:00", testTimePointFrmt),
     points, testMaxPointDist);
   logPeriods(periods);
-  //expect(periods.length).toEqual(1);
+  if (periods.length !== 1) {
+    throw "periods.length !== 1";
+  }
+  if (!(periods[0] instanceof OnlinePeriod)) {
+    throw "!instanceof OnlinePeriod";
+  }
 }
 
 function testShortTimeLimit() {
@@ -174,7 +178,21 @@ function testShortTimeLimit() {
     moment("2016-01-27 06:10:00", testTimePointFrmt),
     points, 60);
   logPeriods(periods);
-  //expect(2).toEqual(2);
+  if (periods.length !== 6) {
+    throw "periods.length !== 6";
+  }
+  let onlinePerCount =_.filter(periods, function (per) {
+    return per instanceof OnlinePeriod;
+  });
+  if (onlinePerCount.length !== 3) {
+    throw "onlinePerCount.length !== 3";
+  }
+  let offlinePerCount =_.filter(periods, function (per) {
+    return per instanceof OfflinePeriod;
+  });
+  if (offlinePerCount.length !== 3) {
+    throw "onlinePerCount.length !== 3";
+  }
 }
 
 // 2. Almost always offline, 1 short online per in the middle
