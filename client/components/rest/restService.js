@@ -876,44 +876,6 @@ mod.service(
       return deffered.promise;
     }
 
-    //function getPassengersInOut(dtStart, dtEnd) {
-    //  var passInOuts = [];
-    //  var deffered = $q.defer();
-    //
-    //  getAllTraffics(dtStart, dtEnd).then(
-    //    function (srvTraffics) {
-    //      // Create inOuts from srv traffics
-    //      var inOuts = [];
-    //      srvTraffics.forEach(function(traf){
-    //        var inout = {};
-    //
-    //        inout.timestamp = moment.unix(traf.timestamp);
-    //        inout.busID = traf.terminalId;
-    //        if (traf.delta >= 0) {
-    //          inout.input = traf.delta;
-    //        }
-    //        else {
-    //          inout.output = -traf.delta;
-    //        }
-    //
-    //        inOuts.push(inout);
-    //      });
-    //
-    //      // sort by timestamp desc
-    //      inOuts = _.sortBy(inOuts, function (iO) {
-    //        return -iO.timestamp;
-    //      });
-    //
-    //      deffered.resolve(inOuts);
-    //    },
-    //    function (reason) {
-    //      deffered.reject(reason);
-    //    }
-    //  );
-    //
-    //  return deffered.promise;
-    //}
-
     function getPassengersInHist(dtStart, dtEnd) {
       var deffered = $q.defer();
 
