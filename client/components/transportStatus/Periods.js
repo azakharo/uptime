@@ -156,7 +156,7 @@ function testAlwaysOnline() {
     moment("2016-01-27 06:00:00", testTimePointFrmt),
     moment("2016-01-27 06:10:00", testTimePointFrmt),
     points, testMaxPointDist);
-  logPeriods(periods);
+  //logPeriods(periods);
   if (periods.length !== 1) {
     throw "periods.length !== 1";
   }
@@ -177,7 +177,7 @@ function testShortTimeLimit() {
     moment("2016-01-27 06:00:00", testTimePointFrmt),
     moment("2016-01-27 06:10:00", testTimePointFrmt),
     points, 60);
-  logPeriods(periods);
+  //logPeriods(periods);
   if (periods.length !== 6) {
     throw "periods.length !== 6";
   }
@@ -205,7 +205,7 @@ function testOneShortOnline() {
     moment("2016-01-27 06:00:00", testTimePointFrmt),
     moment("2016-01-27 16:10:00", testTimePointFrmt),
     points, onlinePointDistance);
-  logPeriods(periods);
+  //logPeriods(periods);
   if (periods.length !== 3) {
     throw "periods.length !== 3";
   }
@@ -223,7 +223,6 @@ function testOneShortOnline() {
   }
 }
 
-// 3. Online, offline, online
 
 function runTests() {
   log('testAlwaysOnline');
