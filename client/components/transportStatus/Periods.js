@@ -46,7 +46,7 @@ function findPeriods (start, end, onlinePoints, maxPointDistance) {
   // Handle the beginning
   if (!start.isSame(onlinePoints[0].timestamp)) {
     // Find out the diff between the start and 1st point
-    if (onlinePoints[0].timestamp.diff(start, 'seconds', true) >= maxPointDistance) {
+    if (onlinePoints[0].timestamp.diff(start, 'seconds', true) > maxPointDistance) {
       // if longer than limit, then add the offline period
       curPeriod = new OfflinePeriod(
         start,
@@ -76,7 +76,7 @@ function findPeriods (start, end, onlinePoints, maxPointDistance) {
     }
     else if (curPeriod instanceof OnlinePeriod) {
       // Find out whether the difference between prevPoint and curPoint is longer than maxPointDistance
-      if (curPoint.timestamp.diff(prevPoint.timestamp, 'seconds', true) >= maxPointDistance) { // if longer
+      if (curPoint.timestamp.diff(prevPoint.timestamp, 'seconds', true) > maxPointDistance) { // if longer
         // Finish cur online per
         curPeriod.end = prevPoint.timestamp.clone().add(maxPointDistance, 'seconds').subtract(1, 'seconds');
         periods.push(curPeriod);
@@ -107,7 +107,7 @@ function findPeriods (start, end, onlinePoints, maxPointDistance) {
   }
   else {
     // Find out the diff
-    if (end.diff(lastPoint.timestamp, 'seconds', true) >= maxPointDistance) {
+    if (end.diff(lastPoint.timestamp, 'seconds', true) > maxPointDistance) {
       // If the diff is longer or equal than limit => add online and offline periods
       curPeriod.end = lastPoint.timestamp.clone().add(maxPointDistance, 'seconds').subtract(1, 'seconds');
       periods.push(curPeriod);
@@ -223,6 +223,35 @@ function testOneShortOnline() {
   }
 }
 
+function testStartEndExceedSmall() {
+  let points = [
+    new OnlinePoint(moment("2016-01-27 06:00:00", testTimePointFrmt)),
+    new OnlinePoint(moment("2016-01-27 06:05:00", testTimePointFrmt)),
+    new OnlinePoint(moment("2016-01-27 06:10:00", testTimePointFrmt)),
+    new OnlinePoint(moment("2016-01-27 06:15:00", testTimePointFrmt))
+  ];
+
+  let start = moment("2016-01-27 05:58:00", testTimePointFrmt);
+  let end = moment("2016-01-27 06:18:00", testTimePointFrmt);
+  let periods = findPeriods(start, end, points, onlinePointDistance);
+  logPeriods(periods);
+  if (periods.length !== 1) {
+    throw "periods.length !== 1";
+  }
+  let onlinePerCount =_.filter(periods, function (per) {
+    return per instanceof OnlinePeriod;
+  });
+  if (onlinePerCount.length !== 1) {
+    throw "onlinePerCount.length !== 1";
+  }
+  if (!periods[0].start.isSame(start)) {
+    throw "wrong start";
+  }
+  if (!periods[periods.length - 1].end.isSame(end)) {
+    throw "wrong end";
+  }
+}
+
 
 function runTests() {
   log('testAlwaysOnline');
@@ -233,5 +262,8 @@ function runTests() {
 
   log('testOneShortOnline');
   testOneShortOnline();
+
+  log('testStartEndExceedSmall');
+  testStartEndExceedSmall();
 }
 runTests();
