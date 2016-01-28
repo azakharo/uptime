@@ -1,10 +1,15 @@
 "use strict";
 
-var mod = angular.module('TransportStatus', []);
+var mod = angular.module('TransportStatus', ['restService']);
 
 mod.service(
   "transpStatus",
-  function ($q, $log) {
+  function ($q, $log, myRest) {
+    //myRest.getTranspStatusRawData(moment().subtract(1, 'days'), moment()).then(
+    //  function (data) {
+    //    log(JSON.stringify(data, null, 2));
+    //  }
+    //);
 
     function getTransportStatus(dtStart, dtEnd) {
       let deferred = $q.defer();

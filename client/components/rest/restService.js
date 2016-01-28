@@ -11,6 +11,7 @@ mod.service(
     var personDataBaseURL = '/api/spd/v1/';
     var operArmBaseURL = '/api/operator/v1/';
     var loginUrl = '/api/auth/v1/login';
+    var transpStatusUrl = '/api/protocolmessage/v1/protocolmessage';
     if (isRestDebug) {
       var serverAddr = 'https://cp.sarov-itc.ru';
       baseURL = serverAddr + baseURL;
@@ -18,6 +19,7 @@ mod.service(
       personDataBaseURL = serverAddr + personDataBaseURL;
       operArmBaseURL = serverAddr + operArmBaseURL;
       loginUrl = serverAddr + loginUrl;
+      transpStatusUrl = serverAddr + transpStatusUrl;
     }
 
     function getBaseURL() {
@@ -1914,6 +1916,23 @@ mod.service(
       return deferred.promise;
     }
 
+    //////////////////////////////////////////////////////////////////////
+    // Transport status
+
+    // Returns server specific models
+    function getTranspStatusRawData(dtStart, dtEnd) {
+      // https://cp.sarov-itc.ru/api/protocolmessage/v1/protocolmessage?filter={"$and":[{"timestamp":{"$gte":1453582800,"$lt":1453973367}},{"servicename":"pt-statusregistry"}]}&sort=-timestamp&limit=2
+      var request = $http({
+        method: "get",
+        url: `${transpStatusUrl}?filter={"$and":[{"timestamp":{"$gte":${dtStart.unix()},"$lt":${dtEnd.unix()}}},{"servicename":"pt-statusregistry"}]}&sort=-timestamp&limit=2`
+      });
+      return ( request.then(handleSuccess, handleError) );
+    }
+
+    // Transport status
+    //////////////////////////////////////////////////////////////////////
+
+
     // Return public API
     return ({
       getAccounts:      getAccounts,
@@ -1996,7 +2015,9 @@ mod.service(
       getTariffs: getTariffs,
 
       // login
-      login: login
+      login: login,
+
+      getTranspStatusRawData: getTranspStatusRawData
     });
   }
 );
