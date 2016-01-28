@@ -5,16 +5,52 @@ var mod = angular.module('TransportStatus', ['restService']);
 mod.service(
   "transpStatus",
   function ($q, $log, myRest) {
-    //myRest.getTranspStatusRawData(moment().subtract(1, 'days'), moment()).then(
-    //  function (data) {
-    //    log(JSON.stringify(data, null, 2));
-    //  }
-    //);
-    //myRest.getTerminals().then(
-    //  function (data) {
-    //    log(JSON.stringify(data, null, 2));
-    //  }
-    //);
+
+    function getBusDefines(dtStart, dtEnd) {
+      let deferred = $q.defer();
+
+      $q.all([
+        myRest.getVehicles(),
+        myRest.getTerminals(),
+        myRest.getTranspStatusRawData(dtStart, dtEnd)
+      ]).then(
+        function (results) {
+          let vehicles = results[0];
+          let terminals = results[1];
+          let transpRawData = results[2];
+
+          let busDefines = [];
+          vehicles.forEach(function (vehcl) {
+            let busDef = {
+              vehicleID: vehcl.id,
+              busName: vehcl.terminal_id,
+              ppCount: 0,
+              pp: [],
+              validatorCount: 0,
+              validators: []
+            };
+
+            // Get number of validators and pp
+            let term = _.find(terminals, ['number', busDef.busName]);
+            if (term) {
+              busDef.validatorCount = term.validatorAmount;
+              busDef.ppCount = term.detectorAmount;
+            }
+
+            busDefines.push(busDef);
+          });
+
+          deferred.resolve(busDefines);
+        }
+      );
+
+      return deferred.promise;
+    }
+    getBusDefines(moment().subtract(1, 'days'), moment()).then(
+      function (data) {
+        log(JSON.stringify(data, null, 2));
+      }
+    );
 
     function getTransportStatus(dtStart, dtEnd) {
       let deferred = $q.defer();
