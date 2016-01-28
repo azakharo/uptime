@@ -76,3 +76,51 @@ function findPeriods (onlinePoints, maxPointDistance) {
 
   return periods;
 }
+
+function log(msg) {
+  console.log(msg);
+}
+
+function logPeriods(periods) {
+  periods.forEach(function (per, ind) {
+    log(`${ind+1}: ${per.toString()}`);
+  });
+}
+
+
+/////////////////////////////////////////////////
+// Tests
+
+const testTimePointFrmt = "YYYY-MM-DD HH:mm:ss";
+const testMaxPointDist = 5 * 60; // sec
+
+function testAlwaysOnline() {
+  let points = [
+    new OnlinePoint(moment("2016-01-27 06:00:00", testTimePointFrmt)),
+    new OnlinePoint(moment("2016-01-27 06:03:00", testTimePointFrmt)),
+    new OnlinePoint(moment("2016-01-27 06:07:00", testTimePointFrmt)),
+    new OnlinePoint(moment("2016-01-27 06:10:00", testTimePointFrmt))
+  ];
+
+  let periods = findPeriods(points, testMaxPointDist);
+  logPeriods(periods);
+  expect(periods.length).toEqual(1);
+}
+
+function testShortTimeLimit() {
+  let points = [
+    new OnlinePoint(moment("2016-01-27 06:00:00", testTimePointFrmt)),
+    new OnlinePoint(moment("2016-01-27 06:03:00", testTimePointFrmt)),
+    new OnlinePoint(moment("2016-01-27 06:07:00", testTimePointFrmt)),
+    new OnlinePoint(moment("2016-01-27 06:10:00", testTimePointFrmt))
+  ];
+
+  let periods = findPeriods(points, 60);
+  logPeriods(periods);
+  expect(1).toEqual(0);
+}
+
+function runTests() {
+  testAlwaysOnline();
+  testShortTimeLimit();
+}
