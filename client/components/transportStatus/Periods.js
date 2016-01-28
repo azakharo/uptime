@@ -431,4 +431,4 @@ function runTests() {
   log('testTwoSeparateOnlines');
   testTwoSeparateOnlines();
 }
-runTests();
+//runTests();
