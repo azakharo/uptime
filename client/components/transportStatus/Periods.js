@@ -313,6 +313,37 @@ function testOffline() {
   }
 }
 
+function testPointsBeyondBoundaries() {
+  let points = [
+    new OnlinePoint(moment("2016-01-27 05:58:00", testTimePointFrmt)),
+    new OnlinePoint(moment("2016-01-27 06:05:00", testTimePointFrmt)),
+    new OnlinePoint(moment("2016-01-27 06:55:00", testTimePointFrmt)),
+    new OnlinePoint(moment("2016-01-27 07:01:00", testTimePointFrmt))
+  ];
+
+  let start = moment("2016-01-27 06:00:00", testTimePointFrmt);
+  let end = moment("2016-01-27 07:00:00", testTimePointFrmt);
+  let periods = findPeriods(start, end, points, onlinePointDistance);
+
+  //logPeriods(periods);
+
+  if (periods.length !== 3) {
+    throw "periods.length !== 3";
+  }
+  let onlinePers =_.filter(periods, function (per) {
+    return per instanceof OnlinePeriod;
+  });
+  if (onlinePers.length !== 2) {
+    throw "onlinePers.length !== 2";
+  }
+  let offlinePers=_.filter(periods, function (per) {
+    return per instanceof OfflinePeriod;
+  });
+  if (offlinePers.length !== 1) {
+    throw "offlinePers.length !== 1";
+  }
+}
+
 
 function runTests() {
   log('testAlwaysOnline');
@@ -332,5 +363,8 @@ function runTests() {
 
   log('testOffline');
   testOffline();
+
+  log('testPointsBeyondBoundaries');
+  testPointsBeyondBoundaries();
 }
 runTests();
