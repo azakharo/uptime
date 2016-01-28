@@ -195,9 +195,35 @@ function testShortTimeLimit() {
   }
 }
 
-// 2. Almost always offline, 1 short online per in the middle
-// 3. Online, offline, online
+// Almost always offline, 1 short online per in the middle
+function testOneShortOnline() {
+  let points = [
+    new OnlinePoint(moment("2016-01-27 12:04:00", testTimePointFrmt)),
+  ];
 
+  let periods = findPeriods(
+    moment("2016-01-27 06:00:00", testTimePointFrmt),
+    moment("2016-01-27 16:10:00", testTimePointFrmt),
+    points, onlinePointDistance);
+  logPeriods(periods);
+  if (periods.length !== 3) {
+    throw "periods.length !== 3";
+  }
+  let onlinePerCount =_.filter(periods, function (per) {
+    return per instanceof OnlinePeriod;
+  });
+  if (onlinePerCount.length !== 1) {
+    throw "onlinePerCount.length !== 1";
+  }
+  let offlinePerCount =_.filter(periods, function (per) {
+    return per instanceof OfflinePeriod;
+  });
+  if (offlinePerCount.length !== 2) {
+    throw "onlinePerCount.length !== 2";
+  }
+}
+
+// 3. Online, offline, online
 
 function runTests() {
   log('testAlwaysOnline');
@@ -205,5 +231,8 @@ function runTests() {
 
   log('testShortTimeLimit');
   testShortTimeLimit();
+
+  log('testOneShortOnline');
+  testOneShortOnline();
 }
 runTests();
