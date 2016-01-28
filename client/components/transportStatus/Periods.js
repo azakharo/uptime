@@ -30,31 +30,36 @@ let onlinePointDistance = 5 * 60; // sec
 
 // maxPointDistance in sec
 function findPeriods(start, end, onlinePoints, maxPointDistance) {
+  if (start.isSame(end) || start.isAfter(end)) {
+    throw "Invalid start parameter";
+  }
   if (!onlinePoints || onlinePoints.length === 0) {
     // Return 1 offline period from start to end
     return [ new OfflinePeriod(start, end) ];
   }
-  if (start.isAfter(onlinePoints[0].timestamp)) {
-    throw "start is after 1st point";
-  }
-  if (end.isBefore(onlinePoints[onlinePoints.length - 1].timestamp)) {
-    throw "end is before last point";
-  }
+
+  // Ignore points before start and after end
+  let points = _.filter(onlinePoints, function (p) {
+    return p.timestamp.isAfter(start) || p.timestamp.isSame(start);
+  });
+  points = _.filter(points, function (p) {
+    return p.timestamp.isBefore(end) || p.timestamp.isSame(end);
+  });
 
   let periods = [];
   let curPeriod = null;
 
   // Handle the beginning
-  if (!start.isSame(onlinePoints[0].timestamp)) {
+  if (!start.isSame(points[0].timestamp)) {
     // Find out the diff between the start and 1st point
-    if (onlinePoints[0].timestamp.diff(start, 'seconds', true) > maxPointDistance) {
+    if (points[0].timestamp.diff(start, 'seconds', true) > maxPointDistance) {
       // if longer than limit, then add the offline period
       curPeriod = new OfflinePeriod(
         start,
-        onlinePoints[0].timestamp.clone().subtract(1, 'seconds'));
+        points[0].timestamp.clone().subtract(1, 'seconds'));
       periods.push(curPeriod);
       // Then start from the 1st point
-      curPeriod = new OnlinePeriod(onlinePoints[0].timestamp, null);
+      curPeriod = new OnlinePeriod(points[0].timestamp, null);
     }
     else {
       // Start from the start
@@ -65,9 +70,9 @@ function findPeriods(start, end, onlinePoints, maxPointDistance) {
     curPeriod = new OnlinePeriod(start, null);
   }
 
-  for (let i = 1; i < onlinePoints.length; i++) {
-    let curPoint = onlinePoints[i];
-    let prevPoint = onlinePoints[i - 1];
+  for (let i = 1; i < points.length; i++) {
+    let curPoint = points[i];
+    let prevPoint = points[i - 1];
 
     if (curPeriod instanceof OfflinePeriod) {
       // Finish period and start new online period
@@ -99,7 +104,7 @@ function findPeriods(start, end, onlinePoints, maxPointDistance) {
   } // point loop
 
   // Handle the ending
-  let lastPoint = onlinePoints[onlinePoints.length - 1];
+  let lastPoint = points[points.length - 1];
   if (end.isSame(lastPoint.timestamp)) {
     if (!curPeriod.start.isSame(end)) {
       curPeriod.end = end;
@@ -295,7 +300,7 @@ function testOffline() {
   let end = moment("2016-01-27 06:21:00", testTimePointFrmt);
   let periods = findPeriods(start, end, points, onlinePointDistance);
 
-  logPeriods(periods);
+  //logPeriods(periods);
 
   if (periods.length !== 1) {
     throw "periods.length !== 1";
