@@ -70,15 +70,10 @@ function findPeriods (start, end, onlinePoints, maxPointDistance) {
     let prevPoint = onlinePoints[i - 1];
 
     if (curPeriod instanceof OfflinePeriod) {
-      // Finish period and start new online period, if not last point
+      // Finish period and start new online period
       curPeriod.end = curPoint.timestamp.clone().subtract(1, 'seconds');
       periods.push(curPeriod);
-      if (!isLastPoint) {
-        curPeriod = new OnlinePeriod(curPoint.timestamp, null);
-      }
-      else {
-        curPeriod = null;
-      }
+      curPeriod = new OnlinePeriod(curPoint.timestamp, null);
     }
     else if (curPeriod instanceof OnlinePeriod) {
       // Find out whether the difference between prevPoint and curPoint is longer than maxPointDistance
@@ -91,25 +86,42 @@ function findPeriods (start, end, onlinePoints, maxPointDistance) {
           prevPoint.timestamp.clone().add(maxPointDistance, 'seconds'),
           curPoint.timestamp.clone().subtract(1, 'seconds'));
         periods.push(curPeriod);
-        // Start new online per, if not last point
-        if (!isLastPoint) {
-          curPeriod = new OnlinePeriod(curPoint.timestamp, null);
-        }
-        else {
-          curPeriod = null;
-        }
+        // Start new online per
+        curPeriod = new OnlinePeriod(curPoint.timestamp, null);
       }
       else {
-        // If this is the last point then finish the cur per
-        if (isLastPoint) {
-          curPeriod.end = curPoint.timestamp;
-          periods.push(curPeriod);
-          curPeriod = null;
-        }
+        // Do nothing
       }
     }
     else {
       throw "UNEXPECTED period type";
+    }
+  } // point loop
+
+  // Handle the ending
+  let lastPoint = onlinePoints[onlinePoints.length - 1];
+  if (end.isSame(lastPoint.timestamp)) {
+    if (!curPeriod.start.isSame(end)) {
+      curPeriod.end = end;
+      periods.push(curPeriod);
+    }
+  }
+  else {
+    // Find out the diff
+    if (end.diff(lastPoint.timestamp, 'seconds', true) >= maxPointDistance) {
+      // If the diff is longer or equal than limit => add online and offline periods
+      curPeriod.end = lastPoint.timestamp.clone().add(maxPointDistance, 'seconds').subtract(1, 'seconds');
+      periods.push(curPeriod);
+      // Add new offline per
+      curPeriod = new OfflinePeriod(
+        lastPoint.timestamp.clone().add(maxPointDistance, 'seconds'),
+        end);
+      periods.push(curPeriod);
+    }
+    else {
+      // otherwise and 1 online period
+      curPeriod.end = end;
+      periods.push(curPeriod);
     }
   }
 
