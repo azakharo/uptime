@@ -1929,12 +1929,25 @@ mod.service(
 
     // Returns server specific models
     function getTranspStatusRawData(dtStart, dtEnd) {
-      // https://cp.sarov-itc.ru/api/protocolmessage/v1/protocolmessage?filter={"$and":[{"timestamp":{"$gte":1453582800,"$lt":1453973367}},{"servicename":"pt-statusregistry"}]}&sort=-timestamp&limit=2
+      // TODO getting trans status - remove limit
       var request = $http({
         method: "get",
-        url: `${transpStatusUrl}?filter={"$and":[{"timestamp":{"$gte":${dtStart.unix()},"$lt":${dtEnd.unix()}}},{"servicename":"pt-statusregistry"}]}&sort=-timestamp&limit=2`
+        url: `${transpStatusUrl}?filter={"$and":[{"timestamp":{"$gte":${dtStart.unix()},"$lt":${dtEnd.unix()}}},{"servicename":"pt-statusregistry"}]}&sort=-timestamp&limit=300`
       });
       return ( request.then(handleSuccess, handleError) );
+    }
+
+    function compactTranspStatusRawData(transpStatusRawData) {
+      return _.map(transpStatusRawData, function (d) {
+        let pp = Object.getOwnPropertyNames(d.eventInfo.meta.traffic);
+        let validators = Object.getOwnPropertyNames(d.eventInfo.meta.validator);
+        return {
+          timestamp: d.eventInfo.meta.timestamp,
+          vehicleID: d.eventInfo.meta.vehicleId,
+          pp: pp,
+          validators: validators
+        };
+      });
     }
 
     // Transport status
@@ -2026,7 +2039,8 @@ mod.service(
       // login
       login: login,
 
-      getTranspStatusRawData: getTranspStatusRawData
+      getTranspStatusRawData: getTranspStatusRawData,
+      compactTranspStatusRawData: compactTranspStatusRawData
     });
   }
 );

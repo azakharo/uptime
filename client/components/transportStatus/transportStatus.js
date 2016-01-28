@@ -5,6 +5,8 @@ var mod = angular.module('TransportStatus', ['restService']);
 mod.service(
   "transpStatus",
   function ($q, $log, myRest) {
+    const UNKNOWN_VALIDATOR_NAME = 'неизвестный';
+    const UNKNOWN_PP_NAME = 'неизвестный';
 
     function getBusDefines(dtStart, dtEnd) {
       let deferred = $q.defer();
@@ -18,6 +20,7 @@ mod.service(
           let vehicles = results[0];
           let terminals = results[1];
           let transpRawData = results[2];
+          let compactTransRawData = myRest.compactTranspStatusRawData(transpRawData);
 
           let busDefines = [];
           vehicles.forEach(function (vehcl) {
@@ -37,7 +40,41 @@ mod.service(
               busDef.ppCount = term.detectorAmount;
             }
 
+            // Get validator and pp names
+            let busData = _.filter(compactTransRawData, ['vehicleID', busDef.vehicleID]);
+            let dif;
+            busData.forEach(function (d) {
+              // Handle validator names
+              dif = _.difference(d.validators, busDef.validators);
+              if (dif.length > 0) { // something new found
+                busDef.validators = _.sortBy(_.concat(busDef.validators, dif));
+              }
+
+              // Handle pp names
+              dif = _.difference(d.pp, busDef.pp);
+              if (dif.length > 0) { // something new found
+                busDef.pp = _.sortBy(_.concat(busDef.pp, dif));
+              }
+            });
+
             busDefines.push(busDef);
+          });
+
+          // Add unknown pp and validators if needed
+          busDefines.forEach(function(d) {
+            let item2add = 0;
+            if (d.validators.length !== d.validatorCount) {
+              item2add = d.validatorCount - d.validators.length;
+              for (var i = 0; i < item2add; i++) {
+                d.validators.push(UNKNOWN_VALIDATOR_NAME);
+              }
+            }
+            if (d.pp.length !== d.ppCount) {
+              item2add = d.ppCount - d.pp.length;
+              for (var i = 0; i < item2add; i++) {
+                d.pp.push(UNKNOWN_PP_NAME);
+              }
+            }
           });
 
           deferred.resolve(busDefines);
