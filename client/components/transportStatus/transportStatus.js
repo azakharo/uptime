@@ -10,6 +10,11 @@ mod.service(
     //    log(JSON.stringify(data, null, 2));
     //  }
     //);
+    //myRest.getTerminals().then(
+    //  function (data) {
+    //    log(JSON.stringify(data, null, 2));
+    //  }
+    //);
 
     function getTransportStatus(dtStart, dtEnd) {
       let deferred = $q.defer();

@@ -141,6 +141,14 @@ mod.service(
       return ( request.then(handleSuccess, handleError) );
     }
 
+    function getTerminals() {
+      var request = $http({
+        method: "get",
+        url: turnoverBaseURL + 'terminals'
+      });
+      return ( request.then(handleSuccess, handleError) );
+    }
+
     function getVehicleTurnover(vehicleID) {
       var request = $http({
         method: "get",
@@ -1943,6 +1951,7 @@ mod.service(
       getAppCurrencies: getAppCurrencies,
       getAllTransactions: getAllTransactions,
       getVehicles:        getVehicles,
+      getTerminals:       getTerminals,
       getVehicleTraffic:  getVehicleTraffic,
       //-------------------------------------------------------------
       // methods which return app specific models (not server models)
