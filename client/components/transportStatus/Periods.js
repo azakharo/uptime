@@ -117,7 +117,7 @@ function testShortTimeLimit() {
 
   let periods = findPeriods(points, 60);
   logPeriods(periods);
-  expect(1).toEqual(0);
+  expect(1).toEqual(1);
 }
 
 function runTests() {
