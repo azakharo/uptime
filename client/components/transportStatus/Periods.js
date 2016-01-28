@@ -29,12 +29,41 @@ class OfflinePeriod extends Period {
 let onlinePointDistance = 5 * 60; // sec
 
 // maxPointDistance in sec
-function findPeriods (onlinePoints, maxPointDistance) {
+function findPeriods (start, end, onlinePoints, maxPointDistance) {
   let periods = [];
-  if (!onlinePoints || onlinePoints.length === 0 || onlinePoints.length === 1) {
+  if (!onlinePoints || onlinePoints.length === 0) {
     return periods;
   }
-  let curPeriod = new OnlinePeriod(onlinePoints[0].timestamp, null);
+  if (start.isAfter(onlinePoints[0].timestamp)) {
+    throw "start is after 1st point";
+  }
+  if (end.isBefore(onlinePoints[onlinePoints.length - 1].timestamp)) {
+    throw "end is before last point";
+  }
+
+  let curPeriod = null;
+
+  // Handle the beginning
+  if (!start.isSame(onlinePoints[0].timestamp)) {
+    // Find out the diff between the start and 1st point
+    if (onlinePoints[0].timestamp.diff(start, 'seconds', true) >= maxPointDistance) {
+      // if longer than limit, then add the offline period
+      curPeriod = new OfflinePeriod(
+        start,
+        onlinePoints[0].timestamp.clone().subtract(1, 'seconds'));
+      periods.push(curPeriod);
+      // Then start from the 1st point
+      curPeriod = new OnlinePeriod(onlinePoints[0].timestamp, null);
+    }
+    else {
+      // Start from the start
+      curPeriod = new OnlinePeriod(start, null);
+    }
+  }
+  else {
+    curPeriod = new OnlinePeriod(start, null);
+  }
+
   for (let i = 1; i < onlinePoints.length; i++) {
     let curPoint = onlinePoints[i];
     let isLastPoint = (i === onlinePoints.length - 1);
@@ -112,7 +141,10 @@ function testAlwaysOnline() {
     new OnlinePoint(moment("2016-01-27 06:10:00", testTimePointFrmt))
   ];
 
-  let periods = findPeriods(points, testMaxPointDist);
+  let periods = findPeriods(
+    moment("2016-01-27 06:00:00", testTimePointFrmt),
+    moment("2016-01-27 06:10:00", testTimePointFrmt),
+    points, testMaxPointDist);
   logPeriods(periods);
   //expect(periods.length).toEqual(1);
 }
@@ -125,10 +157,17 @@ function testShortTimeLimit() {
     new OnlinePoint(moment("2016-01-27 06:10:00", testTimePointFrmt))
   ];
 
-  let periods = findPeriods(points, 60);
+  let periods = findPeriods(
+    moment("2016-01-27 06:00:00", testTimePointFrmt),
+    moment("2016-01-27 06:10:00", testTimePointFrmt),
+    points, 60);
   logPeriods(periods);
   //expect(2).toEqual(2);
 }
+
+// 2. Almost always offline, 1 short online per in the middle
+// 3. Online, offline, online
+
 
 function runTests() {
   log('testAlwaysOnline');
