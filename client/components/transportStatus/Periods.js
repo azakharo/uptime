@@ -344,6 +344,35 @@ function testPointsBeyondBoundaries() {
   }
 }
 
+function testTwoCombinedOnlines() {
+  let points = [
+    new OnlinePoint(moment("2016-01-27 06:25:00", testTimePointFrmt)),
+    new OnlinePoint(moment("2016-01-27 06:30:00", testTimePointFrmt)),
+  ];
+
+  let start = moment("2016-01-27 06:00:00", testTimePointFrmt);
+  let end = moment("2016-01-27 07:00:00", testTimePointFrmt);
+  let periods = findPeriods(start, end, points, onlinePointDistance);
+
+  //logPeriods(periods);
+
+  if (periods.length !== 3) {
+    throw "periods.length !== 3";
+  }
+  let onlinePers =_.filter(periods, function (per) {
+    return per instanceof OnlinePeriod;
+  });
+  if (onlinePers.length !== 1) {
+    throw "onlinePers.length !== 1";
+  }
+  let offlinePers=_.filter(periods, function (per) {
+    return per instanceof OfflinePeriod;
+  });
+  if (offlinePers.length !== 2) {
+    throw "offlinePers.length !== 2";
+  }
+}
+
 
 function runTests() {
   log('testAlwaysOnline');
@@ -366,5 +395,8 @@ function runTests() {
 
   log('testPointsBeyondBoundaries');
   testPointsBeyondBoundaries();
+
+  log('testTwoCombinedOnlines');
+  testTwoCombinedOnlines();
 }
 runTests();
