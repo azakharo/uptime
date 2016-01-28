@@ -30,9 +30,9 @@ let onlinePointDistance = 5 * 60; // sec
 
 // maxPointDistance in sec
 function findPeriods(start, end, onlinePoints, maxPointDistance) {
-  let periods = [];
   if (!onlinePoints || onlinePoints.length === 0) {
-    return periods;
+    // Return 1 offline period from start to end
+    return [ new OfflinePeriod(start, end) ];
   }
   if (start.isAfter(onlinePoints[0].timestamp)) {
     throw "start is after 1st point";
@@ -41,6 +41,7 @@ function findPeriods(start, end, onlinePoints, maxPointDistance) {
     throw "end is before last point";
   }
 
+  let periods = [];
   let curPeriod = null;
 
   // Handle the beginning
@@ -287,6 +288,26 @@ function testStartEndExceedBig() {
   }
 }
 
+function testOffline() {
+  let points = [];
+
+  let start = moment("2016-01-27 05:54:00", testTimePointFrmt);
+  let end = moment("2016-01-27 06:21:00", testTimePointFrmt);
+  let periods = findPeriods(start, end, points, onlinePointDistance);
+
+  logPeriods(periods);
+
+  if (periods.length !== 1) {
+    throw "periods.length !== 1";
+  }
+  let offlinePers=_.filter(periods, function (per) {
+    return per instanceof OfflinePeriod;
+  });
+  if (offlinePers.length !== 1) {
+    throw "offlinePers.length !== 1";
+  }
+}
+
 
 function runTests() {
   log('testAlwaysOnline');
@@ -303,5 +324,8 @@ function runTests() {
 
   log('testStartEndExceedBig');
   testStartEndExceedBig();
+
+  log('testOffline');
+  testOffline();
 }
 runTests();
