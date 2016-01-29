@@ -85,6 +85,8 @@ mod.service(
           // Create periods for timelines
           createPeriods(busDefines, dtStart, dtEnd);
 
+          createStatuses(busDefines);
+
           deferred.resolve(busDefines);
         }
       );
@@ -155,6 +157,42 @@ mod.service(
             bus.validatorOnlinePoints[name], onlinePointMaxDistance);
         });
       });
+    }
+
+    function createStatuses(busDefines) {
+      busDefines.forEach(function (bus) {
+        // Bus status
+        bus.status = getStatusByLastPeriod(bus.periods);
+
+        // Create status for every pp
+        bus.ppStatuses = {};
+        bus.pp.forEach(function (name) {
+          bus.ppStatuses[name] = getStatusByLastPeriod(bus.ppPeriods[name]);
+        });
+
+        // Create status for every validator
+        bus.validatorStatuses = {};
+        bus.validators.forEach(function (name) {
+          bus.validatorStatuses[name] = getStatusByLastPeriod(bus.validatorPeriods[name]);
+        });
+      });
+    }
+
+    function getStatusByLastPeriod(periods) {
+      if (!periods || periods.length === 0) {
+        return 'UNKNOWN';
+      }
+
+      const lastPer = periods[periods.length - 1];
+      if (lastPer instanceof OnlinePeriod) {
+        return 'OK';
+      }
+      else if (lastPer instanceof OfflinePeriod) {
+        return 'FAIL';
+      }
+      else {
+        return 'UNKNOWN';
+      }
     }
 
     //function getTransportStatus(dtStart, dtEnd) {
