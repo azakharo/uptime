@@ -96,14 +96,14 @@ mod.service(
       busDefines.forEach(function (bus) {
         bus.onlinePoints = [];
         // Prepare space for online points of pp
-        bus.ppOnlinePoints = new Map();
+        bus.ppOnlinePoints = {};
         bus.pp.forEach(function (name) {
-          bus.ppOnlinePoints.set(name, []);
+          bus.ppOnlinePoints[name] = [];
         });
         // Prepare space for online points of validators
-        bus.validatorOnlinePoints = new Map();
+        bus.validatorOnlinePoints = {};
         bus.validators.forEach(function (name) {
-          bus.validatorOnlinePoints.set(name, []);
+          bus.validatorOnlinePoints[name] = [];
         });
 
         let busStatusData = _.filter(transpStatusData, ['vehicleID', bus.vehicleID]);
@@ -116,17 +116,13 @@ mod.service(
 
           // Add online point for every mentioned pp
           statusItem.pp.forEach(function (pp) {
-            bus.ppOnlinePoints.get(pp).push(point);
+            bus.ppOnlinePoints[pp].push(point);
           });
 
           // Add online point for every mentioned validator
           statusItem.validators.forEach(function (v) {
-            bus.validatorOnlinePoints.get(v).push(point);
+            bus.validatorOnlinePoints[v].push(point);
           });
-
-          //for (const k of bus.ppOnlinePoints.keys()) {
-          //  log(`${k} - ${bus.ppOnlinePoints.get(k)}`);
-          //}
         });
       });
     }
