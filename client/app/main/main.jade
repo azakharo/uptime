@@ -39,6 +39,7 @@
             // BODY
             // validators
             .sect-validators.mb1.bb1
+              .accordion-first-col.text-right.bold.pb1 Валидаторы:
               .Grid.Grid--center.pb1(ng-repeat="v in bus.validators")
                 .Grid-cell--autoSize.accordion-first-col.text-right.pr1
                   span.bold(ng-class="getStatusFgClass(bus.validatorStatuses[v])") {{v}}
@@ -46,6 +47,7 @@
                   timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals")
             // pps
             .sect-pps.mb1
+              .accordion-first-col.text-right.bold.pb1 Датчики ПП:
               .Grid.Grid--center.pb1(ng-repeat="pp in bus.pp")
                 .Grid-cell--autoSize.accordion-first-col.text-right.pr1
                   span.bold(ng-class="getStatusFgClass(bus.ppStatuses[pp])") {{pp | ppNameFilter}}
