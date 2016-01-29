@@ -26,7 +26,7 @@ class OfflinePeriod extends Period {
   }
 }
 
-let onlinePointDistance = 5 * 60; // sec
+let onlinePointMaxDistance = 5 * 60; // sec
 
 // maxPointDistance in sec
 function findPeriods(start, end, onlinePoints, maxPointDistance) {
@@ -144,7 +144,7 @@ function logPeriods(periods) {
 // Tests
 
 const testTimePointFrmt = "YYYY-MM-DD HH:mm:ss";
-const testMaxPointDist = 5 * 60; // sec
+const onlinePointMaxDistanceTest = 5 * 60; // sec
 
 function testAlwaysOnline() {
   let points = [
@@ -157,7 +157,7 @@ function testAlwaysOnline() {
   let periods = findPeriods(
     moment("2016-01-27 06:00:00", testTimePointFrmt),
     moment("2016-01-27 06:10:00", testTimePointFrmt),
-    points, testMaxPointDist);
+    points, onlinePointMaxDistanceTest);
   //logPeriods(periods);
   if (periods.length !== 1) {
     throw "periods.length !== 1";
@@ -206,7 +206,7 @@ function testOneShortOnline() {
   let periods = findPeriods(
     moment("2016-01-27 06:00:00", testTimePointFrmt),
     moment("2016-01-27 16:10:00", testTimePointFrmt),
-    points, onlinePointDistance);
+    points, onlinePointMaxDistanceTest);
   //logPeriods(periods);
   if (periods.length !== 3) {
     throw "periods.length !== 3";
@@ -235,7 +235,7 @@ function testStartEndExceedSmall() {
 
   let start = moment("2016-01-27 05:58:00", testTimePointFrmt);
   let end = moment("2016-01-27 06:18:00", testTimePointFrmt);
-  let periods = findPeriods(start, end, points, onlinePointDistance);
+  let periods = findPeriods(start, end, points, onlinePointMaxDistanceTest);
   //logPeriods(periods);
   if (periods.length !== 1) {
     throw "periods.length !== 1";
@@ -264,7 +264,7 @@ function testStartEndExceedBig() {
 
   let start = moment("2016-01-27 05:54:00", testTimePointFrmt);
   let end = moment("2016-01-27 06:21:00", testTimePointFrmt);
-  let periods = findPeriods(start, end, points, onlinePointDistance);
+  let periods = findPeriods(start, end, points, onlinePointMaxDistanceTest);
   //logPeriods(periods);
   if (periods.length !== 3) {
     throw "periods.length !== 3";
@@ -294,7 +294,7 @@ function testOffline() {
 
   let start = moment("2016-01-27 05:54:00", testTimePointFrmt);
   let end = moment("2016-01-27 06:21:00", testTimePointFrmt);
-  let periods = findPeriods(start, end, points, onlinePointDistance);
+  let periods = findPeriods(start, end, points, onlinePointMaxDistanceTest);
 
   //logPeriods(periods);
 
@@ -319,7 +319,7 @@ function testPointsBeyondBoundaries() {
 
   let start = moment("2016-01-27 06:00:00", testTimePointFrmt);
   let end = moment("2016-01-27 07:00:00", testTimePointFrmt);
-  let periods = findPeriods(start, end, points, onlinePointDistance);
+  let periods = findPeriods(start, end, points, onlinePointMaxDistanceTest);
 
   //logPeriods(periods);
 
@@ -348,7 +348,7 @@ function testTwoCombinedOnlines() {
 
   let start = moment("2016-01-27 06:00:00", testTimePointFrmt);
   let end = moment("2016-01-27 07:00:00", testTimePointFrmt);
-  let periods = findPeriods(start, end, points, onlinePointDistance);
+  let periods = findPeriods(start, end, points, onlinePointMaxDistanceTest);
 
   //logPeriods(periods);
 
@@ -377,7 +377,7 @@ function testTwoSeparateOnlines() {
 
   let start = moment("2016-01-27 06:00:00", testTimePointFrmt);
   let end = moment("2016-01-27 07:00:00", testTimePointFrmt);
-  let periods = findPeriods(start, end, points, onlinePointDistance);
+  let periods = findPeriods(start, end, points, onlinePointMaxDistanceTest);
 
   //logPeriods(periods);
 
@@ -428,3 +428,7 @@ function runTests() {
   testTwoSeparateOnlines();
 }
 //runTests();
+
+function log(msg) {
+  console.log(msg);
+}
