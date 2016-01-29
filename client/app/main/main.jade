@@ -36,8 +36,7 @@
                     .Grid-cell.text-right.pr1
                       span.bold(ng-class="getStatusFgClass(bus.status)") {{bus.busName}}
                 .Grid-cell
-                  timeline(dt-start="dtStart", dt-end="dtEnd",
-                  intervals="timeIntervals",
+                  timeline(dt-start="dtStart", dt-end="dtEnd", intervals="intervals[bus.busName].busIntervals",
                   height="50px")
             // BODY
             // validators
@@ -47,8 +46,7 @@
                 .Grid-cell--autoSize.accordion-first-col.text-right.pr1
                   span.bold(ng-class="getStatusFgClass(bus.validatorStatuses[v])") {{v}}
                 .Grid-cell
-                  timeline(dt-start="dtStart", dt-end="dtEnd",
-                  intervals="timeIntervals")
+                  timeline(dt-start="dtStart", dt-end="dtEnd", intervals="intervals[bus.busName].validatorIntervals[v]")
             // pps
             .sect-pps.mb1
               .accordion-first-col.text-right.bold.pb1 Датчики ПП:
@@ -56,8 +54,7 @@
                 .Grid-cell--autoSize.accordion-first-col.text-right.pr1
                   span.bold(ng-class="getStatusFgClass(bus.ppStatuses[pp])") {{pp | ppNameFilter}}
                 .Grid-cell
-                  timeline(dt-start="dtStart", dt-end="dtEnd",
-                  intervals="timeIntervals")
+                  timeline(dt-start="dtStart", dt-end="dtEnd", intervals="intervals[bus.busName].ppIntervals[pp]")
             // uhf
             //.sect-uhf.mb1
             //  .Grid.Grid--center

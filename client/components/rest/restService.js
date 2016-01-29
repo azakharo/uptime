@@ -1932,7 +1932,7 @@ mod.service(
       // TODO getting trans status - remove limit
       var request = $http({
         method: "get",
-        url: `${transpStatusUrl}?filter={"$and":[{"timestamp":{"$gte":${dtStart.unix()},"$lt":${dtEnd.unix()}}},{"servicename":"pt-statusregistry"}]}&sort=-timestamp&limit=2`
+        url: `${transpStatusUrl}?filter={"$and":[{"timestamp":{"$gte":${dtStart.unix()},"$lt":${dtEnd.unix()}}},{"servicename":"pt-statusregistry"}]}&sort=timestamp`
       });
       return ( request.then(handleSuccess, handleError) );
     }

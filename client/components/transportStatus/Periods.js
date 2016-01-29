@@ -19,7 +19,7 @@ class Period {
 class OnlinePeriod extends Period {
 // TODO workaround class json.stringify issue
   constructor(start, end) {
-    super(start, end)
+    super(start, end);
     this.type = "online";
   }
 
@@ -31,7 +31,7 @@ class OnlinePeriod extends Period {
 class OfflinePeriod extends Period {
 // TODO workaround class json.stringify issue
   constructor(start, end) {
-    super(start, end)
+    super(start, end);
     this.type = "offline";
   }
 
@@ -40,7 +40,7 @@ class OfflinePeriod extends Period {
   }
 }
 
-let onlinePointMaxDistance = 5 * 60; // sec
+let onlinePointMaxDistance = 6 * 60; // sec
 
 // maxPointDistance in sec
 function findPeriods(start, end, onlinePoints, maxPointDistance) {

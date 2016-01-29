@@ -15,14 +15,63 @@ angular.module('armUptimeApp')
     };
 
     $scope.busInfos = [];
+    $scope.intervals = {};
 
     function updateTransportStatus() {
       transpStatus.getBusDefines($scope.dtStart, $scope.dtEnd).then(
         function (data) {
           $scope.busInfos = data;
+          $scope.intervals = createTimelineIntervals(data);
           log("transport statuses updated");
+          //data.forEach(function (bus) {
+          //  log(`bus '${bus.busName}'`);
+          //  logPeriods(bus.periods);
+          //  log("----------------------")
+          //});
         }
       );
+    }
+
+    function createTimelineIntervals(busDefines) {
+      let intervals = {};
+      busDefines.forEach(function (bus) {
+        intervals[bus.busName] = {};
+        let intervl = intervals[bus.busName];
+
+        // Bus intervals
+        intervl.busIntervals = periods2TimelineIntervals(bus.periods);
+
+        // Create intervals for every pp
+        intervl.ppIntervals = {};
+        bus.pp.forEach(function (name) {
+          intervl.ppIntervals[name] = periods2TimelineIntervals(bus.ppPeriods[name]);
+        });
+
+        // Create status for every validator
+        intervl.validatorIntervals = {};
+        bus.validators.forEach(function (name) {
+          intervl.validatorIntervals[name] = periods2TimelineIntervals(bus.validatorPeriods[name]);
+        });
+      });
+      return intervals;
+    }
+
+    function periods2TimelineIntervals(periods) {
+      return _.map(periods, function (per) {
+        let color = undefined;
+        if (per instanceof OnlinePeriod) {
+          color = 'success';
+        }
+        else if (per instanceof OfflinePeriod) {
+          color = 'danger';
+        }
+
+        return {
+          dtStart: per.start,
+          dtEnd: per.end,
+          color: color
+        };
+      })
     }
 
     $scope.$watch('timePeriod', function (newVal, oldVal, scope) {
@@ -95,44 +144,6 @@ angular.module('armUptimeApp')
       return class2ret;
     };
 
-    // TODO rem dummy data applied to all timelines
-    //$scope.dtStart = moment().subtract(1, 'days');
-    //$scope.dtEnd = moment();
-    //$scope.timeIntervals = [
-    //  {
-    //    dtStart: $scope.dtStart.clone(),
-    //    dtEnd: $scope.dtStart.clone().add(8, 'hours'),
-    //    color: 'danger'
-    //  },
-    //  {
-    //    dtStart: $scope.dtStart.clone().add(8, 'hours'),
-    //    dtEnd: $scope.dtStart.clone().add(16, 'hours'),
-    //    color: 'warning'
-    //  },
-    //  {
-    //    dtStart: $scope.dtStart.clone().add(16, 'hours'),
-    //    dtEnd: $scope.dtEnd.clone(),
-    //    color: 'success'
-    //  }
-    //];
-
-    $scope.periods2TimelineIntervals = function(periods) {
-      return _.map(periods, function (per) {
-        let color = null;
-        if (per instanceof OnlinePeriod) {
-          color = 'success';
-        }
-        else if (per instanceof OfflinePeriod) {
-          color = 'danger';
-        }
-
-        return {
-          dtStart: per.start,
-          dtEnd: per.end,
-          color: color
-        };
-      })
-    };
 
     //-----------------------------------
     // ui-grid setup
