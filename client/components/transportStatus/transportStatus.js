@@ -66,13 +66,13 @@ mod.service(
             if (d.validators.length !== d.validatorCount) {
               item2add = d.validatorCount - d.validators.length;
               for (var i = 0; i < item2add; i++) {
-                d.validators.push(UNKNOWN_VALIDATOR_NAME);
+                d.validators.push(`${UNKNOWN_VALIDATOR_NAME} ${i + 1}`);
               }
             }
             if (d.pp.length !== d.ppCount) {
               item2add = d.ppCount - d.pp.length;
               for (var i = 0; i < item2add; i++) {
-                d.pp.push(UNKNOWN_PP_NAME);
+                d.pp.push(`${UNKNOWN_PP_NAME} ${i + 1}`);
               }
             }
           });
@@ -89,11 +89,11 @@ mod.service(
 
       return deferred.promise;
     }
-    getBusDefines(moment().subtract(1, 'days'), moment()).then(
-      function (data) {
-        logData(data);
-      }
-    );
+    //getBusDefines(moment().subtract(1, 'days'), moment()).then(
+    //  function (data) {
+    //    logData(data);
+    //  }
+    //);
 
     function createOnlinePoints(busDefines, transpStatusData) {
       busDefines.forEach(function (bus) {
@@ -151,114 +151,114 @@ mod.service(
       });
     }
 
-    function getTransportStatus(dtStart, dtEnd) {
-      let deferred = $q.defer();
-
-      let data = [
-        {
-          type: 'trolleybus',
-          name: '1022',
-          status: 'OK',
-          events: [
-            {
-              timestamp: moment(),
-              status: 'PARTIAL'
-            }
-          ],
-          validators: [
-            {
-              name: 'v1',
-              status: 'OK',
-              events: [
-                {
-                  timestamp: moment(),
-                  status: 'FAIL'
-                }
-              ]
-            },
-            {
-              name: 'v2',
-              status: 'OK',
-              events: []
-            },
-            {
-              name: 'v3',
-              status: 'OK',
-              events: []
-            }
-          ],
-          pps: [
-            {
-              name: 'pp1',
-              status: 'OK',
-              events: []
-            },
-            {
-              name: 'pp2',
-              status: 'OK',
-              events: []
-            },
-            {
-              name: 'pp3',
-              status: 'OK',
-              events: []
-            }
-          ],
-          uhf: {
-            status: 'OK',
-            events: []
-          }
-        },
-        {
-          type: 'bus',
-          name: '1093',
-          status: 'FAIL',
-          events: [
-            {
-              timestamp: moment(),
-              status: 'FAIL'
-            }
-          ],
-          validators: [
-            {
-              name: 'v1',
-              status: 'FAIL',
-              events: [
-                {
-                  timestamp: moment(),
-                  status: 'FAIL'
-                }
-              ]
-            },
-            {
-              name: 'v2',
-              status: 'FAIL',
-              events: []
-            }
-          ],
-          pps: [
-            {
-              name: 'pp1',
-              status: 'FAIL',
-              events: []
-            },
-            {
-              name: 'pp2',
-              status: 'FAIL',
-              events: []
-            }
-          ],
-          uhf: {
-            status: 'FAIL',
-            events: []
-          }
-        }
-      ];
-
-      deferred.resolve(data);
-
-      return deferred.promise;
-    }
+    //function getTransportStatus(dtStart, dtEnd) {
+    //  let deferred = $q.defer();
+    //
+    //  let data = [
+    //    {
+    //      type: 'trolleybus',
+    //      name: '1022',
+    //      status: 'OK',
+    //      events: [
+    //        {
+    //          timestamp: moment(),
+    //          status: 'PARTIAL'
+    //        }
+    //      ],
+    //      validators: [
+    //        {
+    //          name: 'v1',
+    //          status: 'OK',
+    //          events: [
+    //            {
+    //              timestamp: moment(),
+    //              status: 'FAIL'
+    //            }
+    //          ]
+    //        },
+    //        {
+    //          name: 'v2',
+    //          status: 'OK',
+    //          events: []
+    //        },
+    //        {
+    //          name: 'v3',
+    //          status: 'OK',
+    //          events: []
+    //        }
+    //      ],
+    //      pps: [
+    //        {
+    //          name: 'pp1',
+    //          status: 'OK',
+    //          events: []
+    //        },
+    //        {
+    //          name: 'pp2',
+    //          status: 'OK',
+    //          events: []
+    //        },
+    //        {
+    //          name: 'pp3',
+    //          status: 'OK',
+    //          events: []
+    //        }
+    //      ],
+    //      uhf: {
+    //        status: 'OK',
+    //        events: []
+    //      }
+    //    },
+    //    {
+    //      type: 'bus',
+    //      name: '1093',
+    //      status: 'FAIL',
+    //      events: [
+    //        {
+    //          timestamp: moment(),
+    //          status: 'FAIL'
+    //        }
+    //      ],
+    //      validators: [
+    //        {
+    //          name: 'v1',
+    //          status: 'FAIL',
+    //          events: [
+    //            {
+    //              timestamp: moment(),
+    //              status: 'FAIL'
+    //            }
+    //          ]
+    //        },
+    //        {
+    //          name: 'v2',
+    //          status: 'FAIL',
+    //          events: []
+    //        }
+    //      ],
+    //      pps: [
+    //        {
+    //          name: 'pp1',
+    //          status: 'FAIL',
+    //          events: []
+    //        },
+    //        {
+    //          name: 'pp2',
+    //          status: 'FAIL',
+    //          events: []
+    //        }
+    //      ],
+    //      uhf: {
+    //        status: 'FAIL',
+    //        events: []
+    //      }
+    //    }
+    //  ];
+    //
+    //  deferred.resolve(data);
+    //
+    //  return deferred.promise;
+    //}
 
     function getEvents(bus, dtStart, dtEnd) {
       let deferred = $q.defer();
@@ -293,8 +293,9 @@ mod.service(
     }
 
     return ({
-      getTransportStatus: getTransportStatus,
-      getEvents: getEvents
+      //getTransportStatus: getTransportStatus,
+      getEvents: getEvents,
+      getBusDefines: getBusDefines
     });
 
   }

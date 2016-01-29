@@ -17,8 +17,16 @@ angular.module('armUptimeApp')
     $scope.busInfos = [];
 
     function updateTransportStatus() {
-      let {start, end} = timePeriod2moments($scope.timePeriod);
-      transpStatus.getTransportStatus(start, end).then(
+      //let {start, end} = timePeriod2moments($scope.timePeriod);
+      //transpStatus.getTransportStatus(start, end).then(
+      //  function (data) {
+      //    $scope.busInfos = data;
+      //    log("transport statuses updated");
+      //  }
+      //);
+      let start = moment().subtract(1, 'hours');
+      let end = moment();
+      transpStatus.getBusDefines(start, end).then(
         function (data) {
           $scope.busInfos = data;
           log("transport statuses updated");
@@ -87,7 +95,7 @@ angular.module('armUptimeApp')
       return class2ret;
     };
 
-    // TODO rem dummy data
+    // TODO rem dummy data applied to all timelines
     $scope.dtStart = moment().subtract(1, 'days');
     $scope.dtEnd = moment();
     $scope.timeIntervals = [
