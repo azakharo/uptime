@@ -8,6 +8,7 @@ angular.module('armUptimeApp', [
   'ui.grid',
   'ui.grid.autoResize',
   'ui.grid.pagination',
+  'angularSpinner',
   'restService',
   'TransportStatus',
   'authService'

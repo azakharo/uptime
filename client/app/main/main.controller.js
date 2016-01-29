@@ -4,6 +4,7 @@ angular.module('armUptimeApp')
   .controller('MainCtrl', function ($scope, $log, $state, uiGridConstants, Auth, transpStatus) {
     $scope.Auth = Auth;
     $scope.timePeriod = 'hour';
+    $scope.isGettingData = false;
 
     $scope.onSettingsBtnClick = function () {
       log("settings clicked");
@@ -18,6 +19,7 @@ angular.module('armUptimeApp')
     $scope.intervals = {};
 
     function updateTransportStatus() {
+      $scope.isGettingData = true;
       transpStatus.getBusDefines($scope.dtStart, $scope.dtEnd).then(
         function (data) {
           $scope.busInfos = data;
@@ -28,6 +30,10 @@ angular.module('armUptimeApp')
           //  logPeriods(bus.periods);
           //  log("----------------------")
           //});
+          $scope.isGettingData = false;
+        },
+        function (reason) {
+          $scope.isGettingData = false;
         }
       );
     }
