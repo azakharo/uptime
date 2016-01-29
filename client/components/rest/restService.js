@@ -1929,7 +1929,6 @@ mod.service(
 
     // Returns server specific models
     function getTranspStatusRawData(dtStart, dtEnd) {
-      // TODO getting trans status - remove limit
       var request = $http({
         method: "get",
         url: `${transpStatusUrl}?filter={"$and":[{"timestamp":{"$gte":${dtStart.unix()},"$lt":${dtEnd.unix()}}},{"servicename":"pt-statusregistry"}]}&sort=timestamp`
