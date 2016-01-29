@@ -3,7 +3,7 @@
 angular.module('armUptimeApp')
   .controller('MainCtrl', function ($scope, $log, $state, uiGridConstants, Auth, transpStatus) {
     $scope.Auth = Auth;
-    $scope.timePeriod = 'day';
+    $scope.timePeriod = 'hour';
 
     $scope.onSettingsBtnClick = function () {
       log("settings clicked");
@@ -17,16 +17,7 @@ angular.module('armUptimeApp')
     $scope.busInfos = [];
 
     function updateTransportStatus() {
-      //let {start, end} = timePeriod2moments($scope.timePeriod);
-      //transpStatus.getTransportStatus(start, end).then(
-      //  function (data) {
-      //    $scope.busInfos = data;
-      //    log("transport statuses updated");
-      //  }
-      //);
-      let start = moment().subtract(1, 'hours');
-      let end = moment();
-      transpStatus.getBusDefines(start, end).then(
+      transpStatus.getBusDefines($scope.dtStart, $scope.dtEnd).then(
         function (data) {
           $scope.busInfos = data;
           log("transport statuses updated");
@@ -35,6 +26,15 @@ angular.module('armUptimeApp')
     }
 
     $scope.$watch('timePeriod', function (newVal, oldVal, scope) {
+      // Clear data
+      $scope.busInfos = [];
+      $scope.gridOptions.data = [];
+      $scope.selectedBus = null;
+
+      const {start, end} = timePeriod2moments($scope.timePeriod);
+      $scope.dtStart = start;
+      $scope.dtEnd = end;
+
       updateTransportStatus();
       updateTransportEvents();
     });
@@ -96,25 +96,43 @@ angular.module('armUptimeApp')
     };
 
     // TODO rem dummy data applied to all timelines
-    $scope.dtStart = moment().subtract(1, 'days');
-    $scope.dtEnd = moment();
-    $scope.timeIntervals = [
-      {
-        dtStart: $scope.dtStart.clone(),
-        dtEnd: $scope.dtStart.clone().add(8, 'hours'),
-        color: 'danger'
-      },
-      {
-        dtStart: $scope.dtStart.clone().add(8, 'hours'),
-        dtEnd: $scope.dtStart.clone().add(16, 'hours'),
-        color: 'warning'
-      },
-      {
-        dtStart: $scope.dtStart.clone().add(16, 'hours'),
-        dtEnd: $scope.dtEnd.clone(),
-        color: 'success'
-      }
-    ];
+    //$scope.dtStart = moment().subtract(1, 'days');
+    //$scope.dtEnd = moment();
+    //$scope.timeIntervals = [
+    //  {
+    //    dtStart: $scope.dtStart.clone(),
+    //    dtEnd: $scope.dtStart.clone().add(8, 'hours'),
+    //    color: 'danger'
+    //  },
+    //  {
+    //    dtStart: $scope.dtStart.clone().add(8, 'hours'),
+    //    dtEnd: $scope.dtStart.clone().add(16, 'hours'),
+    //    color: 'warning'
+    //  },
+    //  {
+    //    dtStart: $scope.dtStart.clone().add(16, 'hours'),
+    //    dtEnd: $scope.dtEnd.clone(),
+    //    color: 'success'
+    //  }
+    //];
+
+    $scope.periods2TimelineIntervals = function(periods) {
+      return _.map(periods, function (per) {
+        let color = null;
+        if (per instanceof OnlinePeriod) {
+          color = 'success';
+        }
+        else if (per instanceof OfflinePeriod) {
+          color = 'danger';
+        }
+
+        return {
+          dtStart: per.start,
+          dtEnd: per.end,
+          color: color
+        };
+      })
+    };
 
     //-----------------------------------
     // ui-grid setup
@@ -151,17 +169,17 @@ angular.module('armUptimeApp')
     $scope.gridOptions.paginationPageSizes = [50, 100, 200, 250, 500];
 
     function updateTransportEvents() {
-      if (!$scope.selectedBus) {
-        $scope.gridOptions.data = [];
-        return;
-      }
-      let {start, end} = timePeriod2moments($scope.timePeriod);
-      transpStatus.getEvents($scope.selectedBus, start, end).then(
-        function (events) {
-          $scope.gridOptions.data = events;
-          log("transport events updated");
-        }
-      );
+      //if (!$scope.selectedBus) {
+      //  $scope.gridOptions.data = [];
+      //  return;
+      //}
+      //let {start, end} = timePeriod2moments($scope.timePeriod);
+      //transpStatus.getEvents($scope.selectedBus, start, end).then(
+      //  function (events) {
+      //    $scope.gridOptions.data = events;
+      //    log("transport events updated");
+      //  }
+      //);
     }
 
     // ui-grid setup
@@ -171,6 +189,9 @@ angular.module('armUptimeApp')
       let start = null;
       let end = moment();
       switch (timePeriod) {
+        case 'hour':
+          start = moment().subtract(1, 'hours');
+          break;
         case 'day':
           start = moment().subtract(1, 'days');
           break;

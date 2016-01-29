@@ -15,6 +15,7 @@
           .Grid-cell--autoSize.fs-medium Выбор периода наблюдения:
           .Grid-cell.text-left.pl1
             .btn-group
+              label.btn.btn-primary(ng-model="timePeriod", uib-btn-radio="'hour'") Час
               label.btn.btn-primary(ng-model="timePeriod", uib-btn-radio="'day'") Сутки
               label.btn.btn-primary(ng-model="timePeriod", uib-btn-radio="'week'") Неделя
               label.btn.btn-primary(ng-model="timePeriod", uib-btn-radio="'month'") Месяц
@@ -35,7 +36,9 @@
                     .Grid-cell.text-right.pr1
                       span.bold(ng-class="getStatusFgClass(bus.status)") {{bus.busName}}
                 .Grid-cell
-                  timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals", height="50px")
+                  timeline(dt-start="dtStart", dt-end="dtEnd",
+                  intervals="timeIntervals",
+                  height="50px")
             // BODY
             // validators
             .sect-validators.mb1.bb1
@@ -44,7 +47,8 @@
                 .Grid-cell--autoSize.accordion-first-col.text-right.pr1
                   span.bold(ng-class="getStatusFgClass(bus.validatorStatuses[v])") {{v}}
                 .Grid-cell
-                  timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals")
+                  timeline(dt-start="dtStart", dt-end="dtEnd",
+                  intervals="timeIntervals")
             // pps
             .sect-pps.mb1
               .accordion-first-col.text-right.bold.pb1 Датчики ПП:
@@ -52,7 +56,8 @@
                 .Grid-cell--autoSize.accordion-first-col.text-right.pr1
                   span.bold(ng-class="getStatusFgClass(bus.ppStatuses[pp])") {{pp | ppNameFilter}}
                 .Grid-cell
-                  timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals")
+                  timeline(dt-start="dtStart", dt-end="dtEnd",
+                  intervals="timeIntervals")
             // uhf
             //.sect-uhf.mb1
             //  .Grid.Grid--center
