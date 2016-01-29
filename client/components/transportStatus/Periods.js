@@ -133,10 +133,6 @@ function findPeriods(start, end, onlinePoints, maxPointDistance) {
   return periods;
 }
 
-function log(msg) {
-  console.log(msg);
-}
-
 function logPeriods(periods) {
   periods.forEach(function (per, ind) {
     log(`${ind+1}: ${per.toString()}`);

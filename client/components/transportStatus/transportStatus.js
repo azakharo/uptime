@@ -77,6 +77,9 @@ mod.service(
             }
           });
 
+          // Create online points for bus, pps, validators
+          createOnlinePoints(busDefines, compactTransRawData);
+
           deferred.resolve(busDefines);
         }
       );
@@ -85,9 +88,48 @@ mod.service(
     }
     getBusDefines(moment().subtract(1, 'days'), moment()).then(
       function (data) {
-        log(JSON.stringify(data, null, 2));
+        logData(data);
       }
     );
+
+    function createOnlinePoints(busDefines, transpStatusData) {
+      busDefines.forEach(function (bus) {
+        bus.onlinePoints = [];
+        // Prepare space for online points of pp
+        bus.ppOnlinePoints = new Map();
+        bus.pp.forEach(function (name) {
+          bus.ppOnlinePoints.set(name, []);
+        });
+        // Prepare space for online points of validators
+        bus.validatorOnlinePoints = new Map();
+        bus.validators.forEach(function (name) {
+          bus.validatorOnlinePoints.set(name, []);
+        });
+
+        let busStatusData = _.filter(transpStatusData, ['vehicleID', bus.vehicleID]);
+        busStatusData.forEach(function (statusItem) {
+          const dt = moment.unix(statusItem.timestamp);
+          const point = new OnlinePoint(dt);
+
+          // Add online point for bus
+          bus.onlinePoints.push(point);
+
+          // Add online point for every mentioned pp
+          statusItem.pp.forEach(function (pp) {
+            bus.ppOnlinePoints.get(pp).push(point);
+          });
+
+          // Add online point for every mentioned validator
+          statusItem.validators.forEach(function (v) {
+            bus.validatorOnlinePoints.get(v).push(point);
+          });
+
+          //for (const k of bus.ppOnlinePoints.keys()) {
+          //  log(`${k} - ${bus.ppOnlinePoints.get(k)}`);
+          //}
+        });
+      });
+    }
 
     function getTransportStatus(dtStart, dtEnd) {
       let deferred = $q.defer();
