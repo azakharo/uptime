@@ -41,14 +41,14 @@
             .sect-validators.mb1.bb1
               .Grid.Grid--center.pb1(ng-repeat="v in bus.validators")
                 .Grid-cell-fixed-1of8.text-right.pr1
-                  span.bold(ng-class="getStatusFgClass(v.status)") {{v}}
+                  span.bold(ng-class="getStatusFgClass(bus.validatorStatuses[v])") {{v}}
                 .Grid-cell
                   timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals")
             // pps
             .sect-pps.mb1
               .Grid.Grid--center.pb1(ng-repeat="pp in bus.pp")
                 .Grid-cell-fixed-1of8.text-right.pr1
-                  span.bold(ng-class="getStatusFgClass(pp.status)") {{pp}}
+                  span.bold(ng-class="getStatusFgClass(bus.ppStatuses[pp])") {{pp}}
                 .Grid-cell
                   timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals")
             // uhf
