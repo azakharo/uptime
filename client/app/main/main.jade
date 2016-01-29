@@ -26,7 +26,7 @@
             // HEADER
             uib-accordion-heading
               .Grid.Grid--center(ng-click="onAccordionItemClicked(bus)")
-                .Grid-cell-fixed-1of8
+                .Grid-cell--autoSize.accordion-first-col
                   .Grid.Grid--center
                     .Grid-cell.rounded(ng-switch="bus.busType",
                     ng-class="getStatusBgClass(bus.status)")
@@ -40,21 +40,21 @@
             // validators
             .sect-validators.mb1.bb1
               .Grid.Grid--center.pb1(ng-repeat="v in bus.validators")
-                .Grid-cell-fixed-1of8.text-right.pr1
+                .Grid-cell--autoSize.accordion-first-col.text-right.pr1
                   span.bold(ng-class="getStatusFgClass(bus.validatorStatuses[v])") {{v}}
                 .Grid-cell
                   timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals")
             // pps
             .sect-pps.mb1
               .Grid.Grid--center.pb1(ng-repeat="pp in bus.pp")
-                .Grid-cell-fixed-1of8.text-right.pr1
+                .Grid-cell--autoSize.accordion-first-col.text-right.pr1
                   span.bold(ng-class="getStatusFgClass(bus.ppStatuses[pp])") {{pp | ppNameFilter}}
                 .Grid-cell
                   timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals")
             // uhf
             //.sect-uhf.mb1
             //  .Grid.Grid--center
-            //    .Grid-cell-fixed-1of8.text-right.pr1
+            //    .Grid-cell--autoSize.accordion-first-col.text-right.pr1
             //      span.bold(ng-class="getStatusFgClass(bus.uhf.status)") UHF
             //    .Grid-cell
             //      timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals")
