@@ -48,7 +48,7 @@
             .sect-pps.mb1
               .Grid.Grid--center.pb1(ng-repeat="pp in bus.pp")
                 .Grid-cell-fixed-1of8.text-right.pr1
-                  span.bold(ng-class="getStatusFgClass(bus.ppStatuses[pp])") {{pp}}
+                  span.bold(ng-class="getStatusFgClass(bus.ppStatuses[pp])") {{pp | ppNameFilter}}
                 .Grid-cell
                   timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals")
             // uhf

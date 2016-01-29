@@ -203,6 +203,18 @@ angular.module('armUptimeApp')
 
   })
 
+  .filter('ppNameFilter', function () {
+    return function (name) {
+      let found = name.match(/^udp:\/\/(.*)#1$/i);
+      if (found) {
+        return found[1];
+      }
+      else {
+        return name;
+      }
+    };
+  })
+
   .filter('transEventNameFilter', function () {
     return function (eventType) {
       switch (eventType) {
