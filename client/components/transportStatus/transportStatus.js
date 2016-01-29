@@ -131,38 +131,24 @@ mod.service(
     }
 
     function createPeriods(busDefines, dtStart, dtEnd) {
-      //busDefines.forEach(function (bus) {
-      //  bus.onlinePoints = [];
-      //  // Prepare space for online points of pp
-      //  bus.ppOnlinePoints = {};
-      //  bus.pp.forEach(function (name) {
-      //    bus.ppOnlinePoints[name] = [];
-      //  });
-      //  // Prepare space for online points of validators
-      //  bus.validatorOnlinePoints = {};
-      //  bus.validators.forEach(function (name) {
-      //    bus.validatorOnlinePoints[name] = [];
-      //  });
-      //
-      //  let busStatusData = _.filter(transpStatusData, ['vehicleID', bus.vehicleID]);
-      //  busStatusData.forEach(function (statusItem) {
-      //    const dt = moment.unix(statusItem.timestamp);
-      //    const point = new OnlinePoint(dt);
-      //
-      //    // Add online point for bus
-      //    bus.onlinePoints.push(point);
-      //
-      //    // Add online point for every mentioned pp
-      //    statusItem.pp.forEach(function (pp) {
-      //      bus.ppOnlinePoints[pp].push(point);
-      //    });
-      //
-      //    // Add online point for every mentioned validator
-      //    statusItem.validators.forEach(function (v) {
-      //      bus.validatorOnlinePoints[v].push(point);
-      //    });
-      //  });
-      //});
+      busDefines.forEach(function (bus) {
+        // Create bus periods
+        bus.periods = findPeriods(dtStart, dtEnd, bus.onlinePoints, onlinePointMaxDistance);
+
+        // Create periods for every pp
+        bus.ppPeriods = {};
+        bus.pp.forEach(function (name) {
+          bus.ppPeriods[name] = findPeriods(dtStart, dtEnd,
+            bus.ppOnlinePoints[name], onlinePointMaxDistance);
+        });
+
+        // Create periods for every validator
+        bus.validatorPeriods = {};
+        bus.validators.forEach(function (name) {
+          bus.validatorPeriods[name] = findPeriods(dtStart, dtEnd,
+            bus.validatorOnlinePoints[name], onlinePointMaxDistance);
+        });
+      });
     }
 
     function getTransportStatus(dtStart, dtEnd) {
