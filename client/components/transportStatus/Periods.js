@@ -4,6 +4,8 @@ class Period {
   constructor(start, end) {
     this.start = start;
     this.end = end;
+// TODO workaround class json.stringify issue
+    this.type = null;
   }
 
   toString() {
@@ -15,12 +17,24 @@ class Period {
 }
 
 class OnlinePeriod extends Period {
+// TODO workaround class json.stringify issue
+  constructor(start, end) {
+    super(start, end)
+    this.type = "online";
+  }
+
   toString() {
     return super.toString() + ' online';
   }
 }
 
 class OfflinePeriod extends Period {
+// TODO workaround class json.stringify issue
+  constructor(start, end) {
+    super(start, end)
+    this.type = "offline";
+  }
+
   toString() {
     return super.toString() + ' offline';
   }
