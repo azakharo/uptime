@@ -41,23 +41,23 @@
             .sect-validators.mb1.bb1
               .Grid.Grid--center.pb1(ng-repeat="v in bus.validators")
                 .Grid-cell-fixed-1of8.text-right.pr1
-                  span.bold(ng-class="getStatusFgClass(v.status)") {{v.name}}
+                  span.bold(ng-class="getStatusFgClass(v.status)") {{v}}
                 .Grid-cell
                   timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals")
             // pps
-            .sect-pps.mb1.bb1
-              .Grid.Grid--center.pb1(ng-repeat="pp in bus.pps")
+            .sect-pps.mb1
+              .Grid.Grid--center.pb1(ng-repeat="pp in bus.pp")
                 .Grid-cell-fixed-1of8.text-right.pr1
-                  span.bold(ng-class="getStatusFgClass(pp.status)") {{pp.name}}
+                  span.bold(ng-class="getStatusFgClass(pp.status)") {{pp}}
                 .Grid-cell
                   timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals")
             // uhf
-            .sect-uhf.mb1
-              .Grid.Grid--center
-                .Grid-cell-fixed-1of8.text-right.pr1
-                  span.bold(ng-class="getStatusFgClass(bus.uhf.status)") UHF
-                .Grid-cell
-                  timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals")
+            //.sect-uhf.mb1
+            //  .Grid.Grid--center
+            //    .Grid-cell-fixed-1of8.text-right.pr1
+            //      span.bold(ng-class="getStatusFgClass(bus.uhf.status)") UHF
+            //    .Grid-cell
+            //      timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals")
     #right-part.p1
       #bus-events-title.pb1.fs-large
         span(ng-show="selectedBus") События для {{ selectedBus.name }}:
