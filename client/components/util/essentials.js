@@ -22,7 +22,12 @@ function debounce(func, wait, immediate) {
 function log(msg) {
   console.log(msg);
 }
-
 function logData(data) {
   log(JSON.stringify(data, null, 2));
+}
+
+function isInt(value) {
+  return !isNaN(value) &&
+    parseInt(Number(value)) == value &&
+    !isNaN(parseInt(value, 10));
 }

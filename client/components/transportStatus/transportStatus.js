@@ -33,6 +33,8 @@ mod.service(
               validators: []
             };
 
+            busDef.busType = getBusType(busDef.busName);
+
             // Get number of validators and pp
             let term = _.find(terminals, ['number', busDef.busName]);
             if (term) {
@@ -94,6 +96,10 @@ mod.service(
     //    logData(data);
     //  }
     //);
+
+    function getBusType(busName) {
+      return isInt(busName) ? "trolleybus" : "bus";
+    }
 
     function createOnlinePoints(busDefines, transpStatusData) {
       busDefines.forEach(function (bus) {
