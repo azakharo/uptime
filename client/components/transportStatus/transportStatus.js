@@ -88,6 +88,8 @@ mod.service(
 
           createStatuses(busDefines);
 
+          createGpsStatePoints(busDefines, compactTransRawData);
+
           deferred.resolve(busDefines);
         }
       );
@@ -135,6 +137,18 @@ mod.service(
           statusItem.validators.forEach(function (v) {
             bus.validatorOnlinePoints[v].push(point);
           });
+        });
+      });
+    }
+
+    function createGpsStatePoints(busDefines, transpStatusData) {
+      busDefines.forEach(function (bus) {
+        let data = _.filter(transpStatusData, ['vehicleID', bus.vehicleID]);
+        data = _.filter(data, function (item) {
+          return item.gpsStatus !== 'FAIL';
+        });
+        bus.gpsPoints = _.map(data, function (item) {
+          return new StatePoint(moment.unix(item.timestamp), item.state);
         });
       });
     }
