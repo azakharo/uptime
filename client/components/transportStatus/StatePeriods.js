@@ -54,11 +54,11 @@ function findStatePeriods(start, end, statePoints, maxPointDistance, unavailStat
         unavailState);
       periods.push(curPeriod);
       // Then start from the 1st point
-      curPeriod = new Period(points[0].timestamp, null, points[0].state);
+      curPeriod = new StatePeriod(points[0].timestamp, null, points[0].state);
     }
     else {
       // Start from the start
-      curPeriod = new Period(start, null, points[0].state);
+      curPeriod = new StatePeriod(start, null, points[0].state);
     }
   }
   else {
@@ -73,7 +73,7 @@ function findStatePeriods(start, end, statePoints, maxPointDistance, unavailStat
       // Finish period and start new period
       curPeriod.end = curPoint.timestamp.clone().subtract(1, 'seconds');
       periods.push(curPeriod);
-      curPeriod = new StatePeriod(curPoint.timestamp, null, curPeriod.state);
+      curPeriod = new StatePeriod(curPoint.timestamp, null, curPoint.state);
     }
     else {
       // Find out whether the difference between prevPoint and curPoint is longer than maxPointDistance
@@ -159,14 +159,41 @@ function testAlwaysOK() {
   }
 }
 
+function testOneShortOK() {
+  let points = [
+    new StatePoint(moment("2016-01-27 12:04:00", testTimePointFrmt), 'OK')
+  ];
+
+  let periods = findStatePeriods(
+    moment("2016-01-27 06:00:00", testTimePointFrmt),
+    moment("2016-01-27 16:10:00", testTimePointFrmt),
+    points, onlinePointMaxDistanceTest, 'FAIL');
+  logPeriods(periods);
+  if (periods.length !== 3) {
+    throw "periods.length !== 3";
+  }
+  let okPers =_.filter(periods, function (per) {
+    return per.state === 'OK';
+  });
+  if (okPers.length !== 1) {
+    throw "okPers.length !== 1";
+  }
+  let unavailPers =_.filter(periods, function (per) {
+    return per.state === 'FAIL';
+  });
+  if (unavailPers.length !== 2) {
+    throw "unavailPers.length !== 2";
+  }
+}
+
 
 function runTests() {
   log('testAlwaysOK');
   testAlwaysOK();
 
-  //log('testOneShortOK');
-  //testOneShortOK();
-  //
+  log('testOneShortOK');
+  testOneShortOK();
+
   //log('testAlwaysUnavail');
   //testAlwaysUnavail();
   //
