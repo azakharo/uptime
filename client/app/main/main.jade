@@ -30,15 +30,15 @@
               .Grid.Grid--center(ng-click="onAccordionItemClicked(bus)")
                 .Grid-cell--autoSize.accordion-first-col
                   .Grid.Grid--center
-                    .Grid-cell.rounded(ng-switch="bus.busType",
+                    .Grid-cell--autoSize.rounded(ng-switch="bus.busType",
                     ng-class="getStatusBgClass(bus.status)")
-                      img(ng-switch-when="trolleybus", src='assets/images/trolleybus.png', alt="Троллейбус")
-                      img(ng-switch-when="bus",        src='assets/images/bus.png',        alt="Автобус")
+                      img.bus-img(ng-switch-when="trolleybus", src='assets/images/trolleybus.png', alt="Троллейбус")
+                      img.bus-img(ng-switch-when="bus",        src='assets/images/bus.png',        alt="Автобус")
                     .Grid-cell.text-right.pr1
                       span.bold(ng-class="getStatusFgClass(bus.status)") {{bus.busName}}
                 .Grid-cell
                   timeline(dt-start="dtStart", dt-end="dtEnd", intervals="intervals[bus.busName].busIntervals",
-                  height="50px")
+                  height="3rem")
             // BODY
             // validators
             .sect-validators.mb1.bb1
