@@ -23,6 +23,7 @@ mod.service(
           let compactTransRawData = myRest.compactTranspStatusRawData(transpRawData);
 
           let busDefines = [];
+          vehicles = _.sortBy(vehicles, 'terminal_id');
           vehicles.forEach(function (vehcl) {
             let busDef = {
               vehicleID: vehcl.id,
