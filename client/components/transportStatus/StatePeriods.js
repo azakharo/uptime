@@ -320,4 +320,4 @@ function runTests() {
   log('testOkNoSatelliteOk');
   testOkNoSatelliteOk();
 }
-runTests();
+//runTests();
