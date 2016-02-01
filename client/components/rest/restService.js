@@ -1940,11 +1940,21 @@ mod.service(
       return _.map(transpStatusRawData, function (d) {
         let pp = Object.getOwnPropertyNames(d.eventInfo.meta.traffic);
         let validators = Object.getOwnPropertyNames(d.eventInfo.meta.validator);
+        // Possible values: FAIL, NO_SATELLITE, OK
+        let gpsStatus = null;
+        const gpsData = d.eventInfo.meta.gps;
+        if (!gpsData) {
+          gpsStatus = 'FAIL';
+        }
+        else {
+          gpsStatus = gpsData.active ? 'OK' : 'NO_SATELLITE';
+        }
         return {
           timestamp: d.eventInfo.meta.timestamp,
           vehicleID: d.eventInfo.meta.vehicleId,
           pp: pp,
-          validators: validators
+          validators: validators,
+          gpsStatus: gpsStatus
         };
       });
     }
