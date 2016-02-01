@@ -3,7 +3,7 @@
 angular.module('armUptimeApp')
   .controller('MainCtrl', function ($scope, $log, $state, uiGridConstants, Auth, transpStatus) {
     $scope.Auth = Auth;
-    $scope.timePeriod = 'hour';
+    $scope.timePeriod = 'day';
     $scope.isGettingData = false;
 
     $scope.onSettingsBtnClick = function () {
