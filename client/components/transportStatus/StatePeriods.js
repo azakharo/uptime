@@ -235,6 +235,35 @@ function testTwoCombinedOK() {
   }
 }
 
+function testTwoSeparateOK() {
+  let points = [
+    new StatePoint(moment("2016-01-27 06:25:00", testTimePointFrmt), 'OK'),
+    new StatePoint(moment("2016-01-27 06:35:00", testTimePointFrmt), 'OK')
+  ];
+
+  let start = moment("2016-01-27 06:00:00", testTimePointFrmt);
+  let end = moment("2016-01-27 07:00:00", testTimePointFrmt);
+  let periods = findStatePeriods(start, end, points, onlinePointMaxDistanceTest, 'FAIL');
+
+  //logPeriods(periods);
+
+  if (periods.length !== 5) {
+    throw "periods.length !== 5";
+  }
+  let onlinePers =_.filter(periods, function (per) {
+    return per.state === 'OK';
+  });
+  if (onlinePers.length !== 2) {
+    throw "onlinePers.length !== 2";
+  }
+  let offlinePers=_.filter(periods, function (per) {
+    return per.state === 'FAIL';
+  });
+  if (offlinePers.length !== 3) {
+    throw "offlinePers.length !== 3";
+  }
+}
+
 function testOkNoSatelliteOk() {
   let points = [
     new StatePoint(moment("2016-01-27 06:25:00", testTimePointFrmt), 'OK'),
@@ -285,8 +314,8 @@ function runTests() {
   log('testTwoCombinedOK');
   testTwoCombinedOK();
 
-  //log('testTwoSeparateOK');
-  //testTwoSeparateOK();
+  log('testTwoSeparateOK');
+  testTwoSeparateOK();
 
   log('testOkNoSatelliteOk');
   testOkNoSatelliteOk();
