@@ -206,6 +206,35 @@ function testAlwaysUnavail() {
   }
 }
 
+function testTwoCombinedOK() {
+  let points = [
+    new StatePoint(moment("2016-01-27 06:25:00", testTimePointFrmt), 'OK'),
+    new StatePoint(moment("2016-01-27 06:30:00", testTimePointFrmt), 'OK')
+  ];
+
+  let start = moment("2016-01-27 06:00:00", testTimePointFrmt);
+  let end = moment("2016-01-27 07:00:00", testTimePointFrmt);
+  let periods = findStatePeriods(start, end, points, onlinePointMaxDistanceTest, 'FAIL');
+
+  //logPeriods(periods);
+
+  if (periods.length !== 3) {
+    throw "periods.length !== 3";
+  }
+  let onlinePers =_.filter(periods, function (per) {
+    return per.state === 'OK';
+  });
+  if (onlinePers.length !== 1) {
+    throw "onlinePers.length !== 1";
+  }
+  let offlinePers=_.filter(periods, function (per) {
+    return per.state === 'FAIL';
+  });
+  if (offlinePers.length !== 2) {
+    throw "offlinePers.length !== 2";
+  }
+}
+
 
 function runTests() {
   log('testAlwaysOK');
@@ -217,9 +246,9 @@ function runTests() {
   log('testAlwaysUnavail');
   testAlwaysUnavail();
 
-  //log('testTwoCombinedOK');
-  //testTwoCombinedOK();
-  //
+  log('testTwoCombinedOK');
+  testTwoCombinedOK();
+
   //log('testTwoSeparateOK');
   //testTwoSeparateOK();
   //
