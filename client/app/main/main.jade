@@ -49,20 +49,20 @@
                 .Grid-cell
                   timeline(dt-start="dtStart", dt-end="dtEnd", intervals="intervals[bus.busName].validatorIntervals[v]")
             // pps
-            .sect-pps.mb1
+            .sect-pps.mb1.bb1
               .accordion-first-col.text-right.bold.pb1 Датчики ПП:
               .Grid.Grid--center.pb1(ng-repeat="pp in bus.pp")
                 .Grid-cell--autoSize.accordion-first-col.text-right.pr1
                   span.bold(ng-class="getStatusFgClass(bus.ppStatuses[pp])") {{pp | ppNameFilter}}
                 .Grid-cell
                   timeline(dt-start="dtStart", dt-end="dtEnd", intervals="intervals[bus.busName].ppIntervals[pp]")
-            // uhf
-            //.sect-uhf.mb1
-            //  .Grid.Grid--center
-            //    .Grid-cell--autoSize.accordion-first-col.text-right.pr1
-            //      span.bold(ng-class="getStatusFgClass(bus.uhf.status)") UHF
-            //    .Grid-cell
-            //      timeline(dt-start="dtStart", dt-end="dtEnd", intervals="timeIntervals")
+            // GPS
+            .sect-gps.bb1
+              .Grid.Grid--center
+                .Grid-cell--autoSize.accordion-first-col.text-right.pr1
+                  span.bold(ng-class="getStatusFgClass(bus.gpsStatus)") GPS
+                .Grid-cell
+                  timeline(dt-start="dtStart", dt-end="dtEnd", intervals="intervals[bus.busName].gpsIntervals")
     #right-part.p1
       #bus-events-title.pb1.fs-large
         span(ng-show="selectedBus") События для {{ selectedBus.busName }}:

@@ -86,10 +86,10 @@ mod.service(
           // Create periods for timelines
           createPeriods(busDefines, dtStart, dtEnd);
 
-          createStatuses(busDefines);
-
           createGpsStatePoints(busDefines, compactTransRawData);
           createGpsStatePeriods(busDefines, dtStart, dtEnd);
+
+          createStatuses(busDefines);
 
           deferred.resolve(busDefines);
         }
@@ -197,6 +197,9 @@ mod.service(
         bus.validators.forEach(function (name) {
           bus.validatorStatuses[name] = getStatusByLastPeriod(bus.validatorPeriods[name]);
         });
+
+        // GPS status
+        bus.gpsStatus = getStatusByLastStatePeriod(bus.gpsPeriods);
       });
     }
 
@@ -215,6 +218,16 @@ mod.service(
       else {
         return 'UNKNOWN';
       }
+    }
+
+    function getStatusByLastStatePeriod(periods) {
+      if (!periods || periods.length === 0) {
+        return 'UNKNOWN';
+      }
+      else {
+        return periods[periods.length - 1].state;
+      }
+
     }
 
     function getEvents(bus, dtStart, dtEnd) {

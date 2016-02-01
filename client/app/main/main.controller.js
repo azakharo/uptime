@@ -58,11 +58,14 @@ angular.module('armUptimeApp')
           intervl.ppIntervals[name] = periods2TimelineIntervals(bus.ppPeriods[name]);
         });
 
-        // Create status for every validator
+        // Create intervals for every validator
         intervl.validatorIntervals = {};
         bus.validators.forEach(function (name) {
           intervl.validatorIntervals[name] = periods2TimelineIntervals(bus.validatorPeriods[name]);
         });
+
+        // Create GPS state intervals
+        intervl.gpsIntervals = gpsPeriods2TimelineIntervals(bus.gpsPeriods);
       });
       return intervals;
     }
@@ -75,6 +78,27 @@ angular.module('armUptimeApp')
         }
         else if (per instanceof OfflinePeriod) {
           color = 'danger';
+        }
+
+        return {
+          dtStart: per.start,
+          dtEnd: per.end,
+          color: color
+        };
+      })
+    }
+
+    function gpsPeriods2TimelineIntervals(periods) {
+      return _.map(periods, function (per) {
+        let color = undefined;
+        if (per.state === 'OK') {
+          color = 'success';
+        }
+        else if (per.state === 'FAIL') {
+          color = 'danger';
+        }
+        else if (per.state === 'NO_SATELLITE') {
+          color = 'warning';
         }
 
         return {
@@ -127,6 +151,7 @@ angular.module('armUptimeApp')
           class2ret = 'status-failed-bg';
           break;
         case 'PARTIAL':
+        case 'NO_SATELLITE':
           class2ret = 'status-partial-bg';
           break;
         default:
@@ -146,6 +171,7 @@ angular.module('armUptimeApp')
           class2ret = 'status-failed-fg';
           break;
         case 'PARTIAL':
+        case 'NO_SATELLITE':
           class2ret = 'status-partial-fg';
           break;
         default:
