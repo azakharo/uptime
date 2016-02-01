@@ -27,7 +27,12 @@ angular.module('armUptimeApp')
           log("transport statuses updated");
           //data.forEach(function (bus) {
           //  log(`bus '${bus.busName}'`);
-          //  logData(bus.gpsPoints);
+          //  //bus.gpsPoints.forEach(function (p, i) {
+          //  //  log(`${i + 1}: ${p.toString()}`);
+          //  //});
+          //  bus.gpsPeriods.forEach(function (p, i) {
+          //    log(`${i + 1}: ${p.toString()}`);
+          //  });
           //  log("----------------------")
           //});
           $scope.isGettingData = false;

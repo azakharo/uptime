@@ -89,6 +89,7 @@ mod.service(
           createStatuses(busDefines);
 
           createGpsStatePoints(busDefines, compactTransRawData);
+          createGpsStatePeriods(busDefines, dtStart, dtEnd);
 
           deferred.resolve(busDefines);
         }
@@ -148,7 +149,7 @@ mod.service(
           return item.gpsStatus !== 'FAIL';
         });
         bus.gpsPoints = _.map(data, function (item) {
-          return new StatePoint(moment.unix(item.timestamp), item.state);
+          return new StatePoint(moment.unix(item.timestamp), item.gpsStatus);
         });
       });
     }
@@ -171,6 +172,12 @@ mod.service(
           bus.validatorPeriods[name] = findPeriods(dtStart, dtEnd,
             bus.validatorOnlinePoints[name], onlinePointMaxDistance);
         });
+      });
+    }
+
+    function createGpsStatePeriods(busDefines, dtStart, dtEnd) {
+      busDefines.forEach(function (bus) {
+        bus.gpsPeriods = findStatePeriods(dtStart, dtEnd, bus.gpsPoints, onlinePointMaxDistance, 'FAIL');
       });
     }
 
