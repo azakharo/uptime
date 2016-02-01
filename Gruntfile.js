@@ -30,6 +30,10 @@ module.exports = function (grunt) {
     from: 'app/',
     to: baseUrl + 'app/'
   };
+  var replAssetsImages = {
+    from: 'assets/images/',
+    to: baseUrl + 'assets/images/'
+  };
   var replBowerComp = {
     from: 'bower_components/',
     to: baseUrl + 'bower_components/'
@@ -645,7 +649,7 @@ module.exports = function (grunt) {
           'dist/public/app/*.css'
         ],
         overwrite: true,
-        replacements: [replApp, replBowerCompAbs, replBowerComp]
+        replacements: [replApp, replAssetsImages, replBowerCompAbs, replBowerComp]
       },
       urlUiGrid: {
         src: [
