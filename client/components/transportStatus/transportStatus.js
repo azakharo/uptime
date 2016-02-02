@@ -129,7 +129,7 @@ mod.service(
           const okPoint = new StatePoint(dt, 'OK');
 
           // Add online point for bus
-          bus.onlinePoints.push(new OnlinePoint(dt));
+          bus.onlinePoints.push(new StatePoint(dt, 'OK'));
 
           // Add state point for every pp
           bus.pp.forEach(function (ppName) {
@@ -173,7 +173,7 @@ mod.service(
     function createPeriods(busDefines, dtStart, dtEnd) {
       busDefines.forEach(function (bus) {
         // Create bus periods
-        bus.periods = findPeriods(dtStart, dtEnd, bus.onlinePoints, onlinePointMaxDistance);
+        bus.periods = findStatePeriods(dtStart, dtEnd, bus.onlinePoints, onlinePointMaxDistance, 'UNAVAIL');
 
         // Create periods for every pp
         bus.ppPeriods = {};
@@ -200,7 +200,7 @@ mod.service(
     function createStatuses(busDefines) {
       busDefines.forEach(function (bus) {
         // Bus status
-        bus.status = getStatusByLastPeriod(bus.periods);
+        bus.status = getStatusByLastStatePeriod(bus.periods);
 
         // Create status for every pp
         bus.ppStatuses = {};

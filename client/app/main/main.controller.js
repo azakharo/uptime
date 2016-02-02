@@ -62,7 +62,7 @@ angular.module('armUptimeApp')
         let intervl = intervals[bus.busName];
 
         // Bus intervals
-        intervl.busIntervals = onOffLinePeriods2TimelineIntervals(bus.periods);
+        intervl.busIntervals = busPeriods2TimelineIntervals(bus.periods);
 
         // Create intervals for every pp
         intervl.ppIntervals = {};
@@ -82,14 +82,14 @@ angular.module('armUptimeApp')
       return intervals;
     }
 
-    function ppValidatorPeriods2TimelineIntervals(periods) {
+    function busPeriods2TimelineIntervals(periods) {
       return _.map(periods, function (per) {
         let color = undefined;
         if (per.state === 'OK') {
           color = 'success';
         }
-        else if (per.state === 'FAIL') {
-          color = 'danger';
+        else if (per.state === 'PARTIAL') {
+          color = 'warning';
         }
         else if (per.state === 'UNAVAIL') {
           color = 'info';
@@ -103,13 +103,16 @@ angular.module('armUptimeApp')
       })
     }
 
-    function onOffLinePeriods2TimelineIntervals(periods) {
+    function ppValidatorPeriods2TimelineIntervals(periods) {
       return _.map(periods, function (per) {
         let color = undefined;
-        if (per instanceof OnlinePeriod) {
+        if (per.state === 'OK') {
           color = 'success';
         }
-        else if (per instanceof OfflinePeriod) {
+        else if (per.state === 'FAIL') {
+          color = 'danger';
+        }
+        else if (per.state === 'UNAVAIL') {
           color = 'info';
         }
 
