@@ -80,8 +80,8 @@ mod.service(
             }
           });
 
-          // Create online points for bus, pps, validators
-          createOnlinePoints(busDefines, compactTransRawData);
+          // Create points for bus, pps, validators
+          createPoints(busDefines, compactTransRawData);
 
           // Create periods for timelines
           createPeriods(busDefines, dtStart, dtEnd);
@@ -107,37 +107,56 @@ mod.service(
       return isInt(busName) ? "trolleybus" : "bus";
     }
 
-    function createOnlinePoints(busDefines, transpStatusData) {
+    function createPoints(busDefines, transpStatusData) {
       busDefines.forEach(function (bus) {
         bus.onlinePoints = [];
-        // Prepare space for online points of pp
-        bus.ppOnlinePoints = {};
+        // Prepare space for points of pp
+        bus.ppPoints = {};
         bus.pp.forEach(function (name) {
-          bus.ppOnlinePoints[name] = [];
+          bus.ppPoints[name] = [];
         });
-        // Prepare space for online points of validators
-        bus.validatorOnlinePoints = {};
+        // Prepare space for points of validators
+        bus.validatorPoints = {};
         bus.validators.forEach(function (name) {
-          bus.validatorOnlinePoints[name] = [];
+          bus.validatorPoints[name] = [];
         });
 
         let busStatusData = _.filter(transpStatusData, ['vehicleID', bus.vehicleID]);
         busStatusData.forEach(function (statusItem) {
           const dt = moment.unix(statusItem.timestamp);
-          const point = new OnlinePoint(dt);
+          //const unavailPoint = new StatePoint(dt, 'UNAVAIL');
+          const failPoint = new StatePoint(dt, 'FAIL');
+          const okPoint = new StatePoint(dt, 'OK');
 
           // Add online point for bus
-          bus.onlinePoints.push(point);
+          bus.onlinePoints.push(new OnlinePoint(dt));
 
-          // Add online point for every mentioned pp
-          statusItem.pp.forEach(function (pp) {
-            bus.ppOnlinePoints[pp].push(point);
+          // Add state point for every pp
+          bus.pp.forEach(function (ppName) {
+            let found = _.find(statusItem.pp, function (ppNameInStatus) {
+              return ppNameInStatus === ppName;
+            });
+            if (found) {
+              bus.ppPoints[ppName].push(okPoint);
+            }
+            else {
+              bus.ppPoints[ppName].push(failPoint);
+            }
           });
 
-          // Add online point for every mentioned validator
-          statusItem.validators.forEach(function (v) {
-            bus.validatorOnlinePoints[v].push(point);
+          // Add state point for every validator
+          bus.validators.forEach(function (vname) {
+            let found = _.find(statusItem.validators, function (vnameInStatus) {
+              return vnameInStatus === vname;
+            });
+            if (found) {
+              bus.validatorPoints[vname].push(okPoint);
+            }
+            else {
+              bus.validatorPoints[vname].push(failPoint);
+            }
           });
+
         });
       });
     }
@@ -162,15 +181,15 @@ mod.service(
         // Create periods for every pp
         bus.ppPeriods = {};
         bus.pp.forEach(function (name) {
-          bus.ppPeriods[name] = findPeriods(dtStart, dtEnd,
-            bus.ppOnlinePoints[name], onlinePointMaxDistance);
+          bus.ppPeriods[name] = findStatePeriods(dtStart, dtEnd,
+            bus.ppPoints[name], onlinePointMaxDistance, 'UNAVAIL');
         });
 
         // Create periods for every validator
         bus.validatorPeriods = {};
         bus.validators.forEach(function (name) {
-          bus.validatorPeriods[name] = findPeriods(dtStart, dtEnd,
-            bus.validatorOnlinePoints[name], onlinePointMaxDistance);
+          bus.validatorPeriods[name] = findStatePeriods(dtStart, dtEnd,
+            bus.validatorPoints[name], onlinePointMaxDistance, 'UNAVAIL');
         });
       });
     }
@@ -189,13 +208,13 @@ mod.service(
         // Create status for every pp
         bus.ppStatuses = {};
         bus.pp.forEach(function (name) {
-          bus.ppStatuses[name] = getStatusByLastPeriod(bus.ppPeriods[name]);
+          bus.ppStatuses[name] = getStatusByLastStatePeriod(bus.ppPeriods[name]);
         });
 
         // Create status for every validator
         bus.validatorStatuses = {};
         bus.validators.forEach(function (name) {
-          bus.validatorStatuses[name] = getStatusByLastPeriod(bus.validatorPeriods[name]);
+          bus.validatorStatuses[name] = getStatusByLastStatePeriod(bus.validatorPeriods[name]);
         });
 
         // GPS status

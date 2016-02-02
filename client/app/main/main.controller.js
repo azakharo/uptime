@@ -67,13 +67,13 @@ angular.module('armUptimeApp')
         // Create intervals for every pp
         intervl.ppIntervals = {};
         bus.pp.forEach(function (name) {
-          intervl.ppIntervals[name] = periods2TimelineIntervals(bus.ppPeriods[name]);
+          intervl.ppIntervals[name] = ppValidatorPeriods2TimelineIntervals(bus.ppPeriods[name]);
         });
 
         // Create intervals for every validator
         intervl.validatorIntervals = {};
         bus.validators.forEach(function (name) {
-          intervl.validatorIntervals[name] = periods2TimelineIntervals(bus.validatorPeriods[name]);
+          intervl.validatorIntervals[name] = ppValidatorPeriods2TimelineIntervals(bus.validatorPeriods[name]);
         });
 
         // Create GPS state intervals
@@ -82,14 +82,17 @@ angular.module('armUptimeApp')
       return intervals;
     }
 
-    function periods2TimelineIntervals(periods) {
+    function ppValidatorPeriods2TimelineIntervals(periods) {
       return _.map(periods, function (per) {
         let color = undefined;
-        if (per instanceof OnlinePeriod) {
+        if (per.state === 'OK') {
           color = 'success';
         }
-        else if (per instanceof OfflinePeriod) {
+        else if (per.state === 'FAIL') {
           color = 'danger';
+        }
+        else if (per.state === 'UNAVAIL') {
+          color = 'info';
         }
 
         return {
