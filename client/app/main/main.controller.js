@@ -133,6 +133,9 @@ angular.module('armUptimeApp')
         else if (per.state === 'NO_SATELLITE') {
           color = 'warning';
         }
+        else if (per.state === 'UNAVAIL') {
+          color = 'info';
+        }
 
         return {
           dtStart: per.start,
@@ -190,6 +193,9 @@ angular.module('armUptimeApp')
         case 'NO_SATELLITE':
           class2ret = 'status-partial-bg';
           break;
+        case 'UNAVAIL':
+          class2ret = 'status-unavail-bg';
+          break;
         default:
           class2ret = 'status-unknown-bg';
           break;
@@ -209,6 +215,9 @@ angular.module('armUptimeApp')
         case 'PARTIAL':
         case 'NO_SATELLITE':
           class2ret = 'status-partial-fg';
+          break;
+        case 'UNAVAIL':
+          class2ret = 'status-unavail-fg';
           break;
         default:
           class2ret = 'status-unknown-fg';

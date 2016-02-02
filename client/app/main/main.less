@@ -116,6 +116,7 @@
 @color-status-ok: rgba(92, 184, 92, 1.0);
 @color-status-failed: rgba(217, 83, 79, 1.0);
 @color-status-partial: rgba(240, 173, 78, 1.0);
+@color-status-unavail: #d9edf7;
 
 .status-ok-bg {
   background: @color-status-ok;
@@ -127,6 +128,10 @@
 
 .status-partial-bg {
   background: @color-status-partial;
+}
+
+.status-unavail-bg {
+  background: @color-status-unavail;
 }
 
 .status-unknown-bg {
@@ -143,6 +148,10 @@
 
 .status-partial-fg {
   color: @color-status-partial;
+}
+
+.status-unavail-fg {
+  color: @color-status-unavail;
 }
 
 .status-unknown-fg {
