@@ -164,9 +164,6 @@ mod.service(
     function createGpsStatePoints(busDefines, transpStatusData) {
       busDefines.forEach(function (bus) {
         let data = _.filter(transpStatusData, ['vehicleID', bus.vehicleID]);
-        data = _.filter(data, function (item) {
-          return item.gpsStatus !== 'FAIL';
-        });
         bus.gpsPoints = _.map(data, function (item) {
           return new StatePoint(moment.unix(item.timestamp), item.gpsStatus);
         });
@@ -196,7 +193,7 @@ mod.service(
 
     function createGpsStatePeriods(busDefines, dtStart, dtEnd) {
       busDefines.forEach(function (bus) {
-        bus.gpsPeriods = findStatePeriods(dtStart, dtEnd, bus.gpsPoints, onlinePointMaxDistance, 'FAIL');
+        bus.gpsPeriods = findStatePeriods(dtStart, dtEnd, bus.gpsPoints, onlinePointMaxDistance, 'UNAVAIL');
       });
     }
 
