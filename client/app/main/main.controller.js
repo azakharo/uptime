@@ -22,7 +22,7 @@ angular.module('armUptimeApp')
         updateTransportStatus();
         updateTransportEvents();
       }
-    }, 120000);
+    }, 180000);
     $scope.$on('$destroy', function () {
       $interval.cancel(stopAutoRefresh);
     });
