@@ -1,9 +1,8 @@
 "use strict";
 
-class Period {
+class Period extends DateRange {
   constructor(start, end) {
-    this.start = start;
-    this.end = end;
+    super(start, end);
     //this.type = null;
   }
 
