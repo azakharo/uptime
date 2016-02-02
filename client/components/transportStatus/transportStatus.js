@@ -89,6 +89,8 @@ mod.service(
           createGpsStatePoints(busDefines, compactTransRawData);
           createGpsStatePeriods(busDefines, dtStart, dtEnd);
 
+          createBusPartialPeriods(busDefines);
+
           createStatuses(busDefines);
 
           deferred.resolve(busDefines);
@@ -243,7 +245,47 @@ mod.service(
       else {
         return periods[periods.length - 1].state;
       }
+    }
 
+    function createBusPartialPeriods(busDefines) {
+      busDefines.forEach(function (bus) {
+        // Find all OK periods for the bus
+        const busOkPeriods = _.filter(bus.periods, ['state', 'OK']);
+
+        // Find all FAIL periods - for all peripherial hw
+        let hwFailPeriods = [];
+        // PPs fail periods
+        bus.pp.forEach(function (name) {
+          let failPers = _.filter(bus.ppPeriods[name], ['state', 'FAIL']);
+          if (failPers.length > 0) {
+            hwFailPeriods = _.concat(hwFailPeriods, failPers);
+          }
+        });
+        // Validators fail periods
+        bus.validators.forEach(function (name) {
+          let failPers = _.filter(bus.validatorPeriods[name], ['state', 'FAIL']);
+          if (failPers.length > 0) {
+            hwFailPeriods = _.concat(hwFailPeriods, failPers);
+          }
+        });
+        // GPS fail periods
+        const gpsFailPeriods = _.filter(bus.gpsPeriods, ['state', 'FAIL']);
+        if (gpsFailPeriods.length > 0) {
+          hwFailPeriods = _.concat(hwFailPeriods, gpsFailPeriods);
+        }
+
+        // Loop through the all OK periods.
+        // If find intersection with any FAIL period => change state from OK to PARTIAL
+        busOkPeriods.forEach(function (okPer) {
+          let intersection = _.find(hwFailPeriods, function (failPer) {
+            return okPer.intersect(failPer);
+          });
+          if (intersection) {
+            okPer.state = 'PARTIAL';
+          }
+        });
+
+      });
     }
 
     function getEvents(bus, dtStart, dtEnd) {
