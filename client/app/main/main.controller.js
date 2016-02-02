@@ -62,7 +62,7 @@ angular.module('armUptimeApp')
         let intervl = intervals[bus.busName];
 
         // Bus intervals
-        intervl.busIntervals = periods2TimelineIntervals(bus.periods);
+        intervl.busIntervals = onOffLinePeriods2TimelineIntervals(bus.periods);
 
         // Create intervals for every pp
         intervl.ppIntervals = {};
@@ -90,6 +90,24 @@ angular.module('armUptimeApp')
         }
         else if (per instanceof OfflinePeriod) {
           color = 'danger';
+        }
+
+        return {
+          dtStart: per.start,
+          dtEnd: per.end,
+          color: color
+        };
+      })
+    }
+
+    function onOffLinePeriods2TimelineIntervals(periods) {
+      return _.map(periods, function (per) {
+        let color = undefined;
+        if (per instanceof OnlinePeriod) {
+          color = 'success';
+        }
+        else if (per instanceof OfflinePeriod) {
+          color = 'info';
         }
 
         return {
