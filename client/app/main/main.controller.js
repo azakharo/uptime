@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('armUptimeApp')
-  .controller('MainCtrl', function ($scope, $log, $state, uiGridConstants, Auth, transpStatus) {
+  .controller('MainCtrl', function ($scope, $log, $state, $interval, uiGridConstants, Auth, transpStatus) {
     $scope.Auth = Auth;
     $scope.timePeriod = 'day';
     $scope.isGettingData = false;
@@ -14,6 +14,18 @@ angular.module('armUptimeApp')
       $state.go('login');
       Auth.logout();
     };
+
+    // Auto-update
+    var stopAutoRefresh = $interval(function () {
+      if ($scope.timePeriod === 'hour' || $scope.timePeriod === 'day') {
+        clearData();
+        updateTransportStatus();
+        updateTransportEvents();
+      }
+    }, 120000);
+    $scope.$on('$destroy', function () {
+      $interval.cancel(stopAutoRefresh);
+    });
 
     $scope.busInfos = [];
     $scope.intervals = {};
@@ -109,11 +121,14 @@ angular.module('armUptimeApp')
       })
     }
 
-    $scope.$watch('timePeriod', function (newVal, oldVal, scope) {
-      // Clear data
+    function clearData() {
       $scope.busInfos = [];
       $scope.gridOptions.data = [];
       $scope.selectedBus = null;
+    }
+
+    $scope.$watch('timePeriod', function (newVal, oldVal, scope) {
+      clearData();
 
       const {start, end} = timePeriod2moments($scope.timePeriod);
       $scope.dtStart = start;
