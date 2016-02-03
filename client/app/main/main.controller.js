@@ -15,17 +15,26 @@ angular.module('armUptimeApp')
       Auth.logout();
     };
 
+    function updateData() {
+      clearData();
+      updateTransportStatus();
+      updateTransportEvents();
+    }
+
     // Auto-update
     var stopAutoRefresh = $interval(function () {
       if ($scope.timePeriod === 'hour' || $scope.timePeriod === 'day') {
-        clearData();
-        updateTransportStatus();
-        updateTransportEvents();
+        updateData();
       }
     }, 180000);
     $scope.$on('$destroy', function () {
       $interval.cancel(stopAutoRefresh);
     });
+
+    // Manual update
+    $scope.onRefreshBtnClick = function () {
+      updateData();
+    };
 
     $scope.busInfos = [];
     $scope.intervals = {};
@@ -155,14 +164,11 @@ angular.module('armUptimeApp')
     }
 
     $scope.$watch('timePeriod', function (newVal, oldVal, scope) {
-      clearData();
-
       const {start, end} = timePeriod2moments($scope.timePeriod);
       $scope.dtStart = start;
       $scope.dtEnd = end;
 
-      updateTransportStatus();
-      updateTransportEvents();
+      updateData();
     });
 
     $scope.selectedBus = null;
