@@ -2,8 +2,16 @@
   span(us-spinner="{radius:30, width:8, length: 16}", spinner-on="isGettingData")
   #header
     #header-text Uptime Monitor
-    #header-right-part.text-right.plr1
-      #user-section(ng-show="Auth.getCurrentUser() !== undefined")
+    #header-right-part.plr1
+      // Navi menu
+      .btn-group.mr1(uib-dropdown='')
+        button#navi-menu-button.btn.btn-primary(type='button', uib-dropdown-toggle='', ng-disabled='disabled')
+          span Перейти к&nbsp;&nbsp;
+          span.caret
+        ul(uib-dropdown-menu='', role='menu', aria-labelledby='navi-menu-button')
+          li(role='menuitem', ng-repeat="menuItem in naviMenuItems")
+            a(ng-href='{{menuItem.url}}') {{menuItem.name}}
+      #user-section.text-right(ng-show="Auth.getCurrentUser() !== undefined")
         span.mr2 Оператор: {{ Auth.getCurrentUser() }}
         button.btn.btn-default.user-section-btn.mr1(ng-click="onSettingsBtnClick()", disabled="disabled")
           i.fa.fa-cog

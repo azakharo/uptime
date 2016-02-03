@@ -12,6 +12,8 @@ mod.service(
     var operArmBaseURL = '/api/operator/v1/';
     var loginUrl = '/api/auth/v1/login';
     var transpStatusUrl = '/api/protocolmessage/v1/protocolmessage';
+    var acceptantUrl = '/acceptant';
+    var dashboardUrl = '/dashboard';
     if (isRestDebug) {
       var serverAddr = 'https://cp.sarov-itc.ru';
       baseURL = serverAddr + baseURL;
@@ -20,10 +22,20 @@ mod.service(
       operArmBaseURL = serverAddr + operArmBaseURL;
       loginUrl = serverAddr + loginUrl;
       transpStatusUrl = serverAddr + transpStatusUrl;
+      acceptantUrl = serverAddr + acceptantUrl;
+      dashboardUrl = serverAddr + dashboardUrl;
     }
 
     function getBaseURL() {
       return baseURL;
+    }
+
+    function getAcceptantUrl() {
+      return acceptantUrl;
+    }
+
+    function getDashboardUrl() {
+      return dashboardUrl;
     }
 
     //$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:admin');
@@ -2049,7 +2061,11 @@ mod.service(
       login: login,
 
       getTranspStatusRawData: getTranspStatusRawData,
-      compactTranspStatusRawData: compactTranspStatusRawData
+      compactTranspStatusRawData: compactTranspStatusRawData,
+
+      // arm urls
+      getAcceptantUrl: getAcceptantUrl,
+      getDashboardUrl: getDashboardUrl
     });
   }
 );

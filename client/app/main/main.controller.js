@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('armUptimeApp')
-  .controller('MainCtrl', function ($scope, $log, $state, $interval, uiGridConstants, Auth, transpStatus) {
+  .controller('MainCtrl', function ($scope, $log, $state, $interval, uiGridConstants, Auth, myRest, transpStatus) {
     $scope.Auth = Auth;
     $scope.timePeriod = 'day';
     $scope.isGettingData = false;
@@ -14,6 +14,18 @@ angular.module('armUptimeApp')
       $state.go('login');
       Auth.logout();
     };
+
+    // Navi menu
+    $scope.naviMenuItems = [
+      {
+        url: myRest.getAcceptantUrl(),
+        name: 'АРМ Акцептанта'
+      },
+      {
+        url: myRest.getDashboardUrl(),
+        name: 'Дашборд'
+      }
+    ];
 
     function updateData() {
       clearData();
