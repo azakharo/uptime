@@ -116,6 +116,7 @@
 @color-status-ok: rgba(92, 184, 92, 1.0);
 @color-status-failed: rgba(217, 83, 79, 1.0);
 @color-status-partial: rgba(240, 173, 78, 1.0);
+@color-status-unavail: #D3D3D3;
 
 .status-ok-bg {
   background: @color-status-ok;
@@ -130,7 +131,7 @@
 }
 
 .status-unavail-bg {
-  background: #d9edf7;
+  background: @color-status-unavail;
 }
 
 .status-unknown-bg {
@@ -150,11 +151,15 @@
 }
 
 .status-unavail-fg {
-  color: #afd9ee;
+  color: @color-status-unavail;
 }
 
 .status-unknown-fg {
   color: #000000;
+}
+
+#transport-list .progress-bar-info {
+  background-color: @color-status-unavail;
 }
 
 /////////////////////////////////////////////////
