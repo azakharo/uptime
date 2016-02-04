@@ -322,19 +322,13 @@ mod.service(
 
       // For every validator find failure and appeared events.
       busInfo.validators.forEach(function (validatorName) {
-        // Skip unknown
-        if (validatorName.startsWith(UNKNOWN_VALIDATOR_NAME)) {
-          return;
-        }
         // Failure events
         // Find fail periods
         const failPers = _.filter(busInfo.validatorPeriods[validatorName], ['state', 'FAIL']);
         // Map each fail per start => fail event
         failPers.forEach(function (failPer) {
-          if (!failPer.start.isSame(dtStart)) {
-            events2ret.push(
-              new ValidatorFailEvent(failPer.start, busInfo, failPer.end, validatorName));
-          }
+          events2ret.push(
+            new ValidatorFailEvent(failPer.start, busInfo, failPer.end, validatorName));
         });
 
         // Appeared events
@@ -372,8 +366,51 @@ mod.service(
 
       }); // validator loop
 
-      // Find events for every pp
-      ;
+      // For every pp find failure and appeared events.
+      busInfo.pp.forEach(function (ppName) {
+        // Failure events
+        // Find fail periods
+        const failPers = _.filter(busInfo.ppPeriods[ppName], ['state', 'FAIL']);
+        // Map each fail per start => fail event
+        failPers.forEach(function (failPer) {
+          events2ret.push(
+            new PpFailEvent(failPer.start, busInfo, failPer.end, ppName));
+        });
+
+        // Appeared events
+        let i = 0;
+        // Go through all periods
+        const periods = busInfo.ppPeriods[ppName];
+        while (i < periods.length) {
+          let curPer = periods[i];
+          // Find fail per
+          if (curPer.state === 'FAIL') {
+            const failPer = curPer;
+            // Find next OK per
+            let nextOkPer = null;
+            let j = i + 1;
+            while (j < periods.length) {
+              if (periods[j].state === 'OK') {
+                nextOkPer = periods[j];
+                break;
+              }
+              else {
+                j++;
+              }
+            }
+            // if found
+            if (nextOkPer) {
+              events2ret.push(
+                new PpAppearedEvent(nextOkPer.start, busInfo, nextOkPer.end, ppName));
+            }
+            i = j + 1;
+          }
+          else {
+            i++;
+          }
+        }
+
+      }); // validator loop
 
       // Find GPS events
       ;

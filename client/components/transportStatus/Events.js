@@ -81,7 +81,7 @@ class ValidatorAppearedEvent extends ValidatorEvent {
 
 class PpEvent extends TransportStatusEvent {
   constructor(t, bus, end, pp) {
-    super(t, bus);
+    super(t, bus, end);
     this.pp = pp;
   }
 
