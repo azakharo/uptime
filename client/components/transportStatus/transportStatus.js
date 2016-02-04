@@ -355,7 +355,16 @@ mod.service(
       }); // pp loop
 
       // Find GPS events
-      ;
+      // Failure events
+      // Find fail periods
+      const failPers = _.filter(busInfo.gpsPeriods, ['state', 'FAIL']);
+      // Map each fail per start => fail event
+      failPers.forEach(function (failPer) {
+        events2ret.push(
+          new GpsFailEvent(failPer.start, busInfo, failPer.end));
+      });
+      // Appeared events
+      createAppearedEvents(busInfo, new GpsEvent().getComponentName(), busInfo.gpsPeriods, GpsAppearedEvent, events2ret);
 
       // Sort all events by timestamp desc
       events2ret = _.sortBy(events2ret, function (event) {
