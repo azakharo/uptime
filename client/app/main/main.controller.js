@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('armUptimeApp')
-  .controller('MainCtrl', function ($scope, $log, $state, $interval, uiGridConstants, Auth, myRest, transpStatus) {
+  .controller('MainCtrl', function ($scope, $log, $state, $interval, $timeout, uiGridConstants,
+                                    Auth, myRest, transpStatus) {
     $scope.Auth = Auth;
     $scope.timePeriod = 'day';
     $scope.isGettingData = false;
@@ -176,11 +177,20 @@ angular.module('armUptimeApp')
     }
 
     $scope.$watch('timePeriod', function (newVal, oldVal, scope) {
-      const {start, end} = timePeriod2moments($scope.timePeriod);
-      $scope.dtStart = start;
-      $scope.dtEnd = end;
+      $scope.isGettingData = true;
+      $timeout(
+        function () {
+          clearData();
+          $scope.dtStart = null;
+          $scope.dtEnd = null;
 
-      updateData();
+          const {start, end} = timePeriod2moments($scope.timePeriod);
+          $scope.dtStart = start;
+          $scope.dtEnd = end;
+
+          updateData();
+        }, 100
+      );
     });
 
     $scope.selectedBus = null;
