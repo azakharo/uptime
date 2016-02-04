@@ -290,7 +290,7 @@ mod.service(
 
     function createEvents(selectedBus, busDefines, dtStart, dtEnd) {
       // Find bus info
-      const events2ret = [];
+      let events2ret = [];
       const busInfo = _.find(busDefines, ['busName', selectedBus.busName]);
       if (!busInfo) {
         return [];
@@ -319,7 +319,9 @@ mod.service(
       ;
 
       // Sort all events by timestamp desc
-      ;
+      events2ret = _.sortBy(events2ret, function (event) {
+        return -event.timestamp.unix();
+      });
 
       return events2ret;
     }
