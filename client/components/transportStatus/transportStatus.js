@@ -320,13 +320,13 @@ mod.service(
         }
       });
 
-      // For every validator find failure events.
+      // For every validator find failure and appeared events.
       busInfo.validators.forEach(function (validatorName) {
         // Skip unknown
         if (validatorName.startsWith(UNKNOWN_VALIDATOR_NAME)) {
           return;
         }
-        // Failure event
+        // Failure events
         // Find fail periods
         const failPers = _.filter(busInfo.validatorPeriods[validatorName], ['state', 'FAIL']);
         // Map each fail per start => fail event
@@ -336,7 +336,41 @@ mod.service(
               new ValidatorFailEvent(failPer.start, busInfo, failPer.end, validatorName));
           }
         });
-      });
+
+        // Appeared events
+        let i = 0;
+        // Go through all periods
+        const periods = busInfo.validatorPeriods[validatorName];
+        while (i < periods.length) {
+          let curPer = periods[i];
+          // Find fail per
+          if (curPer.state === 'FAIL') {
+            const failPer = curPer;
+            // Find next OK per
+            let nextOkPer = null;
+            let j = i + 1;
+            while (j < periods.length) {
+              if (periods[j].state === 'OK') {
+                nextOkPer = periods[j];
+                break;
+              }
+              else {
+                j++;
+              }
+            }
+            // if found
+            if (nextOkPer) {
+              events2ret.push(
+                new ValidatorAppearedEvent(nextOkPer.start, busInfo, nextOkPer.end, validatorName));
+            }
+            i = j + 1;
+          }
+          else {
+            i++;
+          }
+        }
+
+      }); // validator loop
 
       // Find events for every pp
       ;
