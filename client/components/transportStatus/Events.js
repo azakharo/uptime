@@ -11,8 +11,12 @@ class TransportStatusEvent {
     return this.timestamp.format('YYYY-MM-DD HH:mm:ss');
   }
 
-  getDisplayString() {
+  getTypeName() {
     return toString();
+  }
+
+  getComponentName() {
+    return '';
   }
 }
 
@@ -20,15 +24,21 @@ class TransportStatusEvent {
 /////////////////////////////////////////////////////////////////////
 // Bus events
 
-class BusOnlineEvent extends TransportStatusEvent {
-  getDisplayString() {
-    return `${this.bus.busName} вышел на связь`;
+class BusEvent extends TransportStatusEvent {
+  getComponentName() {
+    return 'БК';
   }
 }
 
-class BusOfflineEvent extends TransportStatusEvent {
-  getDisplayString() {
-    return `Пропала связь с ${this.bus.busName}`;
+class BusOnlineEvent extends BusEvent {
+  getTypeName() {
+    return 'появилась связь';
+  }
+}
+
+class BusOfflineEvent extends BusEvent {
+  getTypeName() {
+    return 'пропала связь';
   }
 }
 
@@ -36,25 +46,27 @@ class BusOfflineEvent extends TransportStatusEvent {
 /////////////////////////////////////////////////////////////////////
 // Validator events
 
-class ValidatorFailEvent extends TransportStatusEvent {
+class ValidatorEvent extends TransportStatusEvent {
   constructor(t, bus, validator) {
     super(t, bus);
     this.validator = validator;
   }
 
-  getDisplayString() {
-    return `${this.bus.busName}: пропал валидатор ${this.validator}`;
+  getComponentName() {
+    return 'валидатор';
   }
 }
 
-class ValidatorAppearedEvent extends TransportStatusEvent {
-  constructor(t, bus, validator) {
-    super(t, bus);
-    this.validator = validator;
-  }
 
-  getDisplayString() {
-    return `${this.bus.busName}: появился валидатор ${this.validator}`;
+class ValidatorFailEvent extends ValidatorEvent {
+  getTypeName() {
+    return 'пропал валидатор';
+  }
+}
+
+class ValidatorAppearedEvent extends ValidatorEvent {
+  getTypeName() {
+    return 'появился валидатор';
   }
 }
 
@@ -62,39 +74,46 @@ class ValidatorAppearedEvent extends TransportStatusEvent {
 /////////////////////////////////////////////////////////////////////
 // PP events
 
-class PpFailEvent extends TransportStatusEvent {
+class PpEvent extends TransportStatusEvent {
   constructor(t, bus, pp) {
     super(t, bus);
     this.pp = pp;
   }
 
-  getDisplayString() {
-    return `${this.bus.busName}: пропал датчик ПП ${this.pp}`;
+  getComponentName() {
+    return 'датчик ПП';
   }
 }
 
-class PpAppearedEvent extends TransportStatusEvent {
-  constructor(t, bus, pp) {
-    super(t, bus);
-    this.pp = pp;
+class PpFailEvent extends PpEvent {
+  getTypeName() {
+    return 'пропал датчик ПП';
   }
+}
 
-  getDisplayString() {
-    return `${this.bus.busName}: появился датчик ПП ${this.pp}`;
+class PpAppearedEvent extends PpEvent {
+  getTypeName() {
+    return 'появился датчик ПП';
   }
 }
 
 /////////////////////////////////////////////////////////////////////
 // GPS events
 
-class GpsFailEvent extends TransportStatusEvent {
-  getDisplayString() {
-    return `${this.bus.busName}: пропал GPS`;
+class GpsEvent extends TransportStatusEvent {
+  getComponentName() {
+    return 'GPS';
   }
 }
 
-class GpsAppearedEvent extends TransportStatusEvent {
-  getDisplayString() {
-    return `${this.bus.busName}: появился GPS`;
+class GpsFailEvent extends GpsEvent {
+  getTypeName() {
+    return 'пропал GPS';
+  }
+}
+
+class GpsAppearedEvent extends GpsEvent {
+  getTypeName() {
+    return 'появился GPS';
   }
 }
