@@ -290,7 +290,7 @@ angular.module('armUptimeApp')
       },
       {
         displayName: 'Продолжительность',
-        field: 'duration',
+        field: 'getDuration()',
         cellClass: "text-right",
         headerCellClass: "text-right"
       }

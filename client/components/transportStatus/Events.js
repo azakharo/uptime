@@ -2,9 +2,10 @@
 
 // Base event class
 class TransportStatusEvent {
-  constructor(t, bus) {
+  constructor(t, bus, end) {
     this.timestamp = t;
     this.bus = bus;
+    this.end = end;
   }
 
   toString() {
@@ -17,6 +18,10 @@ class TransportStatusEvent {
 
   getComponentName() {
     return '';
+  }
+
+  getDuration() {
+    return this.end ? this.end.from(this.timestamp, true) : "";
   }
 }
 
@@ -47,8 +52,8 @@ class BusDisconnnectedEvent extends BusEvent {
 // Validator events
 
 class ValidatorEvent extends TransportStatusEvent {
-  constructor(t, bus, validator) {
-    super(t, bus);
+  constructor(t, bus, end, validator) {
+    super(t, bus, end);
     this.validator = validator;
   }
 
@@ -75,7 +80,7 @@ class ValidatorAppearedEvent extends ValidatorEvent {
 // PP events
 
 class PpEvent extends TransportStatusEvent {
-  constructor(t, bus, pp) {
+  constructor(t, bus, end, pp) {
     super(t, bus);
     this.pp = pp;
   }

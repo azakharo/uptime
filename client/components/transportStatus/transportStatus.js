@@ -298,14 +298,25 @@ mod.service(
 
       // Find bus offline, online events
       const busUnavailPers = _.filter(busInfo.periods, ['state', 'UNAVAIL']);
-      busUnavailPers.forEach(function (unavailPer) {
+      busUnavailPers.forEach(function (unavailPer, unavailPerInd) {
         if (!unavailPer.start.isSame(dtStart)) {
           events2ret.push(
-            new BusDisconnnectedEvent(unavailPer.start, busInfo));
+            new BusDisconnnectedEvent(unavailPer.start, busInfo, unavailPer.end));
         }
         if (!unavailPer.end.isSame(dtEnd)) {
+          // Bus Connected Event!
+          // First, find the ending for this event.
+          // It's either the start of next offline period or the end.
+          let end = null;
+          if (unavailPerInd !== busUnavailPers.length - 1) {
+            end = busUnavailPers[unavailPerInd + 1].start;
+          }
+          else {
+            end = dtEnd;
+          }
+
           events2ret.push(
-            new BusConnectedEvent(unavailPer.end, busInfo));
+            new BusConnectedEvent(unavailPer.end, busInfo, end));
         }
       });
 
