@@ -288,32 +288,40 @@ mod.service(
       });
     }
 
-    function getEvents(bus, dtStart, dtEnd) {
-      let deferred = $q.defer();
+    function createEvents(selectedBus, busDefines, dtStart, dtEnd) {
+      // Find bus info
+      const events2ret = [];
+      const busInfo = _.find(busDefines, ['busName', selectedBus.busName]);
+      if (!busInfo) {
+        return [];
+      }
 
-      const buses = [
-        'Автобус 1',
-        'Автобус 2'
-      ];
-      const eventTypes = [
-        'validator_OK',
-        'validator_FAIL',
-        'pp_OK',
-        'pp_FAIL',
-        'uhf_OK',
-        'uhf_FAIL'
-      ];
-
-      let events = _.times(500, function (ind) {
-        let newEvent = {};
-        newEvent.timestamp = moment().subtract(10 * ind, 'minutes');
-        newEvent.bus = _.sample(buses);
-        newEvent.name = _.sample(eventTypes);
-        return newEvent;
+      // Find bus offline, online events
+      const busUnavailPers = _.filter(busInfo.periods, ['state', 'UNAVAIL']);
+      busUnavailPers.forEach(function (unavailPer) {
+        if (!unavailPer.start.isSame(dtStart)) {
+          events2ret.push(
+            new BusDisconnnectedEvent(unavailPer.start, busInfo));
+        }
+        if (!unavailPer.end.isSame(dtEnd)) {
+          events2ret.push(
+            new BusConnectedEvent(unavailPer.end, busInfo));
+        }
       });
-      deferred.resolve(events);
 
-      return deferred.promise;
+      // For every validator find failure and appeared events;
+      ;
+
+      // Find events for every pp
+      ;
+
+      // Find GPS events
+      ;
+
+      // Sort all events by timestamp desc
+      ;
+
+      return events2ret;
     }
 
     function log(msg) {
@@ -321,8 +329,8 @@ mod.service(
     }
 
     return ({
-      getEvents: getEvents,
-      getBusDefines: getBusDefines
+      getBusDefines:  getBusDefines,
+      createEvents:   createEvents
     });
 
   }

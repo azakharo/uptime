@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('armUptimeApp')
-  .controller('MainCtrl', function ($scope, $log, $state, $interval, $timeout, uiGridConstants,
+  .controller('MainCtrl', function ($scope, $log, $state, $interval, $q, $timeout, uiGridConstants,
                                     Auth, myRest, transpStatus) {
     $scope.Auth = Auth;
     $scope.timePeriod = 'day';
@@ -30,8 +30,11 @@ angular.module('armUptimeApp')
 
     function updateData() {
       clearData();
-      updateTransportStatus();
-      updateTransportEvents();
+      updateTransportStatus().then(
+        function () {
+          updateTransportEvents();
+        }
+      );
     }
 
     // Auto-update
@@ -53,6 +56,8 @@ angular.module('armUptimeApp')
     $scope.intervals = {};
 
     function updateTransportStatus() {
+      let deferred = $q.defer();
+
       $scope.isGettingData = true;
       transpStatus.getBusDefines($scope.dtStart, $scope.dtEnd).then(
         function (data) {
@@ -70,11 +75,15 @@ angular.module('armUptimeApp')
           //  log("----------------------")
           //});
           $scope.isGettingData = false;
+          deferred.resolve();
         },
         function (reason) {
           $scope.isGettingData = false;
+          deferred.resolve();
         }
       );
+
+      return deferred.promise;
     }
 
     function createTimelineIntervals(busDefines) {
@@ -171,9 +180,10 @@ angular.module('armUptimeApp')
     }
 
     function clearData() {
-      $scope.busInfos = [];
       $scope.gridOptions.data = [];
       $scope.selectedBus = null;
+      $scope.intervals = {};
+      $scope.busInfos = [];
     }
 
     $scope.$watch('timePeriod', function (newVal, oldVal, scope) {
@@ -272,12 +282,11 @@ angular.module('armUptimeApp')
       },
       {
         displayName: 'Событие',
-        field: 'name',
-        cellFilter: 'transEventNameFilter'
+        field: 'getTypeName()'
       },
       {
-        displayName: 'Детали',
-        field: 'bus'
+        displayName: 'Компонент',
+        field: 'getComponentName()'
       },
       {
         displayName: 'Продолжительность',
@@ -293,17 +302,13 @@ angular.module('armUptimeApp')
     $scope.gridOptions.paginationPageSizes = [50, 100, 200, 250, 500];
 
     function updateTransportEvents() {
-      //if (!$scope.selectedBus) {
-      //  $scope.gridOptions.data = [];
-      //  return;
-      //}
-      //let {start, end} = timePeriod2moments($scope.timePeriod);
-      //transpStatus.getEvents($scope.selectedBus, start, end).then(
-      //  function (events) {
-      //    $scope.gridOptions.data = events;
-      //    log("transport events updated");
-      //  }
-      //);
+      if (!$scope.busInfos || !$scope.selectedBus) {
+        $scope.gridOptions.data = [];
+        return;
+      }
+      $scope.gridOptions.data = transpStatus.createEvents(
+        $scope.selectedBus, $scope.busInfos, $scope.dtStart, $scope.dtEnd);
+      log("transport events updated");
     }
 
     // ui-grid setup

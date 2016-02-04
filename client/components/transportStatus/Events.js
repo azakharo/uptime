@@ -30,13 +30,13 @@ class BusEvent extends TransportStatusEvent {
   }
 }
 
-class BusOnlineEvent extends BusEvent {
+class BusConnectedEvent extends BusEvent {
   getTypeName() {
     return 'появилась связь';
   }
 }
 
-class BusOfflineEvent extends BusEvent {
+class BusDisconnnectedEvent extends BusEvent {
   getTypeName() {
     return 'пропала связь';
   }
