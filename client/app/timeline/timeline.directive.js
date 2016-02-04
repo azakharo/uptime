@@ -20,7 +20,8 @@ angular.module('armUptimeApp')
           let timeIntervl = {
             dtStart: intervl.dtStart,
             dtEnd: intervl.dtEnd,
-            color: intervl.color
+            color: intervl.color,
+            status: intervl.status
           };
           // Find the percent
           timeIntervl.percent = (timeIntervl.dtEnd.unix() - timeIntervl.dtStart.unix()) / totalDurationInSec * 100;
@@ -33,7 +34,8 @@ angular.module('armUptimeApp')
           let start = intervl.dtStart.format(timeFrmt);
           let end = intervl.dtEnd.format(timeFrmt);
           let duration = intervl.dtEnd.from(intervl.dtStart, true);
-          return `<p>Начало: ${start}</p>
+          return `<p>Статус:&nbsp;&nbsp;${intervl.status}</p>
+          <p>Начало: ${start}</p>
           <p>&nbsp;Конец: ${end}</p>
           <p>Продолжительность: ${duration}</p>`;
         };

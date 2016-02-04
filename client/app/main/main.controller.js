@@ -116,20 +116,25 @@ angular.module('armUptimeApp')
     function busPeriods2TimelineIntervals(periods) {
       return _.map(periods, function (per) {
         let color = undefined;
+        let status;
         if (per.state === 'OK') {
           color = 'success';
+          status = 'OK';
         }
         else if (per.state === 'PARTIAL') {
           color = 'warning';
+          status = 'есть проблемы';
         }
         else if (per.state === 'UNAVAIL') {
           color = 'info';
+          status = 'нет связи';
         }
 
         return {
           dtStart: per.start,
           dtEnd: per.end,
-          color: color
+          color: color,
+          status: status
         };
       })
     }
@@ -137,20 +142,25 @@ angular.module('armUptimeApp')
     function ppValidatorPeriods2TimelineIntervals(periods) {
       return _.map(periods, function (per) {
         let color = undefined;
+        let status;
         if (per.state === 'OK') {
           color = 'success';
+          status = 'OK';
         }
         else if (per.state === 'FAIL') {
           color = 'danger';
+          status = 'отказ';
         }
         else if (per.state === 'UNAVAIL') {
           color = 'info';
+          status = 'нет связи';
         }
 
         return {
           dtStart: per.start,
           dtEnd: per.end,
-          color: color
+          color: color,
+          status: status
         };
       })
     }
@@ -158,23 +168,29 @@ angular.module('armUptimeApp')
     function gpsPeriods2TimelineIntervals(periods) {
       return _.map(periods, function (per) {
         let color = undefined;
+        let status;
         if (per.state === 'OK') {
           color = 'success';
+          status = 'OK';
         }
         else if (per.state === 'FAIL') {
           color = 'danger';
+          status = 'отказ';
         }
         else if (per.state === 'NO_SATELLITE') {
           color = 'warning';
+          status = 'нет спутников';
         }
         else if (per.state === 'UNAVAIL') {
           color = 'info';
+          status = 'нет связи';
         }
 
         return {
           dtStart: per.start,
           dtEnd: per.end,
-          color: color
+          color: color,
+          status: status
         };
       })
     }
