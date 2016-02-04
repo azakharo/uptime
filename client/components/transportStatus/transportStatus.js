@@ -320,8 +320,23 @@ mod.service(
         }
       });
 
-      // For every validator find failure and appeared events;
-      ;
+      // For every validator find failure events.
+      busInfo.validators.forEach(function (validatorName) {
+        // Skip unknown
+        if (validatorName.startsWith(UNKNOWN_VALIDATOR_NAME)) {
+          return;
+        }
+        // Failure event
+        // Find fail periods
+        const failPers = _.filter(busInfo.validatorPeriods[validatorName], ['state', 'FAIL']);
+        // Map each fail per start => fail event
+        failPers.forEach(function (failPer) {
+          if (!failPer.start.isSame(dtStart)) {
+            events2ret.push(
+              new ValidatorFailEvent(failPer.start, busInfo, failPer.end, validatorName));
+          }
+        });
+      });
 
       // Find events for every pp
       ;

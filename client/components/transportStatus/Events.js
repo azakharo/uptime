@@ -58,7 +58,7 @@ class ValidatorEvent extends TransportStatusEvent {
   }
 
   getComponentName() {
-    return 'валидатор';
+    return this.validator;
   }
 }
 
@@ -86,7 +86,7 @@ class PpEvent extends TransportStatusEvent {
   }
 
   getComponentName() {
-    return 'датчик ПП';
+    return this.pp;
   }
 }
 
