@@ -5,8 +5,8 @@ var mod = angular.module('TransportStatus', ['restService']);
 mod.service(
   "transpStatus",
   function ($q, $log, myRest) {
-    const UNKNOWN_VALIDATOR_NAME = 'неизвестный';
-    const UNKNOWN_PP_NAME = 'неизвестный';
+    const UNKNOWN_VALIDATOR_NAME = 'валидатор';
+    const UNKNOWN_PP_NAME = 'датчик ПП';
 
     function getBusDefines(dtStart, dtEnd) {
       let deferred = $q.defer();
