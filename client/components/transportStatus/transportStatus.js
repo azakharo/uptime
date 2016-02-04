@@ -332,39 +332,11 @@ mod.service(
         });
 
         // Appeared events
-        let i = 0;
-        // Go through all periods
-        const periods = busInfo.validatorPeriods[validatorName];
-        while (i < periods.length) {
-          let curPer = periods[i];
-          // Find fail per
-          if (curPer.state === 'FAIL') {
-            const failPer = curPer;
-            // Find next OK per
-            let nextOkPer = null;
-            let j = i + 1;
-            while (j < periods.length) {
-              if (periods[j].state === 'OK') {
-                nextOkPer = periods[j];
-                break;
-              }
-              else {
-                j++;
-              }
-            }
-            // if found
-            if (nextOkPer) {
-              events2ret.push(
-                new ValidatorAppearedEvent(nextOkPer.start, busInfo, nextOkPer.end, validatorName));
-            }
-            i = j + 1;
-          }
-          else {
-            i++;
-          }
-        }
+        createAppearedEvents(busInfo, validatorName, busInfo.validatorPeriods[validatorName],
+          ValidatorAppearedEvent, events2ret);
 
       }); // validator loop
+
 
       // For every pp find failure and appeared events.
       busInfo.pp.forEach(function (ppName) {
@@ -378,39 +350,9 @@ mod.service(
         });
 
         // Appeared events
-        let i = 0;
-        // Go through all periods
-        const periods = busInfo.ppPeriods[ppName];
-        while (i < periods.length) {
-          let curPer = periods[i];
-          // Find fail per
-          if (curPer.state === 'FAIL') {
-            const failPer = curPer;
-            // Find next OK per
-            let nextOkPer = null;
-            let j = i + 1;
-            while (j < periods.length) {
-              if (periods[j].state === 'OK') {
-                nextOkPer = periods[j];
-                break;
-              }
-              else {
-                j++;
-              }
-            }
-            // if found
-            if (nextOkPer) {
-              events2ret.push(
-                new PpAppearedEvent(nextOkPer.start, busInfo, nextOkPer.end, ppName));
-            }
-            i = j + 1;
-          }
-          else {
-            i++;
-          }
-        }
+        createAppearedEvents(busInfo, ppName, busInfo.ppPeriods[ppName], PpAppearedEvent, events2ret);
 
-      }); // validator loop
+      }); // pp loop
 
       // Find GPS events
       ;
@@ -421,6 +363,39 @@ mod.service(
       });
 
       return events2ret;
+    }
+
+    function createAppearedEvents(bus, componentName, periods, appearedEventCls, events) {
+      let i = 0;
+      // Go through all periods
+      while (i < periods.length) {
+        let curPer = periods[i];
+        // Find fail per
+        if (curPer.state === 'FAIL') {
+          const failPer = curPer;
+          // Find next OK per
+          let nextOkPer = null;
+          let j = i + 1;
+          while (j < periods.length) {
+            if (periods[j].state === 'OK') {
+              nextOkPer = periods[j];
+              break;
+            }
+            else {
+              j++;
+            }
+          }
+          // if found
+          if (nextOkPer) {
+            events.push(
+              new appearedEventCls(nextOkPer.start, bus, nextOkPer.end, componentName));
+          }
+          i = j + 1;
+        }
+        else {
+          i++;
+        }
+      }
     }
 
     function log(msg) {
