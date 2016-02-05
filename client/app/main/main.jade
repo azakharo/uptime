@@ -36,7 +36,7 @@
       #transport-list.overflow-auto
         uib-accordion
           // ACCORDION ITEM
-          uib-accordion-group(ng-repeat="bus in busInfos")
+          uib-accordion-group(ng-repeat="bus in busInfos", is-open="accordionItemOpenStates[bus.busName]")
             // HEADER
             uib-accordion-heading
               .Grid.Grid--center(ng-click="onAccordionItemClicked(bus)")

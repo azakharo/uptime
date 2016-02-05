@@ -28,10 +28,40 @@ angular.module('armUptimeApp')
       }
     ];
 
+    let prevSelectedBusName = null;
+    $scope.accordionItemOpenStates = {};
+    let prevOpenBusName = null;
     function updateData() {
+      // Remember previously selected and(?) open bus
+      if ($scope.selectedBus) {
+        prevSelectedBusName = $scope.selectedBus.busName;
+        prevOpenBusName = _.find(Object.getOwnPropertyNames($scope.accordionItemOpenStates), function (busName) {
+          return $scope.accordionItemOpenStates[busName];
+        });
+      }
+      else {
+        prevSelectedBusName = null;
+        prevOpenBusName = null;
+      }
+
       clearData();
       updateTransportStatus().then(
         function () {
+          $scope.busInfos.forEach(function (bus) {
+            $scope.accordionItemOpenStates[bus.busName] = false;
+          });
+
+          if (prevSelectedBusName) {
+            // Restore the selected bus
+            $scope.selectedBus = _.find($scope.busInfos, ['busName', prevSelectedBusName]);
+            if ($scope.selectedBus) {
+              // Restore the open state
+              if (prevOpenBusName) {
+                $scope.accordionItemOpenStates[prevOpenBusName] = true;
+              }
+            }
+          }
+
           updateTransportEvents();
         }
       );
@@ -206,10 +236,6 @@ angular.module('armUptimeApp')
       $scope.isGettingData = true;
       $timeout(
         function () {
-          clearData();
-          $scope.dtStart = null;
-          $scope.dtEnd = null;
-
           const {start, end} = timePeriod2moments($scope.timePeriod);
           $scope.dtStart = start;
           $scope.dtEnd = end;
