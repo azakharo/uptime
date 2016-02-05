@@ -79,7 +79,8 @@ angular.module('armUptimeApp')
 
     // Manual update
     $scope.onRefreshBtnClick = function () {
-      updateData();
+      $scope.isGettingData = true;
+      $timeout(updateData, 100);
     };
 
     $scope.busInfos = [];
