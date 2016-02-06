@@ -95,16 +95,6 @@ angular.module('armUptimeApp')
           $scope.busInfos = data;
           $scope.intervals = createTimelineIntervals(data);
           log("transport statuses updated");
-          //data.forEach(function (bus) {
-          //  log(`bus '${bus.busName}'`);
-          //  //bus.gpsPoints.forEach(function (p, i) {
-          //  //  log(`${i + 1}: ${p.toString()}`);
-          //  //});
-          //  bus.gpsPeriods.forEach(function (p, i) {
-          //    log(`${i + 1}: ${p.toString()}`);
-          //  });
-          //  log("----------------------")
-          //});
           $scope.isGettingData = false;
           deferred.resolve();
         },
@@ -404,27 +394,6 @@ angular.module('armUptimeApp')
       }
       else {
         return name;
-      }
-    };
-  })
-
-  .filter('transEventNameFilter', function () {
-    return function (eventType) {
-      switch (eventType) {
-        case 'validator_OK':
-          return "валидатор появился";
-        case 'validator_FAIL':
-          return "валидатор пропал";
-        case 'pp_OK':
-          return "датчик пассажиропотока появился";
-        case 'pp_FAIL':
-          return "датчик пассажиропотока пропал";
-        case 'uhf_OK':
-          return "UHF появился";
-        case 'uhf_FAIL':
-          return "UHF пропал";
-        default:
-          return "неизвестное";
       }
     };
   });
