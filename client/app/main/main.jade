@@ -13,9 +13,9 @@
             a(ng-href='{{menuItem.url}}') {{menuItem.name}}
       #user-section.text-right(ng-show="Auth.getCurrentUser() !== undefined")
         span.mr2 Оператор: {{ Auth.getCurrentUser() }}
-        button.btn.btn-default.user-section-btn.mr1(ng-click="onSettingsBtnClick()", disabled="disabled")
+        button.btn.btn-default.responsive-btn.mr1(ng-click="onSettingsBtnClick()", disabled="disabled")
           i.fa.fa-cog
-        button.btn.btn-default.user-section-btn(ng-click="onLogOutBtnClick()")
+        button.btn.btn-default.responsive-btn(ng-click="onLogOutBtnClick()")
           i.fa.fa-sign-out
   #content
     #left-part.p1
@@ -29,7 +29,7 @@
               label.btn.btn-primary(ng-model="timePeriod", uib-btn-radio="'week'") Неделя
               label.btn.btn-primary(ng-model="timePeriod", uib-btn-radio="'month'") Месяц
           .Grid-cell--autoSize.pl1
-            button.btn.btn-default(ng-click="onRefreshBtnClick()",
+            button.btn.btn-default.responsive-btn(ng-click="onRefreshBtnClick()",
             uib-tooltip="Обновить данные", tooltip-append-to-body="true", tooltip-placement="auto right")
               i.fa.fa-refresh
       //#transport-list-title.pt2.pb1.fs-medium Список транспортных средств с оборудованием:
