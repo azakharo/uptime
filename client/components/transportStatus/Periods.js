@@ -153,7 +153,7 @@ function logPeriods(periods) {
 /////////////////////////////////////////////////
 // Tests
 
-const testTimePointFrmt = "YYYY-MM-DD HH:mm:ss";
+var testTimePointFrmt = "YYYY-MM-DD HH:mm:ss";
 const onlinePointMaxDistanceTest = 5 * 60; // sec
 
 function testAlwaysOnline() {
