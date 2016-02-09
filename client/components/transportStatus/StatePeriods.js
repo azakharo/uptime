@@ -301,7 +301,7 @@ function testOkNoSatelliteOk() {
 }
 
 
-function runTests() {
+function runStatePeriodTests() {
   log('testAlwaysOK');
   testAlwaysOK();
 
@@ -320,4 +320,3 @@ function runTests() {
   log('testOkNoSatelliteOk');
   testOkNoSatelliteOk();
 }
-//runTests();
