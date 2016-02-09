@@ -1,3 +1,5 @@
+"use strict";
+
 function testNoOverlap() {
   log('testNoOverlap');
   const okPer = new StatePeriod(
