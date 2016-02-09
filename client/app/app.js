@@ -75,5 +75,5 @@ angular.module('armUptimeApp', [
 
     // Rus tests
     //runStatePeriodTests();
-    runBusWarnPerTests();
+    //runBusWarnPerTests();
   });
