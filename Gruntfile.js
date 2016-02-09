@@ -637,10 +637,16 @@ module.exports = function (grunt) {
       is_debug: {
         src: ['.tmp/concat/app/app.js'], // source files array (supports minimatch)
         dest: '.tmp/concat/app/app.js',  // destination directory or file
-        replacements: [{
-          from: 'var isRestDebug = true;', // string replacement
-          to: 'var isRestDebug = false;'
-        }]
+        replacements: [
+          {
+            from: 'var isRestDebug = true;', // string replacement
+            to: 'var isRestDebug = false;'
+          },
+          {
+            from: 'var isMyDebug = true;',
+            to: 'var isMyDebug = false;'
+          }
+        ]
       },
       baseUrl: {
         src: [

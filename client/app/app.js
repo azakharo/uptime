@@ -1,5 +1,7 @@
 'use strict';
 
+var isMyDebug = true;
+
 angular.module('armUptimeApp', [
   'ngCookies',
   'ngSanitize',

@@ -4,7 +4,8 @@ angular.module('armUptimeApp')
   .controller('MainCtrl', function ($scope, $log, $state, $interval, $q, $timeout, uiGridConstants,
                                     Auth, myRest, transpStatus) {
     $scope.Auth = Auth;
-    $scope.timePeriod = 'day';
+
+    $scope.timePeriod = isMyDebug ? 'hour' : 'day';
     $scope.isGettingData = false;
 
     $scope.onSettingsBtnClick = function () {
