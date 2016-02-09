@@ -72,4 +72,6 @@ angular.module('armUptimeApp', [
 
     // ui-grid
     i18nService.setCurrentLang('ru');
+
+    runBusWarnPerTests();
   });

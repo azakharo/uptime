@@ -105,9 +105,8 @@ function testPerCombi() {
 }
 
 
-function runTests() {
-  testNoOverlap();
-  testWholeOverlap();
-  testPerCombi();
+function runBusWarnPerTests() {
+  //testNoOverlap();
+  //testWholeOverlap();
+  //testPerCombi();
 }
-//runTests();
