@@ -1,5 +1,8 @@
 "use strict";
 
+/////////////////////////////////////////////////////////////////////
+// test find warn periods
+
 function testNoOverlap() {
   log('testNoOverlap');
   const okPer = new StatePeriod(
@@ -105,7 +108,7 @@ function testPerCombi() {
 }
 
 function testPerCombi2() {
-  log('testPerCombi');
+  log('testPerCombi2');
   const okPer = new StatePeriod(
     moment("2016-02-09 06:00:00", testTimePointFrmt),
     moment("2016-02-09 07:00:00", testTimePointFrmt),
@@ -156,10 +159,154 @@ function testPerCombi2() {
   }
 }
 
+/////////////////////////////////////////////////////////////////////
+// test splitPeriod
+
+function testLeftSubPer() {
+  log('testLeftSubPer');
+  const mainPerStart = moment("2016-02-09 06:00:00", testTimePointFrmt);
+  const mainPerEnd = moment("2016-02-09 07:00:00", testTimePointFrmt);
+  const okPer = new StatePeriod(mainPerStart, mainPerEnd, 'OK');
+
+  const subPerStart = moment("2016-02-09 06:00:00", testTimePointFrmt);
+  const subPerEnd = moment("2016-02-09 06:10:00", testTimePointFrmt);
+  const subPers = [new StatePeriod(subPerStart, subPerEnd, 'PARTIAL')];
+
+  let pers = splitPeriod(okPer, subPers);
+  logPeriods(pers);
+
+  if (pers.length !== 2) {
+    throw "pers.length !== 2";
+  }
+  checkPeriod(pers[0], subPerStart, subPerEnd, 'PARTIAL', 1);
+  checkPeriod(pers[1], subPerEnd, mainPerEnd, 'OK', 2);
+}
+
+function testMidSubPer() {
+  log('testMidSubPer');
+  const mainPerStart = moment("2016-02-09 06:00:00", testTimePointFrmt);
+  const mainPerEnd = moment("2016-02-09 07:00:00", testTimePointFrmt);
+  const okPer = new StatePeriod(mainPerStart, mainPerEnd, 'OK');
+
+  const subPerStart = moment("2016-02-09 06:25:00", testTimePointFrmt);
+  const subPerEnd = moment("2016-02-09 06:35:00", testTimePointFrmt);
+  const subPers = [new StatePeriod(subPerStart, subPerEnd, 'PARTIAL')];
+
+  let pers = splitPeriod(okPer, subPers);
+  logPeriods(pers);
+
+  if (pers.length !== 3) {
+    throw "pers.length !== 3";
+  }
+  // check 1 per
+  if (!pers[0].start.isSame(mainPerStart)) {
+    throw "per1 incorrect start";
+  }
+  if (!pers[0].end.isSame(subPerStart)) {
+    throw "per1 incorrect end";
+  }
+  if (!pers[0].state !== 'OK') {
+    throw "per1 incorrect state";
+  }
+  checkPeriod(pers[0], mainPerStart, subPerStart, 'OK', 1);
+  checkPeriod(pers[1], subPerStart, subPerEnd, 'PARTIAL', 2);
+  checkPeriod(pers[2], subPerEnd, mainPerEnd, 'OK', 3);
+}
+
+function testRightSubPer() {
+  log('testRightSubPer');
+  const mainPerStart = moment("2016-02-09 06:00:00", testTimePointFrmt);
+  const mainPerEnd = moment("2016-02-09 07:00:00", testTimePointFrmt);
+  const okPer = new StatePeriod(mainPerStart, mainPerEnd, 'OK');
+
+  const subPerStart = moment("2016-02-09 06:45:00", testTimePointFrmt);
+  const subPerEnd = moment("2016-02-09 06:50:00", testTimePointFrmt);
+  const subPers = [new StatePeriod(subPerStart, subPerEnd, 'PARTIAL')];
+
+  let pers = splitPeriod(okPer, subPers);
+  logPeriods(pers);
+
+  if (pers.length !== 2) {
+    throw "pers.length !== 2";
+  }
+  checkPeriod(pers[0], mainPerStart, subPerStart, 'OK', 1);
+  checkPeriod(pers[1], subPerStart, mainPerEnd, 'PARTIAL', 2);
+}
+
+function test2MidSubPers() {
+  log('test2MidSubPers');
+  const mainPerStart = moment("2016-02-09 06:00:00", testTimePointFrmt);
+  const mainPerEnd = moment("2016-02-09 07:00:00", testTimePointFrmt);
+  const okPer = new StatePeriod(mainPerStart, mainPerEnd, 'OK');
+
+  const subPer1Start = moment("2016-02-09 06:15:00", testTimePointFrmt);
+  const subPer1End = moment("2016-02-09 06:25:00", testTimePointFrmt);
+  const subPer2Start = moment("2016-02-09 06:35:00", testTimePointFrmt);
+  const subPer2End = moment("2016-02-09 06:45:00", testTimePointFrmt);
+  const subPers = [
+    new StatePeriod(subPer1Start, subPer1End, 'PARTIAL'),
+    new StatePeriod(subPer2Start, subPer2End, 'PARTIAL')
+  ];
+
+  let pers = splitPeriod(okPer, subPers);
+  logPeriods(pers);
+
+  if (pers.length !== 5) {
+    throw "pers.length !== 5";
+  }
+  checkPeriod(pers[0], mainPerStart, subPer1Start, 'OK', 1);
+  checkPeriod(pers[1], subPer1Start, subPer1End, 'PARTIAL', 2);
+  checkPeriod(pers[2], subPer1End, subPer2Start, 'OK', 3);
+  checkPeriod(pers[3], subPer2Start, subPer2End, 'PARTIAL', 4);
+  checkPeriod(pers[4], subPer2End, mainPerEnd, 'OK', 5);
+}
+
+function testFullOverlapSubPer() {
+  log('testFullOverlapSubPer');
+  const mainPerStart = moment("2016-02-09 06:00:00", testTimePointFrmt);
+  const mainPerEnd = moment("2016-02-09 07:00:00", testTimePointFrmt);
+  const okPer = new StatePeriod(mainPerStart, mainPerEnd, 'OK');
+
+  const subPers = [
+    new StatePeriod(mainPerStart, mainPerEnd, 'PARTIAL')
+  ];
+
+  let pers = splitPeriod(okPer, subPers);
+  logPeriods(pers);
+
+  if (pers.length !== 1) {
+    throw "pers.length !== 1";
+  }
+  checkPeriod(pers[0], mainPerStart, mainPerEnd, 'PARTIAL', 1);
+}
+
+function checkPeriod(period, start, stop, state, periodNum) {
+  if (period.start.isSame(start)) {
+    throw `period ${periodNum}: incorrect start`;
+  }
+  if (period.end.isSame(end)) {
+    throw `period ${periodNum}: incorrect end`;
+  }
+  if (period.state !== state) {
+    throw `period ${periodNum}: incorrect state`;
+  }
+}
+
+
+/////////////////////////////////////////////////////////////////////
+// run all tests
 
 function runBusWarnPerTests() {
+// test find warn periods
   testNoOverlap();
   testWholeOverlap();
   testPerCombi();
   testPerCombi2();
+
+// test splitPeriod
+//  testLeftSubPer();
+//  testMidSubPer();
+//  testRightSubPer();
+//  test2MidSubPers();
+//  testFullOverlapSubPer();
 }

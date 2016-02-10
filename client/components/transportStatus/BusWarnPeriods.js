@@ -19,7 +19,7 @@ function findWarnPeriods(okPer, failPers) {
     if (intsect) { // if there is an intersection
       // If the intersection contains whole ok per, then ret 1 warn per equal to ok per
       if (intsect.isSame(okPer)) {
-        retval = [new StatePeriod(okPer.start, okPer.end, 'PARTIAL')]
+        retval = [new StatePeriod(okPer.start, okPer.end, 'PARTIAL')];
         return false;
       }
 
