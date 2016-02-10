@@ -74,6 +74,6 @@ angular.module('armUptimeApp', [
     i18nService.setCurrentLang('ru');
 
     // Rus tests
-    runStatePeriodTests();
-    runBusWarnPerTests();
+    //runStatePeriodTests();
+    //runBusWarnPerTests();
   });

@@ -73,5 +73,35 @@ function findWarnPeriods(okPer, failPers) {
 }
 
 function splitPeriod(mainPer, subPers) {
+  let pers2ret = [];
+  let curPos = mainPer.start;
 
+  let need2ret = false;
+  _.forEach(subPers, function (subPer) {
+    // is same as the main per
+    if (subPer.isSame(mainPer)) {
+      pers2ret = [subPer];
+      need2ret = true;
+      return false;
+    }
+    // if starts together with the main per
+    if (subPer.start.isSame(mainPer.start)) {
+      pers2ret.push(subPer);
+    }
+    else {
+      let mainPerSubRange = new Period(curPos, subPer.end);
+      let [okSubRange] = mainPerSubRange.subtract(subPer);
+      pers2ret.push(new StatePeriod(okSubRange.start, okSubRange.end, 'OK'));
+      pers2ret.push(subPer);
+    }
+
+    curPos = subPer.end;
+  });
+
+  // Add the range after all sub pers
+  if (!need2ret && curPos.isBefore(mainPer.end)) {
+    pers2ret.push(new StatePeriod(curPos, mainPer.end, 'OK'));
+  }
+
+  return pers2ret;
 }

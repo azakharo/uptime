@@ -173,7 +173,7 @@ function testLeftSubPer() {
   const subPers = [new StatePeriod(subPerStart, subPerEnd, 'PARTIAL')];
 
   let pers = splitPeriod(okPer, subPers);
-  logPeriods(pers);
+  //logPeriods(pers);
 
   if (pers.length !== 2) {
     throw "pers.length !== 2";
@@ -193,21 +193,12 @@ function testMidSubPer() {
   const subPers = [new StatePeriod(subPerStart, subPerEnd, 'PARTIAL')];
 
   let pers = splitPeriod(okPer, subPers);
-  logPeriods(pers);
+  //logPeriods(pers);
 
   if (pers.length !== 3) {
     throw "pers.length !== 3";
   }
   // check 1 per
-  if (!pers[0].start.isSame(mainPerStart)) {
-    throw "per1 incorrect start";
-  }
-  if (!pers[0].end.isSame(subPerStart)) {
-    throw "per1 incorrect end";
-  }
-  if (!pers[0].state !== 'OK') {
-    throw "per1 incorrect state";
-  }
   checkPeriod(pers[0], mainPerStart, subPerStart, 'OK', 1);
   checkPeriod(pers[1], subPerStart, subPerEnd, 'PARTIAL', 2);
   checkPeriod(pers[2], subPerEnd, mainPerEnd, 'OK', 3);
@@ -220,11 +211,11 @@ function testRightSubPer() {
   const okPer = new StatePeriod(mainPerStart, mainPerEnd, 'OK');
 
   const subPerStart = moment("2016-02-09 06:45:00", testTimePointFrmt);
-  const subPerEnd = moment("2016-02-09 06:50:00", testTimePointFrmt);
+  const subPerEnd = moment("2016-02-09 07:00:00", testTimePointFrmt);
   const subPers = [new StatePeriod(subPerStart, subPerEnd, 'PARTIAL')];
 
   let pers = splitPeriod(okPer, subPers);
-  logPeriods(pers);
+  //logPeriods(pers);
 
   if (pers.length !== 2) {
     throw "pers.length !== 2";
@@ -249,7 +240,7 @@ function test2MidSubPers() {
   ];
 
   let pers = splitPeriod(okPer, subPers);
-  logPeriods(pers);
+  //logPeriods(pers);
 
   if (pers.length !== 5) {
     throw "pers.length !== 5";
@@ -272,7 +263,7 @@ function testFullOverlapSubPer() {
   ];
 
   let pers = splitPeriod(okPer, subPers);
-  logPeriods(pers);
+  //logPeriods(pers);
 
   if (pers.length !== 1) {
     throw "pers.length !== 1";
@@ -281,10 +272,10 @@ function testFullOverlapSubPer() {
 }
 
 function checkPeriod(period, start, stop, state, periodNum) {
-  if (period.start.isSame(start)) {
+  if (!period.start.isSame(start)) {
     throw `period ${periodNum}: incorrect start`;
   }
-  if (period.end.isSame(end)) {
+  if (!period.end.isSame(stop)) {
     throw `period ${periodNum}: incorrect end`;
   }
   if (period.state !== state) {
@@ -304,9 +295,9 @@ function runBusWarnPerTests() {
   testPerCombi2();
 
 // test splitPeriod
-//  testLeftSubPer();
-//  testMidSubPer();
-//  testRightSubPer();
-//  test2MidSubPers();
-//  testFullOverlapSubPer();
+  testLeftSubPer();
+  testMidSubPer();
+  testRightSubPer();
+  test2MidSubPers();
+  testFullOverlapSubPer();
 }
