@@ -73,6 +73,9 @@ function findWarnPeriods(okPer, failPers) {
 }
 
 function splitPeriod(mainPer, subPers) {
+  if (!subPers || subPers.length === 0) {
+    return [mainPer];
+  }
   let pers2ret = [];
   let curPos = mainPer.start;
 

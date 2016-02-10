@@ -274,18 +274,31 @@ mod.service(
           hwFailPeriods = _.concat(hwFailPeriods, gpsFailPeriods);
         }
 
-        // Loop through the all OK periods.
-        // If find intersection with any FAIL period => change state from OK to PARTIAL
+        // Loop through the all OK periods and split them, if necessary
+        let processedPeriods = [];
         busOkPeriods.forEach(function (okPer) {
-          let intersection = _.find(hwFailPeriods, function (failPer) {
-            return okPer.intersect(failPer);
-          });
-          if (intersection) {
-            okPer.state = 'PARTIAL';
+          let warnPers = findWarnPeriods(okPer, hwFailPeriods);
+          if (warnPers.length > 0) { // if found
+            let splitResult = splitPeriod(okPer, warnPers);
+            processedPeriods = _.concat(processedPeriods, splitResult);
+          }
+          else {
+            processedPeriods.push(okPer);
           }
         });
 
-      });
+        // Re-create bus.periods.
+        // Get all non-OK periods, then add processedPeriods.
+        const notOkPeriods = _.filter(bus.periods, function (per) {
+          return per.state !== 'OK';
+        });
+        bus.periods = _.concat(notOkPeriods, processedPeriods);
+        // At the end, sort all periods by start asc.
+        bus.periods = _.sortBy(bus.periods, function (per) {
+          return per.start.unix();
+        });
+
+      }); // for every bus
     }
 
     function createEvents(selectedBus, busDefines, dtStart, dtEnd) {
