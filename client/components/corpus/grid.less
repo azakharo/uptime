@@ -4,7 +4,7 @@
 
 @import "variables";
 
-.column {
+.f-column {
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
@@ -15,7 +15,7 @@
   });
 }
 
-.myrow {
+.f-row {
   display: flex;
   flex: 1 1 auto;
   height: auto;
@@ -23,7 +23,7 @@
   flex-wrap: wrap;
 }
 
-.myrow > .column {
+.f-row > .f-column {
   .small({
     width: 100% !important;
   });
@@ -33,12 +33,12 @@
 //  Gutters
 //====================================================
 
-// Add .gutters to .myrow/.column elements
+// Add .gutters to .f-row/.f-column elements
 .gutters { padding: @padding; }
 
 // All direct descendants of .gutters get margin
-.gutters > .column,
-.gutters > .myrow {
+.gutters > .f-column,
+.gutters > .f-row {
   margin: @margin;
   .small({
     width: 100% !important;
