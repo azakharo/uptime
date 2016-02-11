@@ -30,6 +30,14 @@ module.exports = function (grunt) {
     from: 'app/',
     to: baseUrl + 'app/'
   };
+  var replComponents = {
+    from: 'src="components/',
+    to: 'src="' + baseUrl + 'components/'
+  };
+  var replComponents2 = {
+    from: "'components/",
+    to: "'" + baseUrl + 'components/'
+  };
   var replAssetsImages = {
     from: 'assets/images/',
     to: baseUrl + 'assets/images/'
@@ -386,39 +394,49 @@ module.exports = function (grunt) {
     // Copies remaining files to places other tasks can use
     copy: {
       dist: {
-        files: [{
-          expand: true,
-          dot: true,
-          cwd: '<%= yeoman.client %>',
-          dest: '<%= yeoman.dist %>/public',
-          src: [
-            '*.{ico,png,txt}',
-            '.htaccess',
-            'bower_components/**/*',
-            'assets/images/{,*/}*.{webp}',
-            'assets/images/*',
-            'assets/fonts/**/*',
-            'index.html'
-          ]
-        }, {
-          expand: true,
-          cwd: '.tmp/images',
-          dest: '<%= yeoman.dist %>/public/assets/images',
-          src: ['generated/*']
-        }, {
-          expand: true,
-          dest: '<%= yeoman.dist %>',
-          src: [
-            'package.json',
-            'server/**/*'
-          ]
-        }]
+        files: [
+          {
+            expand: true,
+            dot: true,
+            cwd: '<%= yeoman.client %>',
+            dest: '<%= yeoman.dist %>/public',
+            src: [
+              '*.{ico,png,txt}',
+              '.htaccess',
+              'bower_components/**/*',
+              'assets/images/{,*/}*.{webp}',
+              'assets/images/*',
+              'assets/fonts/**/*',
+              'index.html'
+            ]
+          },
+          {
+            expand: true,
+            cwd: '.tmp/images',
+            dest: '<%= yeoman.dist %>/public/assets/images',
+            src: ['generated/*']
+          },
+          {
+            expand: true,
+            dest: '<%= yeoman.dist %>',
+            src: [
+              'package.json',
+              'server/**/*'
+            ]
+          }
+        ]
       },
       styles: {
         expand: true,
         cwd: '<%= yeoman.client %>',
         dest: '.tmp/',
         src: ['{app,components}/**/*.css']
+      },
+      tmp: {
+        expand: true,
+        cwd: '.tmp',
+        dest: '<%= yeoman.dist %>/public',
+        src: ['{app,components}/**/*']
       }
     },
 
@@ -663,6 +681,36 @@ module.exports = function (grunt) {
         ],
         overwrite: true,
         replacements: [replUrlUiGrid]
+      },
+      /////////////////////////////////////////////////////////////////////////
+      // Code for debug build
+      is_debug_debug: {
+        src: [
+          'dist/public/app/**/*.js',
+          'dist/public/components/**/*.js'
+        ],
+        overwrite: true,
+        replacements: [
+          {
+            from: 'var isRestDebug = true;', // string replacement
+            to: 'var isRestDebug = false;'
+          },
+          {
+            from: 'var isMyDebug = true;',
+            to: 'var isMyDebug = false;'
+          }
+        ]
+      },
+      baseUrl_debug: {
+        src: [
+          'dist/public/index.html',
+          'dist/public/app/**/*.html',
+          'dist/public/app/**/*.js',
+          'dist/public/app/**/*.css',
+          'dist/public/components/**/*.js',
+        ],
+        overwrite: true,
+        replacements: [replApp, replComponents, replComponents2, replAssetsImages, replBowerCompAbs, replBowerComp]
       }
     }
 
@@ -786,6 +834,19 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('build-debug', [
+    'clean:dist',
+    'injector:less',
+    'concurrent:dist',
+    'injector',
+    'wiredep',
+    'autoprefixer',
+    'copy:dist',
+    'copy:tmp',
+    'replace:is_debug_debug',
+    'replace:baseUrl_debug'
+  ]);
+
+  grunt.registerTask('build-neo', [
     'clean:dist',
     'injector:less',
     'concurrent:dist',
