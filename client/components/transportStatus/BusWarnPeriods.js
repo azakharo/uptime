@@ -6,6 +6,11 @@ function findWarnPeriods(okPer, failPers) {
     return [];
   }
 
+  // Remove non uniq fail pers
+  failPers = _.uniqWith(failPers, function (per1, per2) {
+    return per1.isSame(per2);
+  });
+
   // Sort all fail periods by start asc
   failPers = _.sortBy(failPers, function (fp) {
     return fp.start.unix();

@@ -278,8 +278,9 @@ mod.service(
         let processedPeriods = [];
         busOkPeriods.forEach(function (okPer) {
           let warnPers = findWarnPeriods(okPer, hwFailPeriods);
+          let splitResult = null;
           if (warnPers.length > 0) { // if found
-            let splitResult = splitPeriod(okPer, warnPers);
+            splitResult = splitPeriod(okPer, warnPers);
             processedPeriods = _.concat(processedPeriods, splitResult);
           }
           else {
