@@ -707,7 +707,7 @@ module.exports = function (grunt) {
           'dist/public/app/**/*.html',
           'dist/public/app/**/*.js',
           'dist/public/app/**/*.css',
-          'dist/public/components/**/*.js',
+          'dist/public/components/**/*.js'
         ],
         overwrite: true,
         replacements: [replApp, replComponents, replComponents2, replAssetsImages, replBowerCompAbs, replBowerComp]
