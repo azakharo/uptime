@@ -4,8 +4,6 @@ angular.module('armUptimeApp')
   .controller('MainCtrl', function ($scope, $log, $state, $interval, $q, $timeout, uiGridConstants,
                                     Auth, myRest, transpStatus) {
     $scope.Auth = Auth;
-
-    $scope.timePeriod = isMyDebug ? 'hour' : 'day';
     $scope.isGettingData = false;
 
     $scope.onSettingsBtnClick = function () {
@@ -70,9 +68,8 @@ angular.module('armUptimeApp')
 
     // Auto-update
     var stopAutoRefresh = $interval(function () {
-      if ($scope.timePeriod === 'hour' || $scope.timePeriod === 'day') {
-        updateData();
-      }
+      // TODO need not always update
+      updateData();
     }, 180000);
     $scope.$on('$destroy', function () {
       $interval.cancel(stopAutoRefresh);
@@ -224,19 +221,6 @@ angular.module('armUptimeApp')
       $scope.busInfos = [];
     }
 
-    $scope.$watch('timePeriod', function (newVal, oldVal, scope) {
-      $scope.isGettingData = true;
-      $timeout(
-        function () {
-          const {start, end} = timePeriod2moments($scope.timePeriod);
-          $scope.dtStart = start;
-          $scope.dtEnd = end;
-
-          updateData();
-        }, 100
-      );
-    });
-
     $scope.selectedBus = null;
     $scope.onAccordionItemClicked = function (bus) {
       if (!$scope.selectedBus) {
@@ -348,30 +332,52 @@ angular.module('armUptimeApp')
     // ui-grid setup
     //-----------------------------------
 
-    function timePeriod2moments(timePeriod) {
-      let start = null;
-      let end = moment();
-      switch (timePeriod) {
-        case 'hour':
-          start = moment().subtract(1, 'hours');
-          break;
-        case 'day':
-          start = moment().subtract(1, 'days');
-          break;
-        case 'week':
-          start = moment().subtract(7, 'days');
-          break;
-        case 'month':
-          start = moment().subtract(1, 'month');
-          break;
-        default:
-          throw `UNEXPECTED time period '${timePeriod}'`;
+    //=======================================================
+    // Date range picker
+
+    $scope.today = moment();
+
+    $scope.dtStart = moment().startOf('day');
+    $scope.dtEnd = moment();
+
+    $scope.datePicker = {};
+    $scope.datePicker.date = {
+      startDate: $scope.dtStart,
+      endDate: $scope.dtEnd
+    };
+
+    $scope.dateRangePickerOpts = {
+      eventHandlers: {
+        'apply.daterangepicker': function () {
+          //log("apply btn clicked");
+          buildTimelines();
+        },
+        'cancel.daterangepicker': function () {
+          //log("cancel btn clicked");
+        }
+      },
+      "locale": {
+        "applyLabel": "ОК",
+        "cancelLabel": "Отмена"
       }
-      return {
-        start: start,
-        end: end
-      }
+    };
+
+    function buildTimelines() {
+      $scope.isGettingData = true;
+      $timeout(
+        function () {
+          $scope.dtStart = $scope.datePicker.date.startDate;
+          $scope.dtEnd = $scope.datePicker.date.endDate;
+
+          updateData();
+        },
+        100);
     }
+
+    buildTimelines();
+
+    // Date range picker
+    //=======================================================
 
     // Handle window resizing
     var onWindowResize = debounce(function () {
