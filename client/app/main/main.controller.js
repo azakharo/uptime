@@ -68,8 +68,9 @@ angular.module('armUptimeApp')
 
     // Auto-update
     var stopAutoRefresh = $interval(function () {
-      // TODO need not always update
-      updateData();
+      if ($scope.dtEnd.endOf('day').isSame(moment().endOf('day'))) { // if the end is today
+        updateData();
+      }
     }, 180000);
     $scope.$on('$destroy', function () {
       $interval.cancel(stopAutoRefresh);
