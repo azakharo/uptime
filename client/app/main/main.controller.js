@@ -333,52 +333,6 @@ angular.module('armUptimeApp')
     // ui-grid setup
     //-----------------------------------
 
-    ////=======================================================
-    //// Date range picker
-    //
-    //$scope.today = moment();
-    //
-    //$scope.dtStart = moment().startOf('day');
-    //$scope.dtEnd = moment();
-    //
-    //$scope.datePicker = {};
-    //$scope.datePicker.date = {
-    //  startDate: $scope.dtStart,
-    //  endDate: $scope.dtEnd
-    //};
-    //
-    //$scope.dateRangePickerOpts = {
-    //  eventHandlers: {
-    //    'apply.daterangepicker': function () {
-    //      //log("apply btn clicked");
-    //      buildTimelines();
-    //    },
-    //    'cancel.daterangepicker': function () {
-    //      //log("cancel btn clicked");
-    //    }
-    //  },
-    //  "locale": {
-    //    "applyLabel": "ОК",
-    //    "cancelLabel": "Отмена"
-    //  }
-    //};
-    //
-    //function buildTimelines() {
-    //  $scope.isGettingData = true;
-    //  $timeout(
-    //    function () {
-    //      $scope.dtStart = $scope.datePicker.date.startDate;
-    //      $scope.dtEnd = $scope.datePicker.date.endDate;
-    //
-    //      updateData();
-    //    },
-    //    100);
-    //}
-    //
-    //buildTimelines();
-    //
-    //// Date range picker
-    ////=======================================================
 
     //===================================
     // Date picker
