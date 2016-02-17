@@ -31,3 +31,7 @@ function isInt(value) {
     parseInt(Number(value)) == value &&
     !isNaN(parseInt(value, 10));
 }
+
+function isToday(momnt) {
+  return momnt.endOf('day').isSame(moment().endOf('day'));
+}

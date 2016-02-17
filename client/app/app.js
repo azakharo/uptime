@@ -64,7 +64,7 @@ angular.module('armUptimeApp', [
   })
 
   // Additional configuration
-  .run(function (i18nService, myRest) {
+  .run(function (i18nService, uibDatepickerPopupConfig, myRest) {
     // Cause 401 if necessary
     myRest.getApps();
 
@@ -73,6 +73,19 @@ angular.module('armUptimeApp', [
 
     // ui-grid
     i18nService.setCurrentLang('ru');
+
+    ///////////////////////////////////////////////////
+    // Date picker settings
+
+    // TRANSLATION
+    uibDatepickerPopupConfig.currentText = 'Сегодня';
+    uibDatepickerPopupConfig.clearText = 'Очистить';
+    uibDatepickerPopupConfig.closeText = 'Закрыть';
+
+    uibDatepickerPopupConfig.appendToBody = true;
+
+    // Date picker settings
+    ///////////////////////////////////////////////////
 
     // Rus tests
     //runStatePeriodTests();

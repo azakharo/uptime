@@ -68,7 +68,7 @@ angular.module('armUptimeApp')
 
     // Auto-update
     var stopAutoRefresh = $interval(function () {
-      if ($scope.dtEnd.endOf('day').isSame(moment().endOf('day'))) { // if the end is today
+      if (isToday($scope.dtEnd)) { // if the end is today
         updateData();
       }
     }, 180000);
@@ -333,52 +333,87 @@ angular.module('armUptimeApp')
     // ui-grid setup
     //-----------------------------------
 
-    //=======================================================
-    // Date range picker
+    ////=======================================================
+    //// Date range picker
+    //
+    //$scope.today = moment();
+    //
+    //$scope.dtStart = moment().startOf('day');
+    //$scope.dtEnd = moment();
+    //
+    //$scope.datePicker = {};
+    //$scope.datePicker.date = {
+    //  startDate: $scope.dtStart,
+    //  endDate: $scope.dtEnd
+    //};
+    //
+    //$scope.dateRangePickerOpts = {
+    //  eventHandlers: {
+    //    'apply.daterangepicker': function () {
+    //      //log("apply btn clicked");
+    //      buildTimelines();
+    //    },
+    //    'cancel.daterangepicker': function () {
+    //      //log("cancel btn clicked");
+    //    }
+    //  },
+    //  "locale": {
+    //    "applyLabel": "ОК",
+    //    "cancelLabel": "Отмена"
+    //  }
+    //};
+    //
+    //function buildTimelines() {
+    //  $scope.isGettingData = true;
+    //  $timeout(
+    //    function () {
+    //      $scope.dtStart = $scope.datePicker.date.startDate;
+    //      $scope.dtEnd = $scope.datePicker.date.endDate;
+    //
+    //      updateData();
+    //    },
+    //    100);
+    //}
+    //
+    //buildTimelines();
+    //
+    //// Date range picker
+    ////=======================================================
 
-    $scope.today = moment();
+    //===================================
+    // Date picker
 
-    $scope.dtStart = moment().startOf('day');
-    $scope.dtEnd = moment();
+    $scope.dt = moment().toDate();
+    $scope.today = moment().toDate();
 
-    $scope.datePicker = {};
-    $scope.datePicker.date = {
-      startDate: $scope.dtStart,
-      endDate: $scope.dtEnd
+    $scope.dateOptions = {
+      formatYear: 'yy',
+      startingDay: 1,
+      showWeeks: false
     };
 
-    $scope.dateRangePickerOpts = {
-      eventHandlers: {
-        'apply.daterangepicker': function () {
-          //log("apply btn clicked");
-          buildTimelines();
-        },
-        'cancel.daterangepicker': function () {
-          //log("cancel btn clicked");
-        }
-      },
-      "locale": {
-        "applyLabel": "ОК",
-        "cancelLabel": "Отмена"
-      }
-    };
+    $scope.dateFormat = 'dd.MM.yyyy';
+    $scope.altInputFormats = ['d!.M!.yyyy'];
+
+    $scope.$watch('dt', function (newVal, oldVal, scope) {
+      buildTimelines();
+    });
+
+    // Date picker
+    //===================================
 
     function buildTimelines() {
       $scope.isGettingData = true;
       $timeout(
         function () {
-          $scope.dtStart = $scope.datePicker.date.startDate;
-          $scope.dtEnd = $scope.datePicker.date.endDate;
+          var dt = moment($scope.dt);
+          $scope.dtStart = moment($scope.dt).startOf('day');
+          $scope.dtEnd = isToday(dt) ? moment() : dt.endOf('day');
 
           updateData();
         },
         100);
     }
-
-    buildTimelines();
-
-    // Date range picker
-    //=======================================================
 
     // Handle window resizing
     var onWindowResize = debounce(function () {

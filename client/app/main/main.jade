@@ -23,8 +23,18 @@
         .Grid.Grid--center
           .Grid-cell--autoSize.fs-medium Выбор периода наблюдения:
           .Grid-cell--autoSize.pl1
-            input.form-control.date-picker(date-range-picker, type="text", ng-model="datePicker.date",
-            options="dateRangePickerOpts", max="today")
+            //input.form-control.date-picker(date-range-picker, type="text", ng-model="datePicker.date",
+            //options="dateRangePickerOpts", max="today")
+            // date picker input (dummy)
+            input#timeline-datepicker-input(type='text',
+            uib-datepicker-popup='{{dateFormat}}', ng-model='dt',
+            is-open='isDatePickerOpened', datepicker-options='dateOptions', max-date='today',
+            alt-input-formats="altInputFormats")
+            // date picker button
+            button#timeline-datepicker-btn.btn.btn-default.responsive-btn(type='button',
+            ng-click='isDatePickerOpened = true',
+            uib-tooltip="Выбрать дату", tooltip-append-to-body="true", tooltip-placement="auto bottom")
+              i.glyphicon.glyphicon-calendar
           .Grid-cell--autoSize.pl1
             button.btn.btn-default.responsive-btn(ng-click="onRefreshBtnClick()",
             uib-tooltip="Обновить данные", tooltip-append-to-body="true", tooltip-placement="auto right")
