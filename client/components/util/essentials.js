@@ -33,5 +33,5 @@ function isInt(value) {
 }
 
 function isToday(momnt) {
-  return momnt.endOf('day').isSame(moment().endOf('day'));
+  return momnt.isSame(moment(), 'day');
 }

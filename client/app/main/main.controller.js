@@ -68,9 +68,7 @@ angular.module('armUptimeApp')
 
     // Auto-update
     var stopAutoRefresh = $interval(function () {
-      if (isToday($scope.dtEnd)) { // if the end is today
-        updateData();
-      }
+      buildTimelines();
     }, 180000);
     $scope.$on('$destroy', function () {
       $interval.cancel(stopAutoRefresh);
@@ -78,8 +76,7 @@ angular.module('armUptimeApp')
 
     // Manual update
     $scope.onRefreshBtnClick = function () {
-      $scope.isGettingData = true;
-      $timeout(updateData, 100);
+      buildTimelines();
     };
 
     $scope.busInfos = [];
