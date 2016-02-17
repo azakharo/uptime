@@ -11,7 +11,6 @@ angular.module('armUptimeApp', [
   'ui.grid.autoResize',
   'ui.grid.pagination',
   'angularSpinner',
-  'daterangepicker',
   'restService',
   'TransportStatus',
   'authService'
