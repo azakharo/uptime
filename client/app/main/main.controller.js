@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('armUptimeApp')
-  .controller('MainCtrl', function ($scope, $log, $state, $interval, $q, $timeout, uiGridConstants,
+  .controller('MainCtrl', function ($scope, $log, $state, $q, $timeout, uiGridConstants,
                                     Auth, myRest, transpStatus) {
     $scope.Auth = Auth;
     $scope.isGettingData = false;
@@ -67,12 +67,12 @@ angular.module('armUptimeApp')
     }
 
     // Auto-update
-    var stopAutoRefresh = $interval(function () {
-      buildTimelines();
-    }, 180000);
-    $scope.$on('$destroy', function () {
-      $interval.cancel(stopAutoRefresh);
-    });
+    //var stopAutoRefresh = $interval(function () {
+    //  buildTimelines();
+    //}, 180000);
+    //$scope.$on('$destroy', function () {
+    //  $interval.cancel(stopAutoRefresh);
+    //});
 
     // Manual update
     $scope.onRefreshBtnClick = function () {

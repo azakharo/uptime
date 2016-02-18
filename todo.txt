@@ -1,3 +1,2 @@
-Build:
-* disable: concat, minify, uglify.
-* just test pushing to github.
+Under ZBB:
+* Layout for smaller screens.
