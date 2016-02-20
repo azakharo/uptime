@@ -370,8 +370,10 @@ angular.module('armUptimeApp')
     var onWindowResize = debounce(function () {
       // Make the right part same height as the left part
       // WORKAROUND the auto-resize issue when make window smaller
-      $('#right-part').height($('#left-part').height());
-    }, 1000);
+      //$('#right-part').height($('#left-part').height());
+
+      $state.reload();
+    }, 2000);
     $(window).resize(onWindowResize);
 
     function log(msg) {

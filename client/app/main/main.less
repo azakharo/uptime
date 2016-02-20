@@ -8,6 +8,11 @@
   justify-content: flex-start;
 
   background: lightgoldenrodyellow;
+
+  .medium({
+    height: auto !important;
+    min-height: 100vh;
+  });
 }
 
 //**********************
@@ -52,6 +57,10 @@
   flex-flow: row nowrap;
   align-items: stretch;
   justify-content: space-between;
+
+  .medium({
+    display: block;
+  });
 }
 
 #left-part {
@@ -62,6 +71,11 @@
   flex-flow: column nowrap;
   align-items: stretch;
   justify-content: flex-start;
+
+  .medium({
+    display: block;
+    width: 100%;
+  });
 }
 
 #time-period-selector {
@@ -95,6 +109,11 @@
   flex-flow: column nowrap;
   align-items: stretch;
   justify-content: flex-start;
+
+  .medium({
+    display: block;
+    width: 100%;
+  });
 }
 
 #bus-events-title {
