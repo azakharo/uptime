@@ -368,11 +368,23 @@ angular.module('armUptimeApp')
 
     // Handle window resizing
     var onWindowResize = debounce(function () {
-      // Make the right part same height as the left part
-      // WORKAROUND the auto-resize issue when make window smaller
-      //$('#right-part').height($('#left-part').height());
+      var leftPart = $('#left-part');
+      var rightPart = $('#right-part');
 
-      $state.reload();
+      if (window.innerWidth <= 800) { // small screens
+        var partW = $('header').width();
+        rightPart.width(partW);
+        leftPart.width(partW);
+      }
+      else { // big screens
+        var partW = Math.floor(window.innerWidth / 2);
+        rightPart.width(partW);
+        leftPart.width(partW);
+
+        // Make the right part same height as the left part
+        // WORKAROUND the auto-resize issue when make window smaller
+        rightPart.height(leftPart.height());
+      }
     }, 2000);
     $(window).resize(onWindowResize);
 
