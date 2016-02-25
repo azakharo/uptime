@@ -25,7 +25,7 @@
           .Grid-cell--autoSize.pl1
             .input-group
               // date picker input (dummy)
-              input#timeline-datepicker-input.form-control(type='text',
+              input#timeline-datepicker-input.form-control.responsive-input(type='text',
               uib-datepicker-popup='{{dateFormat}}', ng-model='dt',
               is-open='isDatePickerOpened', datepicker-options='dateOptions', max-date='today',
               alt-input-formats="altInputFormats", readonly)
