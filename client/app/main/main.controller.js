@@ -368,12 +368,6 @@ angular.module('armUptimeApp')
 
     // Handle window resizing
     var onWindowResize = debounce(function () {
-      var browser = getBrowserInfo();
-      if (browser.name === 'Firefox') {
-        $state.reload();
-        return;
-      }
-
       var leftPart = $('#left-part');
       var rightPart = $('#right-part');
 
@@ -385,6 +379,12 @@ angular.module('armUptimeApp')
         $('#bus-events').height(400);
       }
       else { // big screens
+        var browser = getBrowserInfo();
+        if (browser.name === 'Firefox') {
+          $state.reload();
+          return;
+        }
+
         var partW = Math.floor(window.innerWidth / 2);
         rightPart.width(partW);
         leftPart.width(partW);
