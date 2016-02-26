@@ -229,6 +229,22 @@ mod.service(
       return ( request.then(handleSuccess, handleError) );
     }
 
+    function getPrices(appID) {
+      var request = $http({
+        method: "get",
+        url: baseURL + `applications/${appID}/prices`
+      });
+      return ( request.then(handleSuccess, handleError) );
+    }
+
+    function getServices(appID) {
+      var request = $http({
+        method: "get",
+        url: baseURL + `applications/${appID}/services`
+      });
+      return ( request.then(handleSuccess, handleError) );
+    }
+
 
     //************************************************************************************
     // Below are methods which return or work with app specific models (not server models)
@@ -1231,113 +1247,6 @@ mod.service(
     //========================================================
     // Acceptant stat
 
-    // TODO use the stat service
-    function getStatPassengerVehicle(dtStart, dtEnd) {
-      var deffered = $q.defer();
-
-      var data = [];
-      var days = getDays(dtStart, dtEnd);
-      days.forEach(function(day) {
-        var dateItem = {
-          day: day,
-          buses: 0,
-          passengers: 0
-        };
-        data.push(dateItem);
-      });
-
-      var dtFrmt = 'DD.MM.YYYY';
-      getPassengersInHist(dtStart, dtEnd).then(
-        function (hist) {
-          //log(hist);
-          var groups = _.groupBy(hist, function(item) {
-            return item.timestamp.format(dtFrmt);
-          });
-          //log(groups);
-
-          Object.keys(groups).forEach(function(grpName) {
-            var day = moment(grpName, dtFrmt);
-
-            var passengers = 0;
-            // calc passengers
-            groups[grpName].forEach(function(event) {
-              passengers += event.input;
-            });
-            // calc buses
-            var uniqBusIDs = _.uniq(groups[grpName], 'busID');
-            var buses = uniqBusIDs.length;
-
-            var item2change = _.find(data, function(item) {
-              return item.day.startOf('day').isSame(day.startOf('day'));
-            });
-            if (item2change) {
-              item2change.passengers = passengers;
-              item2change.buses = buses;
-            }
-
-          });
-          //log(data);
-
-          deffered.resolve(data);
-        },
-        function (reason) {
-          deffered.reject(reason);
-        }
-      );
-
-      return deffered.promise;
-    }
-
-    // TODO use the stat service
-    function getStatTurnover(dtStart, dtEnd) {
-      var deffered = $q.defer();
-
-      var data = [];
-      var days = getDays(dtStart, dtEnd);
-      days.forEach(function(day) {
-        var dateItem = {
-          day: day,
-          passKm: 0
-        };
-        data.push(dateItem);
-      });
-
-      getTurnoverHist(dtStart, dtEnd).then(function (hist) {
-        var dtFrmt = 'DD.MM.YYYY';
-
-        // Group data by day
-        var groups = _.groupBy(hist, function(item) {
-          return item.timestamp.format(dtFrmt);
-        });
-        //log(groups);
-
-        // For each day calc passKm
-        Object.keys(groups).forEach(function(grpName) {
-          var day = moment(grpName, dtFrmt);
-
-          // Calc passenger-kilometers
-          var passKm = 0;
-          groups[grpName].forEach(function(event) {
-            passKm += event.distance / 1000.0 * event.quantity;
-          });
-
-          var passKm2change = _.find(data, function(pk) {
-            return pk.day.startOf('day').isSame(day.startOf('day'));
-          });
-          if (passKm2change) {
-            passKm2change.passKm = passKm;
-          }
-        });
-
-        deffered.resolve(data);
-      },
-      function (reason) {
-        deffered.reject(reason);
-      });
-
-      return deffered.promise;
-    }
-
     function getStatPaidPrivileges(dtStart, dtEnd) {
       //return getStatPaidPrivilegesDUMMY(dtStart, dtEnd);
 
@@ -1603,7 +1512,8 @@ mod.service(
 
             var dateItem = {
               day: day,
-              passengers: stat.data._summary_owner._summary_vehicle[dayIndex].amount_inlet
+              passengers: stat.data._summary_owner._summary_vehicle[dayIndex].amount_inlet,
+              passCountErr: stat.data._summary_owner._summary_vehicle[dayIndex].error
             };
             data.push(dateItem);
           });
@@ -1842,6 +1752,38 @@ mod.service(
       return deffered.promise;
     }
 
+    function getStatPassKmPerDay(dtStart, dtFinish) {
+      var deffered = $q.defer();
+
+      getStatPassKmPerDayPerOrg(dtStart, dtFinish).then(
+        function (statPerOrg) {
+          let passKms = _.map(statPerOrg, 'passKms');
+          if (!passKms || passKms.length === 0) {
+            deffered.resolve([]);
+          }
+          let days = _.map(passKms[0], 'day');
+          let retVal = [];
+          days.forEach(function (day, dayIndex) {
+            let retValItem = { day: day };
+            let allPassKmsForDay = _.map(passKms, function (arr) {
+              return arr[dayIndex].passKm;
+            });
+            retValItem.passKm = _.reduce(allPassKmsForDay, function(sum, n) {
+              return sum + n;
+            });
+            retVal.push(retValItem);
+          });
+
+          deffered.resolve(retVal);
+        },
+        function (reason) {
+          deffered.reject(reason);
+        }
+      );
+
+      return deffered.promise;
+    }
+
     function getStatTotalServed(dtStart, dtFinish) {
       var deffered = $q.defer();
 
@@ -1872,42 +1814,77 @@ mod.service(
 
     // Acceptant prices
     function getTariffs() {
-      var tariffs = [];
-      var deffered = $q.defer();
+      let tariffs = [];
+      let deffered = $q.defer();
 
-      $q.all([
-        getCurrencies(),
-        getPrices(1)
-      ]).then(
-        function (values) {
-          var currencies = values[0];
-          var prices = values[1];
+      getTransportApp().then(
+        function (app) {
+          if (!app) {
+            deffered.resolve([]);
+          }
+          $q.all([
+            getCurrencies(),
+            getPrices(app.id),
+            getServices(app.id)
+          ]).then(
+            function (values) {
+              let currencies = values[0];
+              let prices = values[1];
+              let services = values[2];
 
-          prices.forEach(function (price) {
-            // Find currency
-            var curr = currencies.find(function(curr) {
-              return curr.srvID === price.currencyId;
-            });
+              prices.forEach(function (price) {
+                // Find currency
+                let curr = _.find(currencies, curr => curr.srvID === price.currencyId);
+                let service = _.find(services, srv => srv.id === price.serviceId);
 
-            if (curr) {
-              var tarr = {
-                currency: curr,
-                price: price.value,
-                name: curr.name,
-                desc: '',
-                type: (curr.isAbonnement) ? 'Проездной' : 'Разовый',
-                activePeriodStart: price.timeframe.startTimestamp,
-                activePeriodFinish: price.timeframe.finishTimestamp
-              };
+                if (!curr) {
+                  return;
+                }
 
-              tariffs.push(tarr);
+                let tarr = {
+                  currency: curr,
+                  price: price.value,
+                  name: curr.name,
+                  desc: service ? service.title : '',
+                  type: (curr.isAbonnement) ? 'Проездной' : 'Разовый',
+                  activePeriodStart: isInt(price.timeframe.startTimestamp) ? price.timeframe.startTimestamp : null,
+                  activePeriodFinish: isInt(price.timeframe.finishTimestamp) ? price.timeframe.finishTimestamp : null
+                };
+
+                tariffs.push(tarr);
+              });
+
+              deffered.resolve(tariffs);
+            },
+            function (reason) {
+              deffered.reject(reason);
             }
-          });
-
-          deffered.resolve(tariffs);
+          );
         },
         function (reason) {
-          deffered.reject(reason);
+          deffered.resolve([]);
+        }
+      );
+
+      return deffered.promise;
+    }
+
+    function getTransportApp() {
+      let deffered = $q.defer();
+
+      getApps().then(
+        function (apps) {
+          if (!apps || apps.length === 0) {
+            deffered.resolve(null);
+          }
+          var app2ret = _.find(apps, function (app) {
+            return app.title.match(/Транспортное/i);
+          });
+
+          deffered.resolve(app2ret ? app2ret : app[0]);
+        },
+        function (reason) {
+          deffered.resolve(null);
         }
       );
 
@@ -1987,6 +1964,7 @@ mod.service(
       getVehicles:        getVehicles,
       getTerminals:       getTerminals,
       getVehicleTraffic:  getVehicleTraffic,
+      getPrices: getPrices,
       //-------------------------------------------------------------
       // methods which return app specific models (not server models)
       getCurrencies:    getCurrencies,
@@ -2034,21 +2012,20 @@ mod.service(
       //========================================================
       // Acceptant stat
 
-      getStatPassengerVehicle: getStatPassengerVehicle,
-      getStatTurnover: getStatTurnover,
       getStatPaidPrivileges: getStatPaidPrivileges,
       getStatTotalPaidPrivileged: getStatTotalPaidPrivileged,
       getStatPrivileges: getStatPrivileges,
       getStatPaidByCardType: getStatPaidByCardType,
       getStatTotalPaidByCardType: getStatTotalPaidByCardType,
       getStatTotalPassengers: getStatTotalPassengers,
+      getStatTotalPassKm: getStatTotalPassKm,
+      getStatTotalServed: getStatTotalServed,
       getStatPassengersPerDay: getStatPassengersPerDay,
       getStatBusesPerDay: getStatBusesPerDay,
       getStatPassengersAvgPerHour: getStatPassengersAvgPerHour,
-      getStatTotalPassKm: getStatTotalPassKm,
       getStatPassKmPerDayPerOrg: getStatPassKmPerDayPerOrg,
-      getStatTotalServed: getStatTotalServed,
       getStatTransactionsPerDay: getStatTransactionsPerDay,
+      getStatPassKmPerDay: getStatPassKmPerDay,
       getStatTransactions: getStatTransactions,
 
       // Acceptant stat
