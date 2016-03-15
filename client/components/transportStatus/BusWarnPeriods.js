@@ -11,6 +11,31 @@ function findWarnPeriods(okPer, failPers) {
     return per1.isSame(per2);
   });
 
+  // Remove periods which are contained by other periods
+  // Find the periods
+  let includedPers = [];
+  _.forEach(failPers, function (examinedPer) {
+    _.forEach(failPers, function (per) {
+      if (!per.isSame(examinedPer) && per.contains(examinedPer)) {
+        includedPers.push(examinedPer);
+        return false;
+      }
+    });
+  });
+  // Rem the periods
+  if (includedPers.length > 0) {
+    failPers = _.filter(failPers, function (per) {
+      let need2rem = false;
+      _.forEach(includedPers, function (inclPer) {
+        if (inclPer.isSame(per)) {
+          need2rem = true;
+          return false;
+        }
+      });
+      return !need2rem;
+    });
+  }
+
   // Sort all fail periods by start asc
   failPers = _.sortBy(failPers, function (fp) {
     return fp.start.unix();
