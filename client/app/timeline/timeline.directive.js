@@ -30,7 +30,7 @@ angular.module('armUptimeApp')
 
         // Tooltip html
         $scope.getTooltipHtml = function(intervl) {
-          let timeFrmt = 'YYYY.MM.DD HH:mm:ss';
+          let timeFrmt = 'HH:mm:ss';
           let start = intervl.dtStart.format(timeFrmt);
           let end = intervl.dtEnd.format(timeFrmt);
           let duration = intervl.dtEnd.from(intervl.dtStart, true);

@@ -294,7 +294,7 @@ angular.module('armUptimeApp')
         displayName: 'Время',
         field: 'timestamp.toDate()',
         type: 'date',
-        cellFilter: 'date: "yyyy.MM.dd HH:mm:ss"'
+        cellFilter: 'date: "HH:mm:ss"'
       },
       {
         displayName: 'Событие',
