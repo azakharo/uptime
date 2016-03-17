@@ -294,21 +294,25 @@ angular.module('armUptimeApp')
         displayName: 'Время',
         field: 'timestamp.toDate()',
         type: 'date',
-        cellFilter: 'date: "HH:mm:ss"'
+        cellFilter: 'date: "HH:mm:ss"',
+        width: '*'
       },
       {
         displayName: 'Событие',
-        field: 'getTypeName()'
+        field: 'getTypeName()',
+        width: '**'
       },
       {
         displayName: 'Компонент',
-        field: 'getComponentName()'
+        field: 'getComponentName()',
+        width: '**'
       },
       {
-        displayName: 'Продолжительность',
+        displayName: 'Длительность',
         field: 'getDuration()',
         cellClass: "text-right",
-        headerCellClass: "text-right"
+        headerCellClass: "text-right",
+        width: '*'
       }
     ];
 
