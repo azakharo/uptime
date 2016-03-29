@@ -1,4 +1,5 @@
 #main-page.w100.vh100
+  // Header
   #header
     #header-text Uptime Monitor
     #header-right-part.plr1
@@ -16,8 +17,9 @@
           i.fa.fa-cog
         button.btn.btn-default.responsive-btn(ng-click="onLogOutBtnClick()")
           i.fa.fa-sign-out
-  #content
-    uptime
+  // Main content
+  uptime#content.uptime-wrapper
+  // Footer
   footer#footer.text-center Copyright &copy; 2015-2016 &mdash;&nbsp;
     a(href="http://sarov-itc.ru/", target="_blank") ИТЦ Система-Саров
     span ,&nbsp;&nbsp;
