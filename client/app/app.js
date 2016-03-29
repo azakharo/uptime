@@ -13,7 +13,8 @@ angular.module('armUptimeApp', [
   'angularSpinner',
   'restService',
   'TransportStatus',
-  'authService'
+  'authService',
+  'uptime'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
