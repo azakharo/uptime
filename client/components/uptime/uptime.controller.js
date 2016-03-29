@@ -1,6 +1,10 @@
 'use strict';
 
-angular.module('uptime', ['TransportStatus'])
+angular.module('uptime', [
+  'TransportStatus',
+  'ui.grid', 'ui.grid.autoResize', 'ui.grid.pagination',
+  'ui.bootstrap',
+  'angularSpinner'])
   .controller('UptimeCtrl', function ($scope, $log, $state, $q, $timeout, uiGridConstants, transpStatus) {
     $scope.isGettingData = false;
 
