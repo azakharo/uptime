@@ -1,0 +1,18 @@
+#login-wrapper.w100.vh100
+  #login-title.w100.text-center {{ title }}
+  .Grid
+    #login-left-margin.Grid-cell
+    #login-center-part.Grid-cell(style="padding-top: 10px")
+      form.form(name='form', ng-submit='login(form)', novalidate='')
+        .form-group
+          label Имя пользователя
+          input#username-input.form-control(type='text', name='username', ng-model='username')
+        .form-group
+          label Пароль
+          input.form-control(type='password', name='password', ng-model='password')
+        .form-group.has-error
+          p.help-block(ng-show='form.username.$error.required && form.password.$error.required && submitted') Пожалуйста, введите имя пользователя и пароль
+          p.help-block {{ errors.other }}
+        div
+          button.btn.btn-primary(type='submit') Войти
+    #login-right-margin.Grid-cell
