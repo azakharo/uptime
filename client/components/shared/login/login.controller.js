@@ -17,7 +17,7 @@ angular.module('loginDlg', ['authService'])
               $rootScope.state2routeAfterLogin = undefined;
             }
             else {
-              state2route = isMyDebug ? $scope.successRoute : $scope.successRouteDebug;
+              state2route = isMyDebug ? $scope.successRouteDebug : $scope.successRoute;
             }
             $state.go(state2route);
           })
