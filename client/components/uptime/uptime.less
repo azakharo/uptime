@@ -1,0 +1,154 @@
+.uptime-wrapper {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+  justify-content: space-between;
+
+  .medium({
+    display: block !important;
+    height: auto !important;
+  });
+}
+
+#uptime-left-part {
+  flex: 1;
+//  background: green;
+
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  .medium({
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+  });
+}
+
+#uptime-time-period-selector {
+  flex: none;
+//  background: lightgreen;
+}
+
+//#uptime-transport-list-title {
+//  flex: none;
+//}
+
+#uptime-transport-list {
+  flex: 1 1 400px;
+//  background: darkgreen;
+}
+
+.accordion-first-col {
+  width: 13rem;
+}
+
+.bus-img {
+  width: 3rem;
+  height: 3rem;
+}
+
+#uptime-right-part {
+  flex: 1;
+//  background: blue;
+
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  .medium({
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+  });
+}
+
+#bus-events-title {
+  flex: none;
+}
+
+#bus-events {
+  flex: 1;
+}
+
+/////////////////////////////////////////////////
+// Status colors
+
+@color-status-ok: rgba(92, 184, 92, 1.0);
+@color-status-failed: rgba(217, 83, 79, 1.0);
+@color-status-partial: rgba(240, 173, 78, 1.0);
+@color-status-unavail: #D3D3D3;
+
+.status-ok-bg {
+  background: @color-status-ok;
+}
+
+.status-failed-bg {
+  background: @color-status-failed;
+}
+
+.status-partial-bg {
+  background: @color-status-partial;
+}
+
+.status-unavail-bg {
+  background: @color-status-unavail;
+}
+
+.status-unknown-bg {
+  background: #ffffff;
+}
+
+.status-ok-fg {
+  color: @color-status-ok;
+}
+
+.status-failed-fg {
+  color: @color-status-failed;
+}
+
+.status-partial-fg {
+  color: @color-status-partial;
+}
+
+.status-unavail-fg {
+  color: @color-status-unavail;
+}
+
+.status-unknown-fg {
+  color: #000000;
+}
+
+#uptime-transport-list .progress-bar-info {
+  background-color: @color-status-unavail;
+}
+
+
+// Disable animation for timelines
+.progress-bar {
+  transition: none;
+}
+
+
+///////////////////////////////////////////////////////////
+// Date picker
+
+#timeline-datepicker-input {
+//  width: 10rem;
+  width: 0px;
+  opacity: 0;
+}
+
+#timeline-datepicker-btn {
+//  border-top-left-radius: 0px;
+//  border-bottom-left-radius: 0px;
+}
+
+.uib-clear {
+  display: none;
+}
+
+// Date picker
+///////////////////////////////////////////////////////////

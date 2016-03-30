@@ -1,0 +1,70 @@
+span(us-spinner="{radius:30, width:8, length: 16}", spinner-on="isGettingData")
+#uptime-left-part.p1
+  #uptime-time-period-selector.pb1
+    .Grid.Grid--center
+      .Grid-cell--autoSize.fs-medium
+        span Данные за&nbsp;
+        strong {{ dt | date:'dd.MM.yyyy' }}:
+      .Grid-cell--autoSize.pl1
+        // date picker input (dummy)
+        input#timeline-datepicker-input(type='text',
+        uib-datepicker-popup='{{dateFormat}}', ng-model='dt',
+        is-open='isDatePickerOpened', datepicker-options='dateOptions', max-date='today',
+        alt-input-formats="altInputFormats", readonly)
+        // date picker button
+        button#timeline-datepicker-btn.btn.btn-default.responsive-btn(type='button',
+        ng-click='isDatePickerOpened = true',
+        uib-tooltip="Выбрать дату", tooltip-append-to-body="true", tooltip-placement="auto bottom")
+          i.glyphicon.glyphicon-calendar
+      .Grid-cell--autoSize.pl1
+        button.btn.btn-default.responsive-btn(ng-click="onRefreshBtnClick()",
+        uib-tooltip="Обновить данные", tooltip-append-to-body="true", tooltip-placement="auto right")
+          i.fa.fa-refresh
+  //#uptime-transport-list-title.pt2.pb1.fs-medium Список транспортных средств с оборудованием:
+  #uptime-transport-list.overflow-auto
+    uib-accordion
+      // ACCORDION ITEM
+      uib-accordion-group(ng-repeat="bus in busInfos", is-open="accordionItemOpenStates[bus.busName]")
+        // HEADER
+        uib-accordion-heading
+          .Grid.Grid--center(ng-click="onAccordionItemClicked(bus)")
+            .Grid-cell--autoSize.accordion-first-col
+              .Grid.Grid--center
+                .Grid-cell--autoSize.rounded(ng-switch="bus.busType",
+                ng-class="getStatusBgClass(bus.status)")
+                  img.bus-img(ng-switch-when="trolleybus", src='assets/images/trolleybus.png', alt="Троллейбус")
+                  img.bus-img(ng-switch-when="bus",        src='assets/images/bus.png',        alt="Автобус")
+                .Grid-cell.text-right.pr1
+                  span.bold(ng-class="getStatusFgClass(bus.status)") {{bus.busName}}
+            .Grid-cell
+              timeline(dt-start="dtStart", dt-end="dtEnd", intervals="intervals[bus.busName].busIntervals",
+              height="3rem")
+        // BODY
+        // validators
+        .sect-validators.mb1.bb1
+          .accordion-first-col.text-right.bold.pb1 Валидаторы:
+          .Grid.Grid--center.pb1(ng-repeat="v in bus.validators")
+            .Grid-cell--autoSize.accordion-first-col.text-right.pr1
+              span.bold(ng-class="getStatusFgClass(bus.validatorStatuses[v])") {{v}}
+            .Grid-cell
+              timeline(dt-start="dtStart", dt-end="dtEnd", intervals="intervals[bus.busName].validatorIntervals[v]")
+        // pps
+        .sect-pps.mb1.bb1
+          .accordion-first-col.text-right.bold.pb1 Датчики ПП:
+          .Grid.Grid--center.pb1(ng-repeat="pp in bus.pp")
+            .Grid-cell--autoSize.accordion-first-col.text-right.pr1
+              span.bold(ng-class="getStatusFgClass(bus.ppStatuses[pp])") {{pp | ppNameFilter}}
+            .Grid-cell
+              timeline(dt-start="dtStart", dt-end="dtEnd", intervals="intervals[bus.busName].ppIntervals[pp]")
+        // GPS
+        .sect-gps.pb2
+          .Grid.Grid--center
+            .Grid-cell--autoSize.accordion-first-col.text-right.pr1
+              span.bold(ng-class="getStatusFgClass(bus.gpsStatus)") GPS
+            .Grid-cell
+              timeline(dt-start="dtStart", dt-end="dtEnd", intervals="intervals[bus.busName].gpsIntervals")
+#uptime-right-part.p1
+  #bus-events-title.pb1.fs-large
+    span(ng-show="selectedBus") События для {{ selectedBus.busName }}:
+    span(ng-show="!selectedBus") Выберите транспортное средство для просмотра событий.
+  #bus-events.grid(ui-grid="gridOptions", ui-grid-auto-resize, ui-grid-pagination)

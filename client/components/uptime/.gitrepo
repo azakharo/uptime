@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:azakharo/uptime-widget.git
+	branch = master
+	commit = 8401140ab8966e11b6da89fa50ec97e27cb7764c
+	parent = c203d7178ad7665e68e00f8739e3af8d51ff6b9e
+	cmdver = 0.3.0
