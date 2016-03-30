@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('armUptimeApp')
+angular.module('modalService', [])
   .factory('Modal', function ($rootScope, $modal) {
     /**
      * Opens a modal

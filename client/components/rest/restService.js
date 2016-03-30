@@ -13,6 +13,7 @@ mod.service(
     var loginUrl = '/api/auth/v1/login';
     var transpStatusUrl = '/api/protocolmessage/v1/protocolmessage';
     var acceptantUrl = '/acceptant';
+    var uptimeUrl = '/uptime';
     var dashboardUrl = '/dashboard';
     if (isRestDebug) {
       var serverAddr = 'https://cp.sarov-itc.ru';
@@ -23,6 +24,7 @@ mod.service(
       loginUrl = serverAddr + loginUrl;
       transpStatusUrl = serverAddr + transpStatusUrl;
       acceptantUrl = serverAddr + acceptantUrl;
+      uptimeUrl = serverAddr + uptimeUrl;
       dashboardUrl = serverAddr + dashboardUrl;
     }
 
@@ -32,6 +34,10 @@ mod.service(
 
     function getAcceptantUrl() {
       return acceptantUrl;
+    }
+
+    function getUptimeUrl() {
+      return uptimeUrl;
     }
 
     function getDashboardUrl() {
@@ -302,7 +308,7 @@ mod.service(
             // TODO use real card state here
             card.state = "success";
 
-            card.isESEK = srvAcc.userId !== undefined && srvAcc.userId !== null;
+            card.isESEK = isEsek(srvAcc);
             card.personID = srvAcc.userId;
 
             // Request bags for the account
@@ -1528,6 +1534,106 @@ mod.service(
       return deffered.promise;
     }
 
+    function getStatPassengersPerDayPerBus(dtStart, dtEnd) {
+      var deffered = $q.defer();
+      var data = [];
+      var params = {
+        startTimestamp: dtStart.unix(),
+        finishTimestamp: dtEnd.unix(),
+        windowTime: 86400 // sec in day
+      };
+
+      $http({
+        method: "get",
+        url: turnoverBaseURL + 'stat/traffics',
+        params: params
+      }).then(
+        function(resp) {
+          const respData = resp.data;
+
+          // Find 1st not "_summary_owner" attr
+          const dataAttrName = _.find(Object.getOwnPropertyNames(respData), function (propName) {
+            return propName !== "_summary_owner";
+          });
+          const dataObj = respData[dataAttrName];
+
+          // Get bus names
+          const busNames = _.filter(Object.getOwnPropertyNames(dataObj), propName => propName !== "_summary_vehicle");
+
+          var days = getDays(dtStart, dtEnd);
+          days.forEach(function (day, dayIndex) {
+            busNames.forEach(function (bus) {
+
+              var dateItem = {
+                day: day,
+                bus: bus,
+                passengers: dataObj[bus][dayIndex].amount_inlet
+              };
+
+              data.push(dateItem);
+            });
+          });
+
+          deffered.resolve(data);
+        },
+        function(reason) {
+          deffered.reject(reason);
+        }
+      );
+
+      return deffered.promise;
+    }
+
+    function getStatPassKmPerDayPerBus(dtStart, dtEnd) {
+      var deffered = $q.defer();
+      var data = [];
+      var params = {
+        startTimestamp: dtStart.unix(),
+        finishTimestamp: dtEnd.unix(),
+        windowTime: 86400 // sec in day
+      };
+
+      $http({
+        method: "get",
+        url: turnoverBaseURL + 'stat/turnovers',
+        params: params
+      }).then(
+        function(resp) {
+          const respData = resp.data;
+
+          // Find 1st not "_summary_owner" attr
+          const dataAttrName = _.find(Object.getOwnPropertyNames(respData), function (propName) {
+            return propName !== "_summary_owner";
+          });
+          const dataObj = respData[dataAttrName];
+
+          // Get bus names
+          const busNames = _.filter(Object.getOwnPropertyNames(dataObj), propName => propName !== "_summary_vehicle");
+
+          var days = getDays(dtStart, dtEnd);
+          days.forEach(function (day, dayIndex) {
+            busNames.forEach(function (bus) {
+
+              var dateItem = {
+                day: day,
+                bus: bus,
+                passKm: Math.round(dataObj[bus][dayIndex].amount_turnover / 1000)
+              };
+
+              data.push(dateItem);
+            });
+          });
+
+          deffered.resolve(data);
+        },
+        function(reason) {
+          deffered.reject(reason);
+        }
+      );
+
+      return deffered.promise;
+    }
+
     function getStatBusesPerDay(dtStart, dtEnd) {
       var deffered = $q.defer();
       var data = [];
@@ -1821,6 +1927,7 @@ mod.service(
         function (app) {
           if (!app) {
             deffered.resolve([]);
+            return deffered.promise;
           }
           $q.all([
             getCurrencies(),
@@ -1952,6 +2059,95 @@ mod.service(
     //////////////////////////////////////////////////////////////////////
 
 
+    function getPaymentsBy(dtStart, dtFinish, currencyIds, busNames) {
+      var deffered = $q.defer();
+
+      var params = {
+        startTimestamp: dtStart.unix(),
+        finishTimestamp: dtFinish.unix(),
+        sort: '-timestamp'
+      };
+      let payMethFilterSentence = createFilterSentence("currencyId", currencyIds);
+      let busFilterSentence = createFilterSentence("source.terminal", busNames);
+      if (payMethFilterSentence && busFilterSentence) {
+        params.filter = `{"$and": [${busFilterSentence}, ${payMethFilterSentence}]}`;
+      }
+      else {
+        if (payMethFilterSentence) {
+          params.filter = payMethFilterSentence;
+        }
+        if (busFilterSentence) {
+          params.filter = busFilterSentence;
+        }
+      }
+
+      $http({
+        method: "get",
+        url: baseURL + 'stat/transactions/payments',
+        params: params
+      }).then(
+        function(resp) {
+          deffered.resolve(resp.data);
+        },
+        function(reason) {
+          deffered.reject(reason);
+        }
+      );
+
+      return deffered.promise;
+    }
+
+    function createFilterSentence(attrName, attrValues) {
+      let filterSentence = null;
+      if (attrValues && attrValues.length > 0) {
+        if (attrValues.length === 1) {
+          filterSentence = `{ "${attrName}": ${getFilterAttrVal(attrValues[0])} }`;
+        }
+        else {
+          filterSentence = `{ "${attrName}": { "$in": [ ${getFilterAttrVals(attrValues)} ] } }`;
+        }
+      }
+      return filterSentence;
+    }
+
+    function getFilterAttrVal(attrVal) {
+      let retval = null;
+      switch (typeof attrVal) {
+        case 'string':
+          retval = `"${attrVal}"`;
+          break;
+        case 'number':
+          retval = attrVal.toString();
+          break;
+        default:
+          retval = attrVal.toString();
+          break;
+      }
+      return retval;
+    }
+
+    function getFilterAttrVals(attrVals) {
+      let retval = null;
+      switch (typeof attrVals[0]) {
+        case 'string':
+          retval = _.map(attrVals, getFilterAttrVal);
+          retval = retval.join();
+          break;
+        case 'number':
+          retval = attrVals.toString();
+          break;
+        default:
+          retval = attrVals.toString();
+          break;
+      }
+      return retval;
+    }
+
+    function isEsek(account) {
+      return account.userId !== undefined && account.userId !== null
+    }
+
+
     // Return public API
     return ({
       getAccounts:      getAccounts,
@@ -2021,11 +2217,13 @@ mod.service(
       getStatTotalPassKm: getStatTotalPassKm,
       getStatTotalServed: getStatTotalServed,
       getStatPassengersPerDay: getStatPassengersPerDay,
+      getStatPassengersPerDayPerBus: getStatPassengersPerDayPerBus,
       getStatBusesPerDay: getStatBusesPerDay,
       getStatPassengersAvgPerHour: getStatPassengersAvgPerHour,
       getStatPassKmPerDayPerOrg: getStatPassKmPerDayPerOrg,
       getStatTransactionsPerDay: getStatTransactionsPerDay,
       getStatPassKmPerDay: getStatPassKmPerDay,
+      getStatPassKmPerDayPerBus: getStatPassKmPerDayPerBus,
       getStatTransactions: getStatTransactions,
 
       // Acceptant stat
@@ -2042,7 +2240,11 @@ mod.service(
 
       // arm urls
       getAcceptantUrl: getAcceptantUrl,
-      getDashboardUrl: getDashboardUrl
+      getUptimeUrl: getUptimeUrl,
+      getDashboardUrl: getDashboardUrl,
+
+      getPaymentsBy: getPaymentsBy,
+      isEsek: isEsek
     });
   }
 );

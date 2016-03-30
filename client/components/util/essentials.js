@@ -19,6 +19,10 @@ function debounce(func, wait, immediate) {
   };
 }
 
+
+///////////////////////////////////////////////////////////
+// Log utils
+
 function log(msg) {
   console.log(msg);
 }
@@ -26,15 +30,9 @@ function logData(data) {
   log(JSON.stringify(data, null, 2));
 }
 
-function isInt(value) {
-  return !isNaN(value) &&
-    parseInt(Number(value)) == value &&
-    !isNaN(parseInt(value, 10));
-}
+// Log utils
+///////////////////////////////////////////////////////////
 
-function isToday(momnt) {
-  return momnt.isSame(moment(), 'day');
-}
 
 function getBrowserInfo(){
   var ua=navigator.userAgent,tem,M=ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
@@ -53,3 +51,52 @@ function getBrowserInfo(){
     version: M[1]
   };
 }
+
+
+///////////////////////////////////////////////////////////
+// Time utils
+
+function getDays(dateStart, dateEnd) {
+  return getTimeUnits(dateStart, dateEnd, 'days');
+}
+
+function getMonths(dateStart, dateEnd) {
+  return getTimeUnits(dateStart, dateEnd, 'months');
+}
+
+function getYears(dateStart, dateEnd) {
+  return getTimeUnits(dateStart, dateEnd, 'years');
+}
+
+function getTimeUnits(dateStart, dateEnd, unitsName) {
+  var units = [];
+  var u = dateStart.clone();
+  while (u.isBefore(dateEnd) || u.isSame(dateEnd)) {
+    units.push(u);
+    u = u.clone();
+    u.add(1, unitsName);
+  }
+  return units;
+}
+
+function isToday(momnt) {
+  return momnt.isSame(moment(), 'day');
+}
+
+// Time utils
+///////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////
+// Number utils
+
+function isInt(value) {
+  return !isNaN(value) &&
+    parseInt(Number(value)) == value &&
+    !isNaN(parseInt(value, 10));
+}
+
+function isNumber(obj) { return !isNaN(parseFloat(obj)) }
+
+// Number utils
+///////////////////////////////////////////////////////////
