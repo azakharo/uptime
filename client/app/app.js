@@ -14,7 +14,8 @@ angular.module('armUptimeApp', [
   'restService',
   'TransportStatus',
   'authService',
-  'uptime'
+  'uptime',
+  'loginDlg'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
