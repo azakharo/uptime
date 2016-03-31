@@ -10,7 +10,7 @@ angular.module('armUptimeApp')
       })
       .state('login', {
         url: '/login',
-        templateUrl: 'app/main/login.html',
-        controller: 'loginCtrl'
+        template: '<login-dlg title="Uptime Monitor" success-route="main" success-route-debug="main" />',
+        controller: function() {}
       });
   });
