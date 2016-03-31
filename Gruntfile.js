@@ -685,7 +685,7 @@ module.exports = function (grunt) {
           'dist/public/app/*.css'
         ],
         overwrite: true,
-        replacements: [replApp, replAssetsImages, replBowerCompAbs, replBowerComp]
+        replacements: [replApp, replComponents, replComponents2, replAssetsImages, replBowerCompAbs, replBowerComp]
       },
       urlUiGrid: {
         src: [
