@@ -38,6 +38,10 @@ module.exports = function (grunt) {
     from: "'components/",
     to: "'" + baseUrl + 'components/'
   };
+  var replComponentsSimple = {
+    from: 'components/',
+    to: baseUrl + 'components/'
+  };
   var replAssetsImages = {
     from: 'assets/images/',
     to: baseUrl + 'assets/images/'
@@ -685,7 +689,12 @@ module.exports = function (grunt) {
           'dist/public/app/*.css'
         ],
         overwrite: true,
-        replacements: [replApp, replComponents, replComponents2, replAssetsImages, replBowerCompAbs, replBowerComp]
+        replacements: [replApp, replAssetsImages, replBowerCompAbs, replBowerComp]
+      },
+      baseUrl2: {
+        src: ['dist/public/app/*.app.js'],
+        overwrite: true,
+        replacements: [replComponentsSimple]
       },
       urlUiGrid: {
         src: [
@@ -846,7 +855,8 @@ module.exports = function (grunt) {
     'rev',
     'usemin',
     'replace:urlUiGrid',
-    'replace:baseUrl'
+    'replace:baseUrl',
+    'replace:baseUrl2'
   ]);
 
   grunt.registerTask('build-debug', [
