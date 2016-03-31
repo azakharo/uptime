@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:azakharo/uptime-widget.git
 	branch = master
-	commit = ff7ab731b000944882d90dcca600cf96f43344b2
-	parent = 0c55c5afb48de9523fd9475985c113344baf61c6
+	commit = 819b32c420cb4eca7dad987e44448ceac2d97fd1
+	parent = bc64c74d59b5cae76bf3ef4c1c76a774123e3b86
 	cmdver = 0.3.0
