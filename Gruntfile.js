@@ -432,6 +432,18 @@ module.exports = function (grunt) {
         dest: '.tmp/',
         src: ['{app,components}/**/*.css']
       },
+      componentImages2tmp: {
+        expand: true,
+        cwd: '<%= yeoman.client %>',
+        dest: '.tmp',
+        src: ['components/**/*.png']
+      },
+      componentImages2dist: {
+        expand: true,
+        cwd: '<%= yeoman.client %>',
+        dest: '<%= yeoman.dist %>/public',
+        src: ['components/**/*.png']
+      },
       tmp: {
         expand: true,
         cwd: '.tmp',
@@ -760,6 +772,7 @@ module.exports = function (grunt) {
       'wiredep',
       'autoprefixer',
       'express:dev',
+      'copy:componentImages2tmp',
       'wait',
       'watch'
     ]);
@@ -843,6 +856,7 @@ module.exports = function (grunt) {
     'autoprefixer',
     'copy:dist',
     'copy:tmp',
+    'copy:componentImages2dist',
     'replace:is_debug_debug',
     'replace:baseUrl_debug'
   ]);

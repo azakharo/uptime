@@ -32,8 +32,8 @@ span(us-spinner="{radius:30, width:8, length: 16}", spinner-on="isGettingData")
               .Grid.Grid--center
                 .Grid-cell--autoSize.rounded(ng-switch="bus.busType",
                 ng-class="getStatusBgClass(bus.status)")
-                  img.bus-img(ng-switch-when="trolleybus", src='assets/images/trolleybus.png', alt="Троллейбус")
-                  img.bus-img(ng-switch-when="bus",        src='assets/images/bus.png',        alt="Автобус")
+                  img.bus-img(ng-switch-when="trolleybus", src='components/uptime/img/trolleybus.png', alt="Троллейбус")
+                  img.bus-img(ng-switch-when="bus",        src='components/uptime/img/bus.png',        alt="Автобус")
                 .Grid-cell.text-right.pr1
                   span.bold(ng-class="getStatusFgClass(bus.status)") {{bus.busName}}
             .Grid-cell
