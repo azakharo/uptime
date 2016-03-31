@@ -759,6 +759,7 @@ module.exports = function (grunt) {
         'injector',
         'wiredep',
         'autoprefixer',
+        'copy:componentImages2tmp',
         'concurrent:debug'
       ]);
     }
@@ -838,6 +839,7 @@ module.exports = function (grunt) {
     'replace:is_debug',
     'ngAnnotate',
     'copy:dist',
+    'copy:componentImages2dist',
     'cdnify',
     'cssmin',
     'uglify',
@@ -873,6 +875,7 @@ module.exports = function (grunt) {
     'concat',
     'ngAnnotate',
     'copy:dist',
+    'copy:componentImages2dist',
     'cdnify',
     'cssmin',
     'uglify',
