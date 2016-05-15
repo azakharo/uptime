@@ -4,7 +4,7 @@
 ; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
 ;
 [subrepo]
-	remote = git@github.com:azakharo/arm-shared.git
+	remote = https://github.com/azakharo/arm-shared.git
 	branch = master
 	commit = a04b8ac59760f463f52b0056c0a48cc4e6c927c5
 	parent = 4bf2ffbee16f0cdd9a54446f79cbef9e71558ee9

@@ -4,7 +4,7 @@
 ; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
 ;
 [subrepo]
-	remote = git@github.com:azakharo/uptime-widget.git
+	remote = https://github.com/azakharo/uptime-widget.git
 	branch = master
 	commit = 819b32c420cb4eca7dad987e44448ceac2d97fd1
 	parent = bc64c74d59b5cae76bf3ef4c1c76a774123e3b86
