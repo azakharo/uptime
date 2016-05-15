@@ -1,9 +1,9 @@
 'use strict';
 
-angular.module('armUptimeApp')
+angular.module('timeline', ['ui.bootstrap'])
   .directive('timeline', function () {
     return {
-      templateUrl: 'app/timeline/timeline.html',
+      templateUrl: 'components/uptime/timeline/timeline.html',
       restrict: 'EA',
       scope: {
         dtStart: '=',

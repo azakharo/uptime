@@ -2,6 +2,7 @@
 
 angular.module('uptime', [
   'TransportStatus',
+  'timeline',
   'ui.grid', 'ui.grid.autoResize', 'ui.grid.pagination',
   'ui.bootstrap',
   'angularSpinner'])
