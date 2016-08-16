@@ -15,6 +15,11 @@ mod.service(
     var acceptantUrl = '/acceptant';
     var uptimeUrl = '/uptime';
     var dashboardUrl = '/dashboard';
+    var ctrlPanelUrl = '/public-dashboard';
+    const acceptant1path = '/arm/accounting/stat-common-chart';
+    const acceptant2path = '/acceptant2/statistic';
+    let acceptant1Url = '';
+    let acceptant2Url = '';
     if (isRestDebug) {
       var serverAddr = 'https://cp.sarov-itc.ru';
       baseURL = serverAddr + baseURL;
@@ -26,7 +31,10 @@ mod.service(
       acceptantUrl = serverAddr + acceptantUrl;
       uptimeUrl = serverAddr + uptimeUrl;
       dashboardUrl = serverAddr + dashboardUrl;
+      ctrlPanelUrl = serverAddr + ctrlPanelUrl;
     }
+    acceptant1Url = acceptantUrl + '/#' + acceptant1path;
+    acceptant2Url = acceptantUrl + '/#' + acceptant2path;
 
     function getBaseURL() {
       return baseURL;
@@ -42,6 +50,18 @@ mod.service(
 
     function getDashboardUrl() {
       return dashboardUrl;
+    }
+
+    function getAcceptant1Url() {
+      return acceptant1Url;
+    }
+
+    function getAcceptant2Url() {
+      return acceptant2Url;
+    }
+
+    function getCtrlPanelUrl() {
+      return ctrlPanelUrl;
     }
 
     //$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:admin');
@@ -105,6 +125,46 @@ mod.service(
         url: baseURL + format('applications/{}/currencies', appID)
       });
       return ( request.then(handleSuccess, handleError) );
+    }
+
+    function getAppProviders(appID) {
+      var request = $http({
+        method: "get",
+        url: baseURL + format('applications/{}/providers', appID)
+      });
+      return ( request.then(handleSuccess, handleError) );
+    }
+
+    function getAllProviders() {
+      var providers = [];
+      var deffered = $q.defer();
+
+      getApps().then(
+        function (apps) {
+          var appInd = 0;
+          apps.forEach(function (app) {
+            getAppProviders(app.id).then(
+              function (appProviders) {
+                appProviders.forEach(function (prov) {
+                  prov.app = app;
+                });
+                providers = providers.concat(appProviders);
+
+                // if last app, then resolve
+                if (appInd === apps.length - 1) {
+                  deffered.resolve(providers);
+                }
+
+                appInd += 1;
+              });
+          });
+        },
+        function (reason) {
+          deffered.reject(reason);
+        }
+      );
+
+      return deffered.promise;
     }
 
     function getAllTransactions() {
@@ -1918,50 +1978,110 @@ mod.service(
     //========================================================
 
 
+    //********************************************************
+    // Public dashboard stat
+
+    function getStatReplenishment(dtStart, dtEnd) {
+      if (isMyDebug) {
+        return getStatReplenishmentDUMMY(dtStart, dtEnd);
+      }
+      var deffered = $q.defer();
+      var params = {
+        startTimestamp: dtStart.unix(),
+        finishTimestamp: dtEnd.unix()
+      };
+
+      $http({
+        method: "get",
+        url: baseURL + 'stat/transactions/replenishmentsinfo',
+        params: params
+      }).then(
+        function(resp) {
+          deffered.resolve(resp.data);
+        },
+        function(reason) {
+          deffered.reject(reason);
+        }
+      );
+
+      return deffered.promise;
+    }
+
+    function getStatReplenishmentDUMMY(dtStart, dtEnd) {
+      var deffered = $q.defer();
+      const data = {
+          total: {
+            'C-PFTT': 10,
+            'C-PR': 1,
+            'TRB': 68
+          },
+          perTerminals: {
+            a9b8c7: {
+              'C-PFTT': 5,
+              'C-PR': 1,
+              'TRB': 68
+            },
+            a9b8d7: {
+              'C-PFTT': 5
+            }
+          }
+      };
+      deffered.resolve(data);
+      return deffered.promise;
+    }
+
+    function getStatPayment(dtStart, dtEnd) {
+      if (isMyDebug) {
+        return getStatPaymentDUMMY(dtStart, dtEnd);
+      }
+      var deffered = $q.defer();
+      var params = {
+        startTimestamp: dtStart.unix(),
+        finishTimestamp: dtEnd.unix()
+      };
+
+      $http({
+        method: "get",
+        url: baseURL + 'stat/transactions/paymentsinfo',
+        params: params
+      }).then(
+        function(resp) {
+          deffered.resolve(resp.data);
+        },
+        function(reason) {
+          deffered.reject(reason);
+        }
+      );
+
+      return deffered.promise;
+    }
+
+    function getStatPaymentDUMMY(dtStart, dtEnd) {
+      var deffered = $q.defer();
+      let data = {};
+      _.times(200, function (ind) {
+        const dataItemName = `Bus_park_${ind + 1}`;
+        data[dataItemName] = {
+          intracity_passenger_traffic: ind + 1
+        };
+      });
+      deffered.resolve(data);
+      return deffered.promise;
+    }
+
+    // Public dashboard stat
+    //********************************************************
+
+
     // Acceptant prices
     function getTariffs() {
-      let tariffs = [];
       let deffered = $q.defer();
 
       getTransportApp().then(
         function (app) {
-          if (!app) {
-            deffered.resolve([]);
-            return deffered.promise;
-          }
-          $q.all([
-            getCurrencies(),
-            getPrices(app.id),
-            getServices(app.id)
-          ]).then(
-            function (values) {
-              let currencies = values[0];
-              let prices = values[1];
-              let services = values[2];
-
-              prices.forEach(function (price) {
-                // Find currency
-                let curr = _.find(currencies, curr => curr.srvID === price.currencyId);
-                let service = _.find(services, srv => srv.id === price.serviceId);
-
-                if (!curr) {
-                  return;
-                }
-
-                let tarr = {
-                  currency: curr,
-                  price: price.value,
-                  name: curr.name,
-                  desc: service ? service.title : '',
-                  type: (curr.isAbonnement) ? 'Проездной' : 'Разовый',
-                  activePeriodStart: isInt(price.timeframe.startTimestamp) ? price.timeframe.startTimestamp : null,
-                  activePeriodFinish: isInt(price.timeframe.finishTimestamp) ? price.timeframe.finishTimestamp : null
-                };
-
-                tariffs.push(tarr);
-              });
-
-              deffered.resolve(tariffs);
+          getAppTariffs(app).then(
+            function (tars) {
+              deffered.resolve(tars);
             },
             function (reason) {
               deffered.reject(reason);
@@ -1970,6 +2090,57 @@ mod.service(
         },
         function (reason) {
           deffered.resolve([]);
+        }
+      );
+
+      return deffered.promise;
+    }
+
+    function getAppTariffs(app) {
+      let tariffs = [];
+      let deffered = $q.defer();
+
+      if (!app) {
+        deffered.resolve([]);
+        return deffered.promise;
+      }
+
+      $q.all([
+        getCurrencies(),
+        getPrices(app.id),
+        getServices(app.id)
+      ]).then(
+        function (values) {
+          let currencies = values[0];
+          let prices = values[1];
+          let services = values[2];
+
+          prices.forEach(function (price) {
+            // Find currency
+            let curr = _.find(currencies, curr => curr.srvID === price.currencyId);
+            let service = _.find(services, srv => srv.id === price.serviceId);
+
+            if (!curr) {
+              return;
+            }
+
+            let tarr = {
+              currency: curr,
+              price: price.value,
+              name: curr.name,
+              desc: service ? service.title : '',
+              type: (curr.isAbonnement) ? 'Проездной' : 'Разовый',
+              activePeriodStart: isInt(price.timeframe.startTimestamp) ? price.timeframe.startTimestamp : null,
+              activePeriodFinish: isInt(price.timeframe.finishTimestamp) ? price.timeframe.finishTimestamp : null
+            };
+
+            tariffs.push(tarr);
+          });
+
+          deffered.resolve(tariffs);
+        },
+        function (reason) {
+          deffered.reject(reason);
         }
       );
 
@@ -2156,6 +2327,8 @@ mod.service(
       getAccountTransactions: getAccountTransactions,
       getApps:          getApps,
       getAppCurrencies: getAppCurrencies,
+      getAppProviders: getAppProviders,
+      getAllProviders: getAllProviders,
       getAllTransactions: getAllTransactions,
       getVehicles:        getVehicles,
       getTerminals:       getTerminals,
@@ -2230,7 +2403,8 @@ mod.service(
       //========================================================
 
       // Acceptant prices
-      getTariffs: getTariffs,
+      getTariffs: getTariffs, // tariffs for the transport app
+      getAppTariffs: getAppTariffs,
 
       // login
       login: login,
@@ -2240,11 +2414,19 @@ mod.service(
 
       // arm urls
       getAcceptantUrl: getAcceptantUrl,
+      getAcceptant1Url: getAcceptant1Url,
+      getAcceptant2Url: getAcceptant2Url,
       getUptimeUrl: getUptimeUrl,
       getDashboardUrl: getDashboardUrl,
+      getCtrlPanelUrl: getCtrlPanelUrl,
 
       getPaymentsBy: getPaymentsBy,
-      isEsek: isEsek
+      isEsek: isEsek,
+
+      // Public dashboard stat
+      getStatReplenishment: getStatReplenishment,
+      getStatPayment: getStatPayment
+
     });
   }
 );

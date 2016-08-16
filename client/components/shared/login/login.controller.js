@@ -3,7 +3,7 @@
 angular.module('loginDlg', ['authService'])
   .controller('LoginDlgCtrl', function ($scope, $rootScope, Auth, $state) {
     $scope.errors = {};
-    $("#username-input").focus();
+    //$("#username-input").focus();
 
     $scope.login = function (form) {
       $scope.submitted = true;

@@ -100,3 +100,7 @@ function isNumber(obj) { return !isNaN(parseFloat(obj)) }
 
 // Number utils
 ///////////////////////////////////////////////////////////
+
+function isTouchDevice() {
+  return ('ontouchstart' in window || navigator.MaxTouchPoints > 0 || navigator.msMaxTouchPoints > 0);
+}

@@ -6,6 +6,6 @@
 [subrepo]
 	remote = https://github.com/azakharo/arm-shared.git
 	branch = master
-	commit = a04b8ac59760f463f52b0056c0a48cc4e6c927c5
-	parent = 4bf2ffbee16f0cdd9a54446f79cbef9e71558ee9
+	commit = 3b878f45ea86cec269ca0c880b5cbd622043b88c
+	parent = 1c034a06bd01138432c0c9a1edb1881c2830f819
 	cmdver = 0.3.0
