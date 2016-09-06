@@ -15,13 +15,13 @@ angular.module('armUptimeApp')
 
     // Navi menu
     $scope.naviMenuItems = [
-      {
-        url: myRest.getAcceptant1Url(),
-        name: 'АРМ Акцептанта 1'
-      },
+      //{
+      //  url: myRest.getAcceptant1Url(),
+      //  name: 'АРМ Акцептанта 1'
+      //},
       {
         url: myRest.getAcceptant2Url(),
-        name: 'АРМ Акцептанта 2'
+        name: 'Акцептант'
       },
       {
         url: myRest.getDashboardUrl(),
