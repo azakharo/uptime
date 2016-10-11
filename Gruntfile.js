@@ -873,7 +873,7 @@ module.exports = function (grunt) {
     'replace:baseUrl_debug'
   ]);
 
-  grunt.registerTask('build-neo', [
+  grunt.registerTask('heroku-build', [
     'clean:dist',
     'injector:less',
     'concurrent:dist',
