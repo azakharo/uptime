@@ -1,10 +1,12 @@
 'use strict';
+
 var isRestDebug = true;
-var mod = angular.module('restService', []);
+
+var mod = angular.module('restService', ['restServiceFake']);
 
 mod.service(
   "myRest",
-  function ($http, $q, $log, $rootScope) {
+  function ($http, $q, $log, $rootScope, restFake) {
 
     var baseURL = '/api/cp/v1/';
     var turnoverBaseURL = '/api/pt/v1/';
@@ -18,21 +20,23 @@ mod.service(
     var ctrlPanelUrl = '/public-dashboard';
     const acceptant1path = '/arm/accounting/stat-common-chart';
     const acceptant2path = '/acceptant2/statistic';
+    var armBankaUrl = '/bank';
     let acceptant1Url = '';
     let acceptant2Url = '';
-    if (isRestDebug) {
-      var serverAddr = 'https://cp.sarov-itc.ru';
-      baseURL = serverAddr + baseURL;
-      turnoverBaseURL = serverAddr + turnoverBaseURL;
-      personDataBaseURL = serverAddr + personDataBaseURL;
-      operArmBaseURL = serverAddr + operArmBaseURL;
-      loginUrl = serverAddr + loginUrl;
-      transpStatusUrl = serverAddr + transpStatusUrl;
-      acceptantUrl = serverAddr + acceptantUrl;
-      uptimeUrl = serverAddr + uptimeUrl;
-      dashboardUrl = serverAddr + dashboardUrl;
-      ctrlPanelUrl = serverAddr + ctrlPanelUrl;
-    }
+    //if (isRestDebug) {
+    //  var serverAddr = 'https://cp.sarov-itc.ru';
+    //  baseURL = serverAddr + baseURL;
+    //  turnoverBaseURL = serverAddr + turnoverBaseURL;
+    //  personDataBaseURL = serverAddr + personDataBaseURL;
+    //  operArmBaseURL = serverAddr + operArmBaseURL;
+    //  loginUrl = serverAddr + loginUrl;
+    //  transpStatusUrl = serverAddr + transpStatusUrl;
+    //  acceptantUrl = serverAddr + acceptantUrl;
+    //  uptimeUrl = serverAddr + uptimeUrl;
+    //  dashboardUrl = serverAddr + dashboardUrl;
+    //  ctrlPanelUrl = serverAddr + ctrlPanelUrl;
+    //  armBankaUrl = serverAddr + armBankaUrl;
+    //}
     acceptant1Url = acceptantUrl + '/#' + acceptant1path;
     acceptant2Url = acceptantUrl + '/#' + acceptant2path;
 
@@ -62,6 +66,10 @@ mod.service(
 
     function getCtrlPanelUrl() {
       return ctrlPanelUrl;
+    }
+
+    function getArmBankaUrl() {
+      return armBankaUrl;
     }
 
     //$http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('admin:admin');
@@ -894,43 +902,12 @@ mod.service(
 
     // buses table
     function getPassengersInOut() {
+      if (isRestDebug) {
+        return restFake.getPassengersInOut();
+      }
+
       var passInOuts = [];
       var deffered = $q.defer();
-
-      // DUMMY data
-      //var startDay = moment().startOf('day').add(8, 'hours').subtract(30, 'days');
-      //var data = _.times(30, function(ind) {
-      //  var day = angular.copy(startDay);
-      //  day.add(ind + 1, 'days');
-      //  var inout = {};
-      //  inout.timestamp = day;
-      //  inout.busID = "c579kk";
-      //  inout.input = 1;
-      //  return inout;
-      //});
-      //var outData = _.times(30, function(ind) {
-      //  var day = angular.copy(startDay);
-      //  day.add(ind + 1, 'days').add(1, 'minutes');
-      //  var inout = {};
-      //  inout.timestamp = day;
-      //  inout.busID = "c579kk";
-      //  inout.output = 1;
-      //  return inout;
-      //});
-      //
-      //// add 1 more item
-      //var inout = {};
-      //inout.timestamp = moment().startOf('day').subtract(1, 'days').add(9, 'hours');
-      //inout.busID = "c579kc";
-      //inout.input = 3;
-      //data.push(inout);
-      //
-      //data = data.concat(outData);
-      //// sort by timestamp desc
-      //data = _.sortBy(data, function (iO) {
-      //  return -iO.timestamp;
-      //});
-      //deffered.resolve(data);
 
       getVehicles().then(
         function (srvVehicles) {
@@ -1559,6 +1536,10 @@ mod.service(
     }
 
     function getStatPassengersPerDay(dtStart, dtEnd) {
+      if (isRestDebug) {
+        return restFake.getStatPassengersPerDay(dtStart, dtEnd);
+      }
+
       var deffered = $q.defer();
       var data = [];
       var params = {
@@ -1695,6 +1676,9 @@ mod.service(
     }
 
     function getStatBusesPerDay(dtStart, dtEnd) {
+      if (isRestDebug) {
+        return restFake.getStatBusesPerDay(dtStart, dtEnd);
+      }
       var deffered = $q.defer();
       var data = [];
       var params = {
@@ -1794,6 +1778,10 @@ mod.service(
     }
 
     function getStatPassengersAvgPerHour(dtStart, dtEnd, numOfDays) {
+      if (isRestDebug) {
+        return restFake.getStatPassengersAvgPerHour(dtStart, dtEnd);
+      }
+
       var deffered = $q.defer();
       var data = [];
       var params = {
@@ -1866,6 +1854,10 @@ mod.service(
     }
 
     function getStatPassKmPerDayPerOrg(dtStart, dtFinish) {
+      if (isRestDebug) {
+        return restFake.getStatPassKmPerDayPerOrg(dtStart, dtFinish);
+      }
+
       var deffered = $q.defer();
 
       var params = {
@@ -2419,6 +2411,7 @@ mod.service(
       getUptimeUrl: getUptimeUrl,
       getDashboardUrl: getDashboardUrl,
       getCtrlPanelUrl: getCtrlPanelUrl,
+      getArmBankaUrl: getArmBankaUrl,
 
       getPaymentsBy: getPaymentsBy,
       isEsek: isEsek,
