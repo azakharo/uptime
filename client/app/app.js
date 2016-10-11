@@ -66,8 +66,10 @@ angular.module('armUptimeApp', [
 
   // Additional configuration
   .run(function (i18nService, uibDatepickerPopupConfig, myRest) {
-    // Cause 401 if necessary
-    myRest.getApps();
+    if (!isMyDebug) {
+      // Cause 401 if necessary
+      myRest.getApps();
+    }
 
     // moment js
     moment.locale('ru');

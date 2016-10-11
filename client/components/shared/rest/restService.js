@@ -220,6 +220,10 @@ mod.service(
     }
 
     function getVehicles() {
+      if (isRestDebug) {
+        return restFake.getVehicles();
+      }
+
       var request = $http({
         method: "get",
         url: turnoverBaseURL + 'vehicles'
@@ -228,6 +232,10 @@ mod.service(
     }
 
     function getTerminals() {
+      if (isRestDebug) {
+        return restFake.getTerminals();
+      }
+
       var request = $http({
         method: "get",
         url: turnoverBaseURL + 'terminals'
@@ -2188,6 +2196,10 @@ mod.service(
 
     // Returns server specific models
     function getTranspStatusRawData(dtStart, dtEnd) {
+      if (isRestDebug) {
+        return restFake.getTranspStatusRawData(dtStart, dtEnd);
+      }
+
       var request = $http({
         method: "get",
         url: `${transpStatusUrl}?filter={"$and":[{"timestamp":{"$gte":${dtStart.unix()},"$lt":${dtEnd.unix()}}},{"servicename":"pt-statusregistry"}]}&sort=timestamp`
