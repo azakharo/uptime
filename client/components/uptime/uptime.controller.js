@@ -68,7 +68,9 @@ angular.module('uptime', [
       let deferred = $q.defer();
 
       $scope.isGettingData = true;
-      transpStatus.getBusDefines($scope.dtStart, $scope.dtEnd).then(
+      const dateStart = isRestDebug ? moment("2016-10-11").startOf('day') : $scope.dtStart;
+      const dateEnd = isRestDebug ? moment("2016-10-11").endOf('day') : $scope.dtEnd;
+      transpStatus.getBusDefines(dateStart, dateEnd).then(
         function (data) {
           $scope.busInfos = data;
           $scope.intervals = createTimelineIntervals(data);
