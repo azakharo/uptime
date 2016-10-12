@@ -24,7 +24,7 @@ mod.service(
     let acceptant1Url = '';
     let acceptant2Url = '';
     //if (isRestDebug) {
-    //  var serverAddr = 'https://cp.sarov-itc.ru';
+    //  var serverAddr = 'https://mrd.sarov-itc.ru';
     //  baseURL = serverAddr + baseURL;
     //  turnoverBaseURL = serverAddr + turnoverBaseURL;
     //  personDataBaseURL = serverAddr + personDataBaseURL;
@@ -79,6 +79,10 @@ mod.service(
     // PUBLIC METHODS
 
     function getAccounts() {
+      if (isRestDebug) {
+        return restFake.getAccounts();
+      }
+
       var request = $http({
         method: "get",
         url: baseURL + "accounts"
@@ -1584,6 +1588,9 @@ mod.service(
     }
 
     function getStatPassengersPerDayPerBus(dtStart, dtEnd) {
+      if (isRestDebug) {
+        return restFake.getStatPassengersPerDayPerBus(dtStart, dtEnd);
+      }
       var deffered = $q.defer();
       var data = [];
       var params = {
@@ -1634,6 +1641,9 @@ mod.service(
     }
 
     function getStatPassKmPerDayPerBus(dtStart, dtEnd) {
+      if (isRestDebug) {
+        return restFake.getStatPassKmPerDayPerBus(dtStart, dtEnd);
+      }
       var deffered = $q.defer();
       var data = [];
       var params = {
@@ -2075,6 +2085,10 @@ mod.service(
 
     // Acceptant prices
     function getTariffs() {
+      if (isRestDebug) {
+        return restFake.getTariffs();
+      }
+
       let deffered = $q.defer();
 
       getTransportApp().then(
@@ -2235,6 +2249,10 @@ mod.service(
 
 
     function getPaymentsBy(dtStart, dtFinish, currencyIds, busNames) {
+      if (isRestDebug) {
+        return restFake.getPaymentsBy(dtStart, dtFinish, currencyIds, busNames);
+      }
+
       var deffered = $q.defer();
 
       var params = {
