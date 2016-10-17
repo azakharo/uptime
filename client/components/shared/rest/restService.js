@@ -37,6 +37,12 @@ mod.service(
     //  ctrlPanelUrl = serverAddr + ctrlPanelUrl;
     //  armBankaUrl = serverAddr + armBankaUrl;
     //}
+    if (isMyDebug) {
+      acceptantUrl = 'https://aza-acceptant.herokuapp.com';
+      uptimeUrl = 'https://aza-uptime.herokuapp.com';
+      dashboardUrl = 'https://dashboard-page2.herokuapp.com';
+      ctrlPanelUrl = 'https://aza-ctrl-panel.herokuapp.com';
+    }
     acceptant1Url = acceptantUrl + '/#' + acceptant1path;
     acceptant2Url = acceptantUrl + '/#' + acceptant2path;
 
@@ -2079,6 +2085,79 @@ mod.service(
       return deffered.promise;
     }
 
+    function getStatEsekActivat(dtStart, dtEnd) {
+      if (isMyDebug) {
+        return getStatEsekActivatDUMMY();
+      }
+      var deffered = $q.defer();
+      var params = {
+        startTimestamp: dtStart.unix(),
+        finishTimestamp: dtEnd.unix()
+      };
+
+      $http({
+        method: "get",
+        url: operArmBaseURL + 'registredusecsinfo',
+        params: params
+      }).then(
+        function (resp) {
+          deffered.resolve(resp.data);
+        },
+        function (reason) {
+          deffered.reject(reason);
+        }
+      );
+
+      return deffered.promise;
+    }
+
+    function getStatEsekActivatDUMMY() {
+      var deffered = $q.defer();
+      deffered.resolve({
+        total: 2,
+        exempted: 1,
+        nonexempted: 1
+      });
+      return deffered.promise;
+    }
+
+
+    function getStatEsekBlock(dtStart, dtEnd) {
+      if (isMyDebug) {
+        return getStatEsekBlockDUMMY();
+      }
+      var deffered = $q.defer();
+      var params = {
+        startTimestamp: dtStart.unix(),
+        finishTimestamp: dtEnd.unix()
+      };
+
+      $http({
+        method: "get",
+        url: operArmBaseURL + 'blockedusecsinfo',
+        params: params
+      }).then(
+        function (resp) {
+          deffered.resolve(resp.data);
+        },
+        function (reason) {
+          deffered.reject(reason);
+        }
+      );
+
+      return deffered.promise;
+    }
+
+    function getStatEsekBlockDUMMY() {
+      var deffered = $q.defer();
+      deffered.resolve({
+        total: 10,
+        exempted: 2,
+        nonexempted: 8
+      });
+      return deffered.promise;
+    }
+
     // Public dashboard stat
     //********************************************************
 
@@ -2448,8 +2527,9 @@ mod.service(
 
       // Public dashboard stat
       getStatReplenishment: getStatReplenishment,
-      getStatPayment: getStatPayment
-
+      getStatPayment: getStatPayment,
+      getStatEsekActivat:   getStatEsekActivat,
+      getStatEsekBlock:     getStatEsekBlock
     });
   }
 );
