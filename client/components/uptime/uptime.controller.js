@@ -322,7 +322,7 @@ angular.module('uptime', [
     //===================================
     // Date picker
 
-    $scope.dt = moment().toDate();
+    $scope.dt = isRestDebug ? moment("2016-10-11").startOf('day').toDate() : moment().toDate();
     $scope.today = moment().toDate();
 
     $scope.dateOptions = {
