@@ -13,7 +13,8 @@ mod.service(
     var personDataBaseURL = '/api/spd/v1/';
     var operArmBaseURL = '/api/operator/v1/';
     var loginUrl = '/api/auth/v1/login';
-    var transpStatusUrl = '/api/protocolmessage/v1/protocolmessage';
+    //var transpStatusUrl = '/api/protocolmessage/v1/protocolmessage';
+    var transpStatusUrl = '/api/pt/v1/vehicles/{vehicleID}/status';
     var acceptantUrl = '/acceptant';
     var uptimeUrl = '/uptime';
     var dashboardUrl = '/dashboard';
@@ -23,20 +24,20 @@ mod.service(
     var armBankaUrl = '/bank';
     let acceptant1Url = '';
     let acceptant2Url = '';
-    //if (isRestDebug) {
-    //  var serverAddr = 'https://mrd.sarov-itc.ru';
-    //  baseURL = serverAddr + baseURL;
-    //  turnoverBaseURL = serverAddr + turnoverBaseURL;
-    //  personDataBaseURL = serverAddr + personDataBaseURL;
-    //  operArmBaseURL = serverAddr + operArmBaseURL;
-    //  loginUrl = serverAddr + loginUrl;
-    //  transpStatusUrl = serverAddr + transpStatusUrl;
-    //  acceptantUrl = serverAddr + acceptantUrl;
-    //  uptimeUrl = serverAddr + uptimeUrl;
-    //  dashboardUrl = serverAddr + dashboardUrl;
-    //  ctrlPanelUrl = serverAddr + ctrlPanelUrl;
-    //  armBankaUrl = serverAddr + armBankaUrl;
-    //}
+
+    //var serverAddr = 'http://mrd-pmi.sarov-itc.ru';
+    //baseURL = serverAddr + baseURL;
+    //turnoverBaseURL = serverAddr + turnoverBaseURL;
+    //personDataBaseURL = serverAddr + personDataBaseURL;
+    //operArmBaseURL = serverAddr + operArmBaseURL;
+    //loginUrl = serverAddr + loginUrl;
+    //transpStatusUrl = serverAddr + transpStatusUrl;
+    //acceptantUrl = serverAddr + acceptantUrl;
+    //uptimeUrl = serverAddr + uptimeUrl;
+    //dashboardUrl = serverAddr + dashboardUrl;
+    //ctrlPanelUrl = serverAddr + ctrlPanelUrl;
+    //armBankaUrl = serverAddr + armBankaUrl;
+
     if (isMyDebug) {
       acceptantUrl = 'https://aza-acceptant.herokuapp.com';
       uptimeUrl = 'https://aza-uptime.herokuapp.com';
@@ -2287,26 +2288,65 @@ mod.service(
     //////////////////////////////////////////////////////////////////////
     // Transport status
 
+    function getVehicleTranspStatusRawData(vehicleID, dtStart, dtEnd) {
+      let baseUrl = transpStatusUrl.replace('{vehicleID}', vehicleID.toString());
+      let url = `${baseUrl}?filter={"timestamp":{"$gte":${dtStart.unix()},"$lt":${dtEnd.unix()}}}&sort=timestamp`;
+
+      let request = $http({
+        method: "get",
+        url: url
+      });
+      return ( request.then(handleSuccess, handleError) );
+    }
+
     // Returns server specific models
     function getTranspStatusRawData(dtStart, dtEnd) {
       if (isRestDebug) {
         return restFake.getTranspStatusRawData(dtStart, dtEnd);
       }
 
-      var request = $http({
-        method: "get",
-        url: `${transpStatusUrl}?filter={"$and":[{"timestamp":{"$gte":${dtStart.unix()},"$lt":${dtEnd.unix()}}},{"servicename":"pt-statusregistry"}]}&sort=timestamp`
-      });
-      return ( request.then(handleSuccess, handleError) );
+      //var request = $http({
+      //  method: "get",
+      //  url: `${transpStatusUrl}?filter={"$and":[{"timestamp":{"$gte":${dtStart.unix()},"$lt":${dtEnd.unix()}}},{"servicename":"pt-statusregistry"}]}&sort=timestamp`
+      //});
+      //return ( request.then(handleSuccess, handleError) );
+
+      let deffered = $q.defer();
+      let data2ret = [];
+
+      getVehicles().then(
+        function (vehicles) {
+          if (!vehicles || vehicles.length === 0) {
+            deffered.resolve(data2ret);
+          }
+
+          _.forEach(vehicles, function (vehcl, vehclInd) {
+            getVehicleTranspStatusRawData(vehcl.id, dtStart, dtEnd).then(
+              function (data) {
+                Array.prototype.push.apply(data2ret, data);
+                if (vehclInd == vehicles.length - 1) { // if last
+                  deffered.resolve(data2ret);
+                }
+              }
+            );
+          });
+
+        },
+        function (reason) {
+          deffered.resolve(data2ret);
+        }
+      );
+
+      return deffered.promise;
     }
 
     function compactTranspStatusRawData(transpStatusRawData) {
       return _.map(transpStatusRawData, function (d) {
-        let pp = Object.getOwnPropertyNames(d.eventInfo.meta.traffic);
-        let validators = Object.getOwnPropertyNames(d.eventInfo.meta.validator);
+        let pp = Object.getOwnPropertyNames(d.traffic);
+        let validators = Object.getOwnPropertyNames(d.validator);
         // Possible values: FAIL, NO_SATELLITE, OK
         let gpsStatus = null;
-        const gpsData = d.eventInfo.meta.gps;
+        const gpsData = d.gps;
         if (!gpsData) {
           gpsStatus = 'FAIL';
         }
@@ -2314,8 +2354,8 @@ mod.service(
           gpsStatus = gpsData.active ? 'OK' : 'NO_SATELLITE';
         }
         return {
-          timestamp: d.eventInfo.meta.timestamp,
-          vehicleID: d.eventInfo.meta.vehicleId,
+          timestamp: d.timestamp,
+          vehicleID: d.vehicleId,
           pp: pp,
           validators: validators,
           gpsStatus: gpsStatus

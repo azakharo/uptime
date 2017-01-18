@@ -334,9 +334,6 @@ mod.service(
 
     const TRANSP_RAW_DATA = [
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -352,18 +349,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65946,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476163021,
-        "updatedAt": 1476163021
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -379,18 +366,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65948,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476163340,
-        "updatedAt": 1476163340
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -406,18 +383,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65950,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476163654,
-        "updatedAt": 1476163654
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -433,18 +400,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65951,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476163976,
-        "updatedAt": 1476163976
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -460,18 +417,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65952,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476164291,
-        "updatedAt": 1476164291
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -487,18 +434,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65954,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476164608,
-        "updatedAt": 1476164608
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -514,18 +451,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65955,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476164927,
-        "updatedAt": 1476164927
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -541,18 +468,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65956,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476165243,
-        "updatedAt": 1476165243
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -568,18 +485,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65958,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476165561,
-        "updatedAt": 1476165561
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -595,18 +502,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65960,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476165876,
-        "updatedAt": 1476165876
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -622,18 +519,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65962,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476166191,
-        "updatedAt": 1476166191
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -649,18 +536,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65965,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476166820,
-        "updatedAt": 1476166820
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -676,18 +553,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65967,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476167137,
-        "updatedAt": 1476167137
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -703,18 +570,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65969,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476167452,
-        "updatedAt": 1476167452
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -730,18 +587,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65971,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476167771,
-        "updatedAt": 1476167771
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -757,18 +604,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65972,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476168082,
-        "updatedAt": 1476168082
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -784,18 +621,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65973,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476168400,
-        "updatedAt": 1476168400
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -811,18 +638,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65974,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476168717,
-        "updatedAt": 1476168717
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -838,18 +655,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65975,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476169033,
-        "updatedAt": 1476169033
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -865,18 +672,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65977,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476169349,
-        "updatedAt": 1476169349
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -892,18 +689,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65979,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476169686,
-        "updatedAt": 1476169686
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -919,18 +706,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65980,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476170003,
-        "updatedAt": 1476170003
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -946,18 +723,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65981,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476170319,
-        "updatedAt": 1476170319
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -973,18 +740,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65982,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476170633,
-        "updatedAt": 1476170633
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1000,18 +757,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65986,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476171618,
-        "updatedAt": 1476171618
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1027,18 +774,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65988,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476171934,
-        "updatedAt": 1476171934
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1054,18 +791,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65990,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476172250,
-        "updatedAt": 1476172250
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1081,18 +808,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65992,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476172570,
-        "updatedAt": 1476172570
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1108,18 +825,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65994,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476172885,
-        "updatedAt": 1476172885
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1135,18 +842,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65996,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476173198,
-        "updatedAt": 1476173198
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1162,18 +859,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65998,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476173517,
-        "updatedAt": 1476173517
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1189,18 +876,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 65999,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476173830,
-        "updatedAt": 1476173830
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1216,18 +893,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 66001,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476174145,
-        "updatedAt": 1476174145
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1243,18 +910,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 66003,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476174468,
-        "updatedAt": 1476174468
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1270,18 +927,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 66005,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476174780,
-        "updatedAt": 1476174780
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1297,18 +944,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 66006,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476175090,
-        "updatedAt": 1476175090
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1324,18 +961,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 66007,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476175406,
-        "updatedAt": 1476175406
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1351,18 +978,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 66009,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476175726,
-        "updatedAt": 1476175726
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1378,18 +995,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 66011,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476176042,
-        "updatedAt": 1476176042
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1405,18 +1012,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 66012,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476176352,
-        "updatedAt": 1476176352
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1432,18 +1029,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 66025,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476183646,
-        "updatedAt": 1476183646
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1459,18 +1046,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 66027,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476183957,
-        "updatedAt": 1476183957
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1486,18 +1063,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 66029,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476184274,
-        "updatedAt": 1476184274
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1513,18 +1080,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 66031,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476184589,
-        "updatedAt": 1476184589
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1540,18 +1097,8 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 66034,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476184902,
-        "updatedAt": 1476184902
       },
       {
-        "eventInfo": {
-          "message": "created",
-          "meta": {
             "gps": {
               "active": true,
               "speed": 0
@@ -1567,13 +1114,6 @@ mod.service(
               "00:1a:b6:02:00:57": 0
             },
             "vehicleId": 1
-          }
-        },
-        "eventType": "logInfo",
-        "id": 66037,
-        "serviceName": "pt-statusregistry",
-        "timestamp": 1476185213,
-        "updatedAt": 1476185213
       }
     ];
 
