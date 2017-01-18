@@ -94,6 +94,9 @@ mod.service(
           createStatuses(busDefines);
 
           deferred.resolve(busDefines);
+        },
+        function (reason) {
+          log(reason);
         }
       );
 
